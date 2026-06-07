@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ajManagement
 
-## Getting Started
+A full-stack restaurant operations platform built to replace clipboards, paper binders, and group texts with a single digital workspace for managers and staff.
 
-First, run the development server:
+## The Problem
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Most small and mid-sized restaurants run their day-to-day operations on paper — CV stacks that end up in the trash, schedules pinned to a wall, releasing or creating many schedules at the same time while keeping the old duplicates, inventory tracked in a notebook, and staff texting managers at 11pm to report something missing or broken, and critical documents buried in chat threads. ajManagement digitizes all of that.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### For Managers
+- **Schedule Management** — define shift templates with seasonal hour overrides, assign employees to shifts, and get notified when staff request swaps
+- **Shift Swap Approval** — review and approve or reject employee-initiated shift swaps before they take effect
+- **CV Archive** — receive and review job applications submitted online or logged from walk-ins, with status tracking from pending to hired
+- **Inventory Tracking** — manage stock levels per location with low-threshold alerts and staff flags
+- **Issue Resolution** — receive staff-reported issues and move them through an open → acknowledged → resolved workflow
+- **Resource Library** — publish recipes, procedures, and policies for staff to reference
+- **Staff Management** — manage employees across multiple locations with role-based access control
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### For Employees
+- **Schedule Access** — view your own shifts and your colleagues' schedules
+- **Shift Swap Requests** — propose a swap with a colleague directly in the app; the manager is notified automatically upon mutual agreement
+- **Issue Reporting** — report problems without texting the manager
+- **Inventory Flagging** — flag low or incorrect stock items
+- **Resource Access** — view recipes, procedures, and policies published by management
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend** — Next.js 15, React, Tailwind CSS, TypeScript
+- **Backend** — Next.js API Routes
+- **Database** — PostgreSQL
+- **ORM** — Prisma
+- **Auth** — JWT, role-based access control (manager / employee)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data Model
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The schema is built around 12 relational tables covering users, locations, scheduling, shift swapping, applications, inventory, issue reporting, and resources. Employees can belong to multiple locations via a junction table. Shifts are defined as reusable templates with seasonal hour overrides, generating concrete daily assignments per employee.
 
-## Deploy on Vercel
+## Project Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Currently in active development. Phase 1 (database schema and core models) is complete.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Roadmap
+- [x] Database schema design
+- [x] Core models — User, Location, UserLocation
+- [ ] Auth — register, login, JWT, role middleware
+- [ ] Scheduling — templates, seasons, assignments
+- [ ] Shift swapping workflow
+- [ ] Application intake
+- [ ] Inventory management
+- [ ] Issue reporting
+- [ ] Resource library
+
+## Future Considerations
+- Texting feature and group chats
+- Clock in/out with geofencing and managerial override
+- Shift-linked task assignment
+- Progressive Web App implementation with a possibility for a React Native Version in v2
+
