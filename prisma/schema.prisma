@@ -19,6 +19,9 @@ name String
 address String
 phone String
 users UserLocation[]
+inventoryItems InventoryItem[]
+issueReports IssueReport[]
+ressources Ressource[]
 }
 
 model User {
@@ -30,8 +33,13 @@ email String @unique
 passwordHash String
 role Role
 createdAt DateTime @default(now())
-
+shiftAssignments ShiftAssignment[]
 locations UserLocation[]
+swapRequestsSent ShiftSwapRequest[] @relation("SwapRequester")
+swapRequestsReceived ShiftSwapRequest[] @relation("SwapTarget")
+inventoryFlags InventoryFlag[]
+issueReports IssueReport[]
+ressources Ressource[]
 }
 
 model UserLocation{
@@ -43,9 +51,116 @@ model UserLocation{
   @@id([userId, locationId])
 }
 
+model ShiftAssignment{
+ id String @id @default(cuid())
+ userId String
+ employee User @relation(fields: [userId], references: [id])
+ date DateTime
+ start String
+ end String
+ position Position
+ createdAt DateTime @default(now())
+ requesterShift ShiftSwapRequest[] @relation("RequesterShift")
+targetShift ShiftSwapRequest[]  @relation("TargetShift")
+}
+
+model ShiftSwapRequest {
+  id String @id @default(cuid())
+  requesterId String
+  targetId String
+  requesterUser User @relation("SwapRequester", fields: [requesterId], references: [id]) 
+  targetUser User @relation("SwapTarget", fields: [targetId], references: [id])
+  requesterShiftId String
+  targetShiftId String
+  requesterShift ShiftAssignment @relation("RequesterShift", fields: [requesterShiftId], references: [id])
+  targetShift ShiftAssignment @relation("TargetShift", fields: [targetShiftId], references: [id])
+  status SwapStatus
+createdAt DateTime
+}
+
+model InventoryItem {
+  id String @id @default(cuid())
+  name String
+  quantity Int
+  unit String
+  locationId String
+  location Location @relation(fields: [locationId], references: [id])
+  lowThreshold Int
+  updatedAt DateTime @updatedAt
+  inventoryFlags InventoryFlag[]
+}
+
+model InventoryFlag {
+  id String @id @default(cuid())
+  inventoryItemId String
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  userId String
+  flaggedBy User @relation(fields: [userId], references: [id])
+  note String
+  flagStatus FlagStatus
+  createdAt DateTime
+}
+
+model IssueReport{
+  id String @id @default(cuid())
+  userId String
+  reportBy User @relation(fields: [userId], references: [id])
+  locationId String
+  atLocation Location @relation(fields: [locationId], references: [id])
+  resolvedAt DateTime?
+  note String
+  reportStatus ReportStatus
+  createdAt DateTime @default(now())
+}
+
+model Ressource {
+  id String @id @default(cuid())
+  userId String
+  createdBy User @relation(fields: [userId], references: [id])
+  locationId String
+  location Location @relation(fields: [locationId], references: [id])
+  title String
+  content String
+  category RessourceType
+  createdAt DateTime @default(now())
+}
+
+enum Position {
+  busboy
+  runner
+  juicebar
+  waiter
+  hostess
+}
+
 enum Status {
   active
   inactive
+}
+
+enum SwapStatus {
+  pending_target
+  pending_manager
+  approved
+  rejected_by_target
+  rejected_by_manager
+}
+
+enum FlagStatus {
+    open
+    resolved
+}
+
+enum ReportStatus {
+ open
+ acknowledged
+ resolved
+}
+
+enum RessourceType {
+  recipe
+  procedure
+  policy
 }
 
 enum Role {
