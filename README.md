@@ -47,7 +47,7 @@ Currently in active development. Phase 1 (database schema and core models) is co
 - [x] Database schema design
 - [x] Core models — User, Location, UserLocation
 - [x] Operation models - Scheduling, Inventory, Issues, Resources
-- [ ] Auth — register, login, JWT, role middleware, Auth pages UI
+- [x] Auth — register, login, JWT, role middleware, Auth pages UI
 - [ ] Scheduling — templates, seasons, assignments, Scheduling pages UI
 - [ ] Shift swapping workflow
 - [ ] Application intake
