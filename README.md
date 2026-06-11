@@ -53,6 +53,8 @@ Currently in active development. Phase 1 (database schema and core models) is co
 - [ ] Resource library
 
 ## Future Considerations
+- Dynamic enum management (e.g. Position) - replace hardcoded enums types with a manager-defined model per location, allowing each restaurant to define their own roles.
+- Ressource document upload with AI analysing, dynamically adding it to the database 
 - Texting feature and group chats
 - Clock in/out with geofencing and managerial override
 - Shift-linked task assignment
