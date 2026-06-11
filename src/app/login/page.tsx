@@ -14,23 +14,27 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!response.ok) {
-      setError("Invalid email or password");
-      return;
+      if (!response.ok) {
+        setError("Invalid email or password");
+        return;
+      }
+
+      const data = await response.json();
+      const { token, id, role } = data;
+
+      login(token, id, role);
+
+      router.push("/dashboard");
+    } catch (e) {
+      setError("Something went wrong. Please try again.");
     }
-
-    const data = await response.json();
-    const { token, id, role } = data;
-
-    login(token, id, role);
-
-    router.push("/dashboard");
   };
 
   return (

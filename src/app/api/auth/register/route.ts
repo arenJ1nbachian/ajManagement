@@ -35,7 +35,10 @@ export async function POST(request: Request) {
       expiresIn: "7d",
     }); // Create a jsonwebtoken
 
-    return NextResponse.json({ token }, { status: 201 }); // return the token with 201 status
+    return NextResponse.json(
+      { token, id: user.id, role: user.role },
+      { status: 200 },
+    ); // return the token, id and role
   } catch (e) {
     return NextResponse.json(
       { message: "Internal server error" },
