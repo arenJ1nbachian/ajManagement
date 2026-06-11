@@ -43,6 +43,7 @@ Currently in active development. Phase 1 (database schema and core models) is co
 ### Roadmap
 - [x] Database schema design
 - [x] Core models — User, Location, UserLocation
+- [x] Operation models - Scheduling, Inventory, Issues, Resources
 - [ ] Auth — register, login, JWT, role middleware
 - [ ] Scheduling — templates, seasons, assignments
 - [ ] Shift swapping workflow
