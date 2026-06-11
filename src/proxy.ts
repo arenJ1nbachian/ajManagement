@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const authorization = request.headers.get("Authorization"); // Retreive the authorization header
 
   if (!authorization)
