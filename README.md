@@ -9,6 +9,7 @@ Most small and mid-sized restaurants run their day-to-day operations on paper �
 ## Features
 
 ### For Managers
+
 - **Schedule Management** — define shift templates with seasonal hour overrides, assign employees to shifts, and get notified when staff request swaps
 - **Shift Swap Approval** — review and approve or reject employee-initiated shift swaps before they take effect
 - **CV Archive** — receive and review job applications submitted online or logged from walk-ins, with status tracking from pending to hired
@@ -18,6 +19,7 @@ Most small and mid-sized restaurants run their day-to-day operations on paper �
 - **Staff Management** — manage employees across multiple locations with role-based access control
 
 ### For Employees
+
 - **Schedule Access** — view your own shifts and your colleagues' schedules
 - **Shift Swap Requests** — propose a swap with a colleague directly in the app; the manager is notified automatically upon mutual agreement
 - **Issue Reporting** — report problems without texting the manager
@@ -41,11 +43,12 @@ The schema is built around 12 relational tables covering users, locations, sched
 Currently in active development. Phase 1 (database schema and core models) is complete.
 
 ### Roadmap
+
 - [x] Database schema design
 - [x] Core models — User, Location, UserLocation
 - [x] Operation models - Scheduling, Inventory, Issues, Resources
-- [ ] Auth — register, login, JWT, role middleware
-- [ ] Scheduling — templates, seasons, assignments
+- [ ] Auth — register, login, JWT, role middleware, Auth pages UI
+- [ ] Scheduling — templates, seasons, assignments, Scheduling pages UI
 - [ ] Shift swapping workflow
 - [ ] Application intake
 - [ ] Inventory management
@@ -53,10 +56,10 @@ Currently in active development. Phase 1 (database schema and core models) is co
 - [ ] Resource library
 
 ## Future Considerations
+
 - Dynamic enum management (e.g. Position) - replace hardcoded enums types with a manager-defined model per location, allowing each restaurant to define their own roles.
-- Ressource document upload with AI analysing, dynamically adding it to the database 
+- Ressource document upload with AI analysing, dynamically adding it to the database
 - Texting feature and group chats
 - Clock in/out with geofencing and managerial override
 - Shift-linked task assignment
 - Progressive Web App implementation with a possibility for a React Native Version in v2
-
