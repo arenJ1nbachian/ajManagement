@@ -36,7 +36,7 @@ Most small and mid-sized restaurants run their day-to-day operations on paper â€
 
 ## Data Model
 
-The schema is built around 12 relational tables covering users, locations, scheduling, shift swapping, applications, inventory, issue reporting, and resources. Employees can belong to multiple locations via a junction table. Shifts are defined as reusable templates with seasonal hour overrides, generating concrete daily assignments per employee.
+The schema is built around 10 relational tables covering users, locations, scheduling, shift swapping, applications, inventory, issue reporting, and resources. Employees can belong to multiple locations via a junction table. Shifts are defined as reusable templates with seasonal hour overrides, generating concrete daily assignments per employee.
 
 ## Project Status
 
