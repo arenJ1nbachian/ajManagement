@@ -35,6 +35,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* Since this function can be called from any component we throw an error to limit the function call to only components that are children of AuthContext.
+   Nothing pr beevents this function froming called by any component but it reduces human developer mistakes */
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used with an AuthProvider");

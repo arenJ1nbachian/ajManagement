@@ -7,11 +7,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const { login } = useAuth();
-  const router = useRouter();
+  const [email, setEmail] = useState<string>(""); // Holds the value of the email input
+  const [password, setPassword] = useState<string>(""); // Holds the value of the password input
+  const [error, setError] = useState<string>(""); // Holds the error message if request's response returns an error
+  const { login } = useAuth(); // Destructures login function from the externally created authContext
+  const router = useRouter(); // Router for page redirection
 
   const handleLogin = async () => {
     try {
@@ -22,6 +22,7 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
+        // Invalid credentials
         setError("Invalid email or password");
         return;
       }
@@ -31,7 +32,7 @@ export default function LoginPage() {
 
       login(token, id, role);
 
-      router.push("/dashboard");
+      router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
       setError("Something went wrong. Please try again.");
     }
