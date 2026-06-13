@@ -14,14 +14,17 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
   });
+
   const [error, setError] = useState<string>("");
+
   const { login } = useAuth();
   const router = useRouter();
 
   const handleRegister = async () => {
-    const { confirmPassword, ...registerData } = form;
+    const { confirmPassword, ...registerData } = form; // Seperate registerData
     try {
       if (form.confirmPassword !== form.password) {
+        // Passwords dont't match
         setError("Passwords do not match");
         return;
       }
@@ -33,16 +36,17 @@ export default function RegisterPage() {
       });
 
       if (!response.ok) {
+        // Account already exists
         setError("Account already exists");
         return;
       }
 
       const data = await response.json();
-      const { token, id, role } = data;
+      const { token, id, role } = data; // Destructure to obtain token, id and role
 
-      login(token, id, role);
+      login(token, id, role); // Login
 
-      router.push("/dashboard");
+      router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
       setError("Something went wrong. Please try again");
     }
