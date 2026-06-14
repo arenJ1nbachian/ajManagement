@@ -1,15 +1,15 @@
 import { PrismaClient } from "@generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { generateToken } from "@/lib/tokens";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-export const POST = async (request: Request): Promise<NextResponse> => {
+export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const secret = process.env.JWT_REFRESH_SECRET!;
-  const { refreshToken } = await request.json();
+  const refreshToken = request.cookies.get("refreshToken")?.value!; // Access the refreshToken
 
   try {
     jwt.verify(refreshToken, secret);
@@ -51,10 +51,20 @@ export const POST = async (request: Request): Promise<NextResponse> => {
     // Generate new tokens and return it to the client
     const tokens = await generateToken(prisma, user);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
     });
+
+    // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is hits this file
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true, // JS won't be able to read this cookie
+      secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
+      sameSite: true, // This cookie is only sent from my own domain
+      path: "/api/auth/refresh", // This cookie is sent to this path
+      maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
+    });
+
+    return response;
   } catch (e) {
     if (e instanceof TokenExpiredError) {
       return NextResponse.json({ message: "Expired token" }, { status: 401 }); // Token is expired

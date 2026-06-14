@@ -31,10 +31,25 @@ export async function POST(request: Request) {
 
     const { accessToken, refreshToken } = await generateToken(prisma, user); // Destructure accessToken and refreshToken from the helper function
 
-    return NextResponse.json(
-      { accessToken, refreshToken, id: user.id, role: user.role },
+    const response = NextResponse.json(
+      {
+        accessToken: accessToken,
+        id: user.id,
+        role: user.role,
+      },
       { status: 200 },
     ); // return the tokens, id and role
+
+    // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is to "/api/auth/refresh"
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true, // JS won't be able to read this cookie
+      secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
+      sameSite: true, // This cookie is only sent from my own domain
+      path: "/api/auth/refresh", // This cookie is sent to this path
+      maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
+    });
+
+    return response;
   } catch (e) {
     console.log(e);
     return NextResponse.json(
