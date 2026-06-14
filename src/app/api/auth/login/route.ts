@@ -1,8 +1,8 @@
+import { generateToken } from "@/lib/tokens";
 import { PrismaClient } from "@generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -29,16 +29,17 @@ export async function POST(request: Request) {
         { status: 401 },
       ); // The password does not match
 
-    const secret = process.env.JWT_SECRET!;
-
-    const token = jwt.sign({ userId: user.id, role: user.role }, secret, {
-      expiresIn: "7d",
-    }); // Create a jwt token
+    const { accessToken, refreshToken } = await generateToken(prisma, user); // Destructure accessToken and refreshToken from the helper function
 
     return NextResponse.json(
-      { token, id: user.id, role: user.role },
+      {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        id: user.id,
+        role: user.role,
+      },
       { status: 200 },
-    ); // return the token, id and role
+    ); // return the tokens, id and role
   } catch (e) {
     return NextResponse.json(
       { message: "Internal server error" },

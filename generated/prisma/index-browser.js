@@ -137,6 +137,16 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  refreshToken: 'refreshToken',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  expiresAt: 'expiresAt',
+  revoked: 'revoked'
+};
+
 exports.Prisma.UserLocationScalarFieldEnum = {
   userId: 'userId',
   locationId: 'locationId',
@@ -262,6 +272,7 @@ exports.RessourceType = exports.$Enums.RessourceType = {
 exports.Prisma.ModelName = {
   Location: 'Location',
   User: 'User',
+  RefreshToken: 'RefreshToken',
   UserLocation: 'UserLocation',
   ShiftAssignment: 'ShiftAssignment',
   ShiftSwapRequest: 'ShiftSwapRequest',

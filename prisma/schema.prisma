@@ -40,6 +40,18 @@ swapRequestsReceived ShiftSwapRequest[] @relation("SwapTarget")
 inventoryFlags InventoryFlag[]
 issueReports IssueReport[]
 ressources Ressource[]
+refreshTokens RefreshToken[] 
+}
+
+model RefreshToken {
+id String @id @default(uuid())
+refreshToken String @unique
+userId String
+user User @relation(fields: [userId], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt()
+expiresAt DateTime
+revoked Boolean  @default(false)
 }
 
 model UserLocation{
