@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       httpOnly: true, // JS won't be able to read this cookie
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: true, // This cookie is only sent from my own domain
-      path: "/api/auth/refresh", // This cookie is sent to this path
+      path: "/api/auth/refreshToken", // This cookie is sent to this path
       maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
     });
 
