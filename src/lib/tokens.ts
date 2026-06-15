@@ -1,6 +1,7 @@
 import { PrismaClient, User } from "@generated/prisma";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 
 type GenerateTokenResult = {
   accessToken: string;
@@ -47,11 +48,16 @@ export const generateToken = async (
     expiresIn: "7d",
   }); // Create a refresh token
 
+  const refreshTokenHash = crypto
+    .createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
   const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
   await prisma.refreshToken.create({
     data: {
-      refreshToken,
+      refreshToken: refreshTokenHash,
       userId: user.id,
       expiresAt: new Date(Date.now() + oneWeek),
     },

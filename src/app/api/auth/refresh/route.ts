@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { NextRequest, NextResponse } from "next/server";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { generateToken } from "@/lib/tokens";
+import crypto from "crypto";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -13,14 +14,21 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
   try {
     jwt.verify(refreshToken, secret);
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
     const rToken = await prisma.refreshToken.findUnique({
-      where: { refreshToken },
+      where: { refreshToken: refreshTokenHash },
     });
 
     if (!rToken) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 }); // Token does not exist in db
     }
 
+    if (rToken.expiresAt < new Date()) {
+      return NextResponse.json({ message: "Expired token" }, { status: 401 }); // Token is expired
+    }
     if (rToken.revoked) {
       // theft detected - revoke all tokens for this user
       await prisma.refreshToken.updateMany({
