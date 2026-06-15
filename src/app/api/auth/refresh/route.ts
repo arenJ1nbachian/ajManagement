@@ -56,7 +56,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     });
 
     // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is hits this file
-    response.cookies.set("refreshToken", refreshToken, {
+    response.cookies.set("refreshToken", tokens.refreshToken, {
       httpOnly: true, // JS won't be able to read this cookie
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: true, // This cookie is only sent from my own domain
