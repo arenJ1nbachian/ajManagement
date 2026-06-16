@@ -50,6 +50,15 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         { status: 200 },
       );
 
+      const refreshTokenHash = crypto
+        .createHash("sha256")
+        .update(refreshToken)
+        .digest("hex");
+
+      await prisma.refreshToken.deleteMany({
+        where: { refreshToken: refreshTokenHash },
+      }); // Delete refresh token from database to prevent dead data accumulation
+
       response.cookies.delete({
         name: "refreshToken",
         path: "/api/auth/refreshToken",
