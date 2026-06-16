@@ -18,6 +18,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       .createHash("sha256")
       .update(refreshToken)
       .digest("hex");
+
     const rToken = await prisma.refreshToken.findUnique({
       where: { refreshToken: refreshTokenHash },
     });
@@ -29,8 +30,13 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     if (rToken.expiresAt < new Date()) {
       return NextResponse.json({ message: "Expired token" }, { status: 401 }); // Token is expired
     }
-    if (rToken.revoked) {
-      // theft detected - revoke all tokens for this user
+
+    const update = await prisma.refreshToken.updateMany({
+      where: { refreshToken: refreshTokenHash, revoked: false },
+      data: { revoked: true },
+    });
+
+    if (update.count === 0) {
       await prisma.refreshToken.updateMany({
         where: { userId: rToken.userId },
         data: { revoked: true },
@@ -50,12 +56,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       return NextResponse.json({ message: "User not found" }, { status: 404 }); // The user does not exist
     }
 
-    // Mark the current refreshToken as revoked
-    await prisma.refreshToken.update({
-      where: { id: rToken.id },
-      data: { revoked: true },
-    });
-
     // Generate new tokens and return it to the client
     const tokens = await generateToken(prisma, user);
 
@@ -71,7 +71,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       path: "/api/auth/refreshToken", // This cookie is sent to this path
       maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
     });
-
     return response;
   } catch (e) {
     if (e instanceof TokenExpiredError) {

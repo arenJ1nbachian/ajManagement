@@ -37,16 +37,20 @@ export const generateToken = async (
   const refreshSecret = process.env.JWT_REFRESH_SECRET!;
 
   const accessToken = jwt.sign(
-    { userId: user.id, role: user.role },
+    { userId: user.id, role: user.role, jti: crypto.randomUUID() },
     accessSecret,
     {
       expiresIn: "5m",
     },
   ); // Create an access token
 
-  const refreshToken = jwt.sign({ userId: user.id }, refreshSecret, {
-    expiresIn: "7d",
-  }); // Create a refresh token
+  const refreshToken = jwt.sign(
+    { userId: user.id, jti: crypto.randomUUID() },
+    refreshSecret,
+    {
+      expiresIn: "7d",
+    },
+  ); // Create a refresh token
 
   const refreshTokenHash = crypto
     .createHash("sha256")
