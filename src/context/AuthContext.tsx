@@ -1,10 +1,11 @@
 "use client";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 type AuthContextType = {
   token: string | null;
   userId: string | null;
   role: string | null;
+  isLoading: boolean;
   login: (token: string, userId: string, role: string) => void;
   logout: () => void;
 };
@@ -15,6 +16,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  /*  Upon initial load generate a new access token and refresh token
+      This will set the states to a specific value which the root layouts
+      of our pages will evaluate to redirect a user to the appropriate page 
+      
+      !isLoading && token  - Indicates that a valid refreshToken was attached and the user is authenticated with a fresh access token
+      isLoading && !token  - Indicates that the renewRefreshToken api is still processing and hasn't returned anything (too early to dertermine)
+      !isLoading && !token - Indicates that an access token couldn't be generated and the user is not authenticated (login required)
+      
+      */
+  useEffect(() => {
+    const renewRefreshToken = async () => {
+      const response = await fetch("/api/auth/refreshToken/renew", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 404 || response.status === 401) {
+        setIsLoading(false);
+      } else {
+        const data = await response.json();
+        login(data.accessToken, data.id, data.role);
+        setIsLoading(false);
+      }
+    };
+
+    renewRefreshToken();
+  }, []);
 
   const login = (token: string, userId: string, role: string) => {
     setToken(token);
@@ -29,7 +59,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, userId, role, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, userId, role, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -61,6 +61,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     const response = NextResponse.json({
       accessToken: tokens.accessToken,
+      id: user.id,
+      role: user.role,
     });
 
     // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is hits this file

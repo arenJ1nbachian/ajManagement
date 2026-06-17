@@ -42,9 +42,9 @@ export default function RegisterPage() {
       }
 
       const data = await response.json();
-      const { token, id, role } = data; // Destructure to obtain token, id and role
+      const { accessToken, id, role } = data; // Destructure to obtain token, id and role
 
-      login(token, id, role); // Login
+      login(accessToken, id, role); // Login
 
       router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {

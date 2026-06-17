@@ -28,9 +28,9 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      const { token, id, role } = data;
+      const { accessToken, id, role } = data;
 
-      login(token, id, role);
+      login(accessToken, id, role);
 
       router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
