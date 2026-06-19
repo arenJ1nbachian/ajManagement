@@ -57,7 +57,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     // Generate new tokens and return it to the client
-    const tokens = await generateToken(prisma, user);
+    const tokens = await generateToken(prisma, user, rToken.expiresAt);
 
     const response = NextResponse.json({
       accessToken: tokens.accessToken,
@@ -71,13 +71,10 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: "strict", // This cookie is only sent from my own domain
       path: "/api/auth/refreshToken", // This cookie is sent to this path
-      maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
+      maxAge: Math.floor(rToken.expiresAt.getTime() - Date.now() / 1000), // Lasts 7 days
     });
     return response;
   } catch (e) {
-    if (e instanceof TokenExpiredError) {
-      return NextResponse.json({ message: "Expired token" }, { status: 401 }); // Token is expired
-    }
     if (e instanceof JsonWebTokenError) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 }); // Wrong token provided
     }

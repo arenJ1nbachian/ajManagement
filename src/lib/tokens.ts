@@ -32,6 +32,7 @@ export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
 export const generateToken = async (
   prisma: PrismaClient,
   user: User,
+  oldTokenExpiry?: Date,
 ): Promise<GenerateTokenResult> => {
   const accessSecret = process.env.JWT_ACCESS_SECRET!;
   const refreshSecret = process.env.JWT_REFRESH_SECRET!;
@@ -47,9 +48,6 @@ export const generateToken = async (
   const refreshToken = jwt.sign(
     { userId: user.id, jti: crypto.randomUUID() },
     refreshSecret,
-    {
-      expiresIn: "7d",
-    },
   ); // Create a refresh token
 
   const refreshTokenHash = crypto
@@ -63,7 +61,9 @@ export const generateToken = async (
     data: {
       refreshToken: refreshTokenHash,
       userId: user.id,
-      expiresAt: new Date(Date.now() + oneWeek),
+      expiresAt: oldTokenExpiry
+        ? oldTokenExpiry
+        : new Date(Date.now() + oneWeek),
     },
   }); // Add refreshToken in the database
 
