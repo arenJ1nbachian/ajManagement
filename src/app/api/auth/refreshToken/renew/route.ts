@@ -1,7 +1,7 @@
 import { PrismaClient } from "@generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { NextRequest, NextResponse } from "next/server";
-import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { generateToken } from "@/lib/tokens";
 import crypto from "crypto";
 
@@ -70,7 +70,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       httpOnly: true, // JS won't be able to read this cookie
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: "strict", // This cookie is only sent from my own domain
-      path: "/api/auth/refreshToken", // This cookie is sent to this path
+      path: "/", // This cookie is sent to this path
       maxAge: Math.floor(rToken.expiresAt.getTime() - Date.now() / 1000), // The cookie lasts for as long as the tokens expiration
     });
     return response;

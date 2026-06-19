@@ -39,7 +39,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     response.cookies.delete({
       name: "refreshToken",
-      path: "/api/auth/refreshToken",
+      path: "/",
     });
 
     return response;
@@ -61,7 +61,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
       response.cookies.delete({
         name: "refreshToken",
-        path: "/api/auth/refreshToken",
+        path: "/",
       });
       return response; // Token is expired, assume logged out and clear cookie
     }
@@ -73,7 +73,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
       response.cookies.delete({
         name: "refreshToken",
-        path: "/api/auth/refreshToken",
+        path: "/",
       });
       return response; // Wrong token provided, assume logged out and clear cookie
     }
