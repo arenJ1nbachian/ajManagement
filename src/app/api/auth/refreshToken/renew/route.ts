@@ -71,7 +71,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: "strict", // This cookie is only sent from my own domain
       path: "/api/auth/refreshToken", // This cookie is sent to this path
-      maxAge: Math.floor(rToken.expiresAt.getTime() - Date.now() / 1000), // Lasts 7 days
+      maxAge: Math.floor(rToken.expiresAt.getTime() - Date.now() / 1000), // The cookie lasts for as long as the tokens expiration
     });
     return response;
   } catch (e) {
