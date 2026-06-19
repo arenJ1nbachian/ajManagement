@@ -5,6 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>(""); // Holds the value of the email input
@@ -39,25 +48,63 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="flex flex-col gap-4">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button onClick={handleLogin}>Login</Button>
-      </div>
+    <div className="flex items-center justify-center min-h-screen px-4">
+      <Card className="w-100 max-w-sm flex ">
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+          <CardAction>
+            <Button onClick={() => router.push("/register")} variant="link">
+              Sign Up
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <form>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {error && (
+                  <div className="ml-auto text-red-500 text-sm w-fit">
+                    {error}
+                  </div>
+                )}
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="flex-col gap-2">
+          <Button type="submit" className="w-full" onClick={handleLogin}>
+            Login
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
