@@ -29,7 +29,11 @@ export async function POST(request: Request) {
       data: { firstname, lastname, email, passwordHash, role: "employee" },
     }); // Create new user in db
 
-    const { accessToken, refreshToken } = await generateToken(prisma, user); // Destructure accessToken and refreshToken from the helper function
+    const { accessToken, refreshToken } = await generateToken(
+      prisma,
+      user,
+      false,
+    ); // Destructure accessToken and refreshToken from the helper function
 
     const response = NextResponse.json(
       {

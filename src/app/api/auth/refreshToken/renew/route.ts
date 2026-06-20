@@ -57,7 +57,12 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }
 
     // Generate new tokens and return it to the client
-    const tokens = await generateToken(prisma, user, rToken.expiresAt);
+    const tokens = await generateToken(
+      prisma,
+      user,
+      undefined,
+      rToken.expiresAt,
+    );
 
     const response = NextResponse.json({
       accessToken: tokens.accessToken,

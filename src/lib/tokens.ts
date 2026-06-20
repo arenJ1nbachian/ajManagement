@@ -32,6 +32,7 @@ export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
 export const generateToken = async (
   prisma: PrismaClient,
   user: User,
+  rememberMe: boolean | undefined,
   oldTokenExpiry?: Date,
 ): Promise<GenerateTokenResult> => {
   const accessSecret = process.env.JWT_ACCESS_SECRET!;
@@ -55,15 +56,16 @@ export const generateToken = async (
     .update(refreshToken)
     .digest("hex");
 
-  const oneWeek = 1000 * 60 * 60 * 24 * 7;
+  const oneMonth = 1000 * 60 * 60 * 24 * 30;
+  const threeHours = 1000 * 60 * 60 * 3;
+
+  const expiry = new Date(Date.now() + (rememberMe ? oneMonth : threeHours)); // If rememberMe is checked then expiration is in 30 days or 3 hours if unchecked
 
   await prisma.refreshToken.create({
     data: {
       refreshToken: refreshTokenHash,
       userId: user.id,
-      expiresAt: oldTokenExpiry
-        ? oldTokenExpiry
-        : new Date(Date.now() + oneWeek),
+      expiresAt: oldTokenExpiry ? oldTokenExpiry : expiry,
     },
   }); // Add refreshToken in the database
 

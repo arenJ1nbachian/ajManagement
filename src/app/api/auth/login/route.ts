@@ -11,7 +11,11 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { email, password } = body; // Destructure login fields from body
+    const {
+      email,
+      password,
+      rememberMe,
+    }: { email: string; password: string; rememberMe: boolean } = body; // Destructure login fields from body
 
     const user = await prisma.user.findUnique({ where: { email } }); // Find the user where email matches one from the input
 
@@ -29,7 +33,11 @@ export async function POST(request: Request) {
         { status: 401 },
       ); // The password does not match
 
-    const { accessToken, refreshToken } = await generateToken(prisma, user); // Destructure accessToken and refreshToken from the helper function
+    const { accessToken, refreshToken } = await generateToken(
+      prisma,
+      user,
+      rememberMe,
+    ); // Destructure accessToken and refreshToken from the helper function
 
     const response = NextResponse.json(
       {
@@ -46,7 +54,7 @@ export async function POST(request: Request) {
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: "strict", // This cookie is only sent from my own domain
       path: "/", // This cookie is sent to this path
-      maxAge: 60 * 60 * 24 * 7, // Lasts 7 days
+      ...(rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}), // If rememberMe checking the cookie lasts a month else it becomes a session cookie
     });
 
     return response;
