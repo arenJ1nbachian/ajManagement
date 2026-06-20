@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       secure: true, // This cookie is only sent over HTTPS and never over plain HTTP
       sameSite: "strict", // This cookie is only sent from my own domain
       path: "/", // This cookie is sent to this path
-      ...(rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}), // If rememberMe checking the cookie lasts a month else it becomes a session cookie
+      ...(rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}), // If rememberMe is checked the cookie lasts a month else it becomes a session cookie
     });
 
     return response;
