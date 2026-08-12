@@ -6,7 +6,13 @@ type AuthContextType = {
   userId: string | null;
   role: string | null;
   isLoading: boolean;
-  login: (token: string, userId: string, role: string) => void;
+  locationId: string | null;
+  login: (
+    token: string,
+    userId: string,
+    role: string,
+    locationId: string,
+  ) => void;
   logout: () => void;
 };
 
@@ -17,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [locationId, setLocationId] = useState<string | null>(null);
 
   /*  Upon initial load generate a new access token and refresh token
       This will set the states to a specific value which the root layouts
@@ -38,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       } else {
         const data = await response.json();
-        login(data.accessToken, data.id, data.role);
+        login(data.accessToken, data.id, data.role, data.locationId);
         setIsLoading(false);
       }
     };
@@ -46,21 +53,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     renewRefreshToken();
   }, []);
 
-  const login = (token: string, userId: string, role: string) => {
+  const login = (
+    token: string,
+    userId: string,
+    role: string,
+    locationId: string,
+  ) => {
     setToken(token);
     setUserId(userId);
     setRole(role);
+    setLocationId(locationId);
   };
 
   const logout = () => {
     setToken(null);
     setUserId(null);
     setRole(null);
+    setLocationId(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ token, userId, role, isLoading, login, logout }}
+      value={{ token, userId, role, isLoading, locationId, login, logout }}
     >
       {children}
     </AuthContext.Provider>

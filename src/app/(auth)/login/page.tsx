@@ -32,9 +32,9 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      const { accessToken, id, role } = data;
+      const { accessToken, id, role, locationId } = data;
 
-      login(accessToken, id, role);
+      login(accessToken, id, role, locationId);
 
       router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
@@ -105,8 +105,14 @@ export default function LoginPage() {
             Sign in
           </Button>
           <div className="text-center">
-            Don't have an account?{" "}
-            <a className="text-primary hover:underline">Create one</a>
+            Don't have an account?
+            <Button
+              className="text-primary hover:underline"
+              onClick={() => router.push("/register")}
+              variant="link"
+            >
+              Create one
+            </Button>
           </div>
         </CardContent>
       </Card>

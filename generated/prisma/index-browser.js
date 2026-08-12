@@ -159,7 +159,7 @@ exports.Prisma.ShiftAssignmentScalarFieldEnum = {
   date: 'date',
   start: 'start',
   end: 'end',
-  position: 'position',
+  positionId: 'positionId',
   createdAt: 'createdAt'
 };
 
@@ -212,6 +212,12 @@ exports.Prisma.RessourceScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PositionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  locationId: 'locationId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -227,21 +233,15 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 exports.Role = exports.$Enums.Role = {
+  owner: 'owner',
   manager: 'manager',
   employee: 'employee'
 };
 
 exports.Status = exports.$Enums.Status = {
   active: 'active',
-  inactive: 'inactive'
-};
-
-exports.Position = exports.$Enums.Position = {
-  busboy: 'busboy',
-  runner: 'runner',
-  juicebar: 'juicebar',
-  waiter: 'waiter',
-  hostess: 'hostess'
+  inactive: 'inactive',
+  pending: 'pending'
 };
 
 exports.SwapStatus = exports.$Enums.SwapStatus = {
@@ -279,7 +279,8 @@ exports.Prisma.ModelName = {
   InventoryItem: 'InventoryItem',
   InventoryFlag: 'InventoryFlag',
   IssueReport: 'IssueReport',
-  Ressource: 'Ressource'
+  Ressource: 'Ressource',
+  Position: 'Position'
 };
 
 /**

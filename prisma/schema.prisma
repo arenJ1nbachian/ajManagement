@@ -12,8 +12,8 @@ datasource db {
   provider = "postgresql"
 }
 
+// Location is a model where owners represent their business and add ressources, employees and other relevant needs
 model Location {
-
 id String @id @default(cuid())
 name String
 address String
@@ -22,10 +22,11 @@ users UserLocation[]
 inventoryItems InventoryItem[]
 issueReports IssueReport[]
 ressources Ressource[]
+position Position[]
 }
 
+// User is a model that represents an individual working in a company.
 model User {
-
 id String @id @default(cuid())
 firstname String
 lastname String
@@ -43,6 +44,7 @@ ressources Ressource[]
 refreshTokens RefreshToken[] 
 }
 
+// A model used for storing the users hashed refresh token. In case of a data breach, the raw value of refreshToken cannot be used to authenticate
 model RefreshToken {
 id String @id @default(uuid())
 refreshToken String @unique
@@ -54,6 +56,7 @@ expiresAt DateTime
 revoked Boolean  @default(false)
 }
 
+// A model used for assigning a user to a specific location with flags that indicates their status to that location
 model UserLocation{
   userId String
   user User @relation(fields: [userId], references: [id])
@@ -63,6 +66,9 @@ model UserLocation{
   @@id([userId, locationId])
 }
 
+
+// A model used for assigning a shift to a user with their position for that shift. Since a user can occupy many positions on different shifts, position
+// belongs on the shift not on the user.
 model ShiftAssignment{
  id String @id @default(cuid())
  userId String
@@ -70,12 +76,14 @@ model ShiftAssignment{
  date DateTime
  start String
  end String
- position Position
+ positionId String
+ position Position @relation(fields: [positionId], references: [id])
  createdAt DateTime @default(now())
  requesterShift ShiftSwapRequest[] @relation("RequesterShift")
 targetShift ShiftSwapRequest[]  @relation("TargetShift")
 }
 
+// A model used for swapping 2 users shifts. Since 2 columns have the same references we require 2 named relations to distinguish them.
 model ShiftSwapRequest {
   id String @id @default(cuid())
   requesterId String
@@ -90,6 +98,7 @@ model ShiftSwapRequest {
 createdAt DateTime
 }
 
+// A model used to track a specific ressource. Information such as quantity, location, low in stock threshold and flags about the item initiated from a user are tracked
 model InventoryItem {
   id String @id @default(cuid())
   name String
@@ -102,6 +111,7 @@ model InventoryItem {
   inventoryFlags InventoryFlag[]
 }
 
+// A model used to create a flag about an item in the inventory.
 model InventoryFlag {
   id String @id @default(cuid())
   inventoryItemId String
@@ -113,6 +123,7 @@ model InventoryFlag {
   createdAt DateTime
 }
 
+// A model used to issue reports such as a broken equipment or an incident or any problem. resolvedAt is optional, it's null when first reported because it hasn't been resolved yet
 model IssueReport{
   id String @id @default(cuid())
   userId String
@@ -125,6 +136,7 @@ model IssueReport{
   createdAt DateTime @default(now())
 }
 
+// A model used for any ressource a business may have (e.g. recipe, procedures, contracts, etc)
 model Ressource {
   id String @id @default(cuid())
   userId String
@@ -137,17 +149,19 @@ model Ressource {
   createdAt DateTime @default(now())
 }
 
-enum Position {
-  busboy
-  runner
-  juicebar
-  waiter
-  hostess
+// A model where owners can define their own roles within their business. It belongs to a specific location and one position can belong to many different shifts
+model Position {
+  id String @id @default(cuid())
+  name String
+  locationId String
+  atLocation Location @relation(fields: [locationId], references: [id])
+  shiftAssignments ShiftAssignment[]
 }
 
 enum Status {
   active
   inactive
+  pending
 }
 
 enum SwapStatus {
@@ -176,6 +190,7 @@ enum RessourceType {
 }
 
 enum Role {
+  owner
   manager
   employee
 }
