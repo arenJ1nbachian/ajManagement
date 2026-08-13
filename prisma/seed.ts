@@ -9,6 +9,7 @@ async function main() {
   await prisma.shiftAssignment.deleteMany();
   await prisma.userLocation.deleteMany();
   await prisma.position.deleteMany();
+  await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
   await prisma.location.deleteMany();
 
@@ -36,16 +37,50 @@ async function main() {
     },
   });
 
+  const user2 = await prisma.user.create({
+    data: {
+      firstname: "Ari",
+      lastname: "Jinbachian",
+      email: "arijinbachian@gmail.com",
+      passwordHash: passwordHash,
+      role: "employee",
+    },
+  });
+
   const userLocation = await prisma.userLocation.create({
     data: { locationId: location.id, userId: user.id, status: "active" },
+  });
+
+  const userLocation2 = await prisma.userLocation.create({
+    data: { locationId: location.id, userId: user2.id, status: "active" },
   });
 
   const shiftAssignment = await prisma.shiftAssignment.create({
     data: {
       userId: user.id,
       date: new Date(Date.now()),
-      start: "8",
-      end: "15",
+      start: "08:00",
+      end: "14:30",
+      positionId: position.id,
+    },
+  });
+
+  const shiftAssignment3 = await prisma.shiftAssignment.create({
+    data: {
+      userId: user.id,
+      date: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      start: "08:00",
+      end: "14:30",
+      positionId: position.id,
+    },
+  });
+
+  const shiftAssignment2 = await prisma.shiftAssignment.create({
+    data: {
+      userId: user2.id,
+      date: new Date(Date.now()),
+      start: "06:30",
+      end: "01:00",
       positionId: position.id,
     },
   });

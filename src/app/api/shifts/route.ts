@@ -8,8 +8,13 @@ const prisma = new PrismaClient({ adapter });
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    // The locationId of the user that made this request
     const locationId = searchParams.get("locationId");
+
+    // The starting Monday date
     const startDate = searchParams.get("startDate");
+
+    // The ending Sunday date
     const endDate = searchParams.get("endDate");
 
     if (!locationId || !startDate || !endDate)
@@ -18,6 +23,7 @@ export async function GET(request: Request) {
         { status: 400 },
       );
 
+    // Retreive every users along with their first name, last name and their shifts where those shifts fall inclusively in between the start and end date
     const users = await prisma.userLocation.findMany({
       where: { locationId },
       select: {
@@ -26,12 +32,16 @@ export async function GET(request: Request) {
             id: true,
             firstname: true,
             lastname: true,
-            role: true,
             shiftAssignments: {
               select: {
                 start: true,
                 end: true,
                 date: true,
+                position: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
               where: {
                 date: { gte: new Date(startDate), lte: new Date(endDate) },

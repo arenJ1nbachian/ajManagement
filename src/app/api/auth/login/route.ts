@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         locationId: location?.locationId,
       },
       { status: 200 },
-    ); // return the tokens, id and role
+    ); // return the tokens, id, role and locationId
 
     // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is to "/api/auth/refresh"
     response.cookies.set("refreshToken", refreshToken, {
