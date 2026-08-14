@@ -73,7 +73,7 @@ model ShiftAssignment{
  id String @id @default(cuid())
  userId String
  employee User @relation(fields: [userId], references: [id])
- date DateTime
+ date DateTime @db.Date
  start String
  end String
  positionId String

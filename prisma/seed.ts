@@ -1,11 +1,14 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma";
 import bcrypt from "bcryptjs";
+import { getMonday, addDays } from "../src/lib/dateUtils";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  const weekStart = getMonday(new Date()); // "2026-08-10"
+
   await prisma.shiftAssignment.deleteMany();
   await prisma.userLocation.deleteMany();
   await prisma.position.deleteMany();
@@ -58,7 +61,7 @@ async function main() {
   const shiftAssignment = await prisma.shiftAssignment.create({
     data: {
       userId: user.id,
-      date: new Date(Date.now()),
+      date: new Date(addDays(weekStart, 0)),
       start: "08:00",
       end: "14:30",
       positionId: position.id,
@@ -68,7 +71,7 @@ async function main() {
   const shiftAssignment3 = await prisma.shiftAssignment.create({
     data: {
       userId: user.id,
-      date: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      date: new Date(addDays(weekStart, 1)),
       start: "08:00",
       end: "14:30",
       positionId: position.id,
@@ -78,7 +81,7 @@ async function main() {
   const shiftAssignment2 = await prisma.shiftAssignment.create({
     data: {
       userId: user2.id,
-      date: new Date(Date.now()),
+      date: new Date(addDays(weekStart, 4)),
       start: "06:30",
       end: "01:00",
       positionId: position.id,

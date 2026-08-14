@@ -23,8 +23,8 @@ export async function GET(request: Request) {
         { status: 400 },
       );
 
-    // Retreive every users along with their first name, last name and their shifts where those shifts fall inclusively in between the start and end date
-    const users = await prisma.userLocation.findMany({
+    // Retreive every schedules of users along with their first name, last name and their shifts where those shifts fall inclusively in between the start and end date
+    const schedules = await prisma.userLocation.findMany({
       where: { locationId },
       select: {
         user: {
@@ -53,7 +53,17 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json(users, { status: 200 });
+    const result = schedules.map((s) => ({
+      user: {
+        ...s.user,
+        shiftAssignments: s.user.shiftAssignments.map((a) => ({
+          ...a,
+          date: a.date.toISOString().split("T")[0],
+        })),
+      },
+    }));
+
+    return NextResponse.json(result, { status: 200 });
   } catch (e) {
     return NextResponse.json(
       { message: "Internal server error" },

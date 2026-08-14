@@ -1,7 +1,19 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import {
+  addDays,
+  formatLong,
+  getMonday,
+  toDateString,
+  todayString,
+} from "@/lib/dateUtils";
 import { useEffect, useState } from "react";
+
+// DATE MODEL
+// Every date in this component is a "YYYY-MM-DD" string, never a Date object.
+// Date objects only exist inside lib/dateUtils, which converts at the edges.
+// This means all date comparisons are string === and can't be shifted by timezone.
 
 // An object that contains the starting and ending hours, the specific date of a shift and the position fulfilled
 interface ShiftAssignment {
@@ -26,75 +38,35 @@ interface Positions {
   name: string;
 }
 
-// Grabs today's date and return the range of the current week from startDate (Monday) to endDate (Sunday)
-const getWeekRange = (): { startDate: Date; endDate: Date } => {
-  const today = new Date();
-
-  const dayOfWeek = today.getDay();
-
-  const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-
-  const monday = new Date();
-
-  monday.setDate(today.getDate() - daysFromMonday);
-
-  const sunday = new Date();
-  sunday.setDate(monday.getDate() + 6);
-
-  monday.setHours(0, 0, 0, 0);
-  sunday.setHours(23, 59, 59, 999);
-
-  return { startDate: monday, endDate: sunday };
-};
-
-const getDayMonthString = (day: number): String => {
-  const range = getWeekRange();
-
-  const date = new Date(range.startDate);
-  date.setDate(range.startDate.getDate() + day);
-
-  let stringDay = date.getDate().toString(); //16th
-
-  if (date.getDate() === 1 || date.getDate() === 21 || date.getDate() === 31) {
-    stringDay = stringDay + "st";
-  } else if (date.getDate() === 2 || date.getDate() === 22) {
-    stringDay = stringDay + "nd";
-  } else if (date.getDate() === 3 || date.getDate() === 23) {
-    stringDay = stringDay + "rd";
-  } else if (
-    (date.getDate() >= 4 && date.getDate() <= 20) ||
-    (date.getDate() >= 24 && date.getDate() <= 30)
-  ) {
-    stringDay = stringDay + "th";
-  }
-
-  stringDay =
-    stringDay + ` ${date.toLocaleDateString("en-US", { month: "long" })}`;
-
-  return stringDay;
-};
+const WEEK_NAMES = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export default function SchedulePage() {
+  const { userId, token, locationId } = useAuth();
+
+  const [weekStart, setWeekStart] = useState(() => getMonday(new Date()));
+
+  // weekStart is the only date state. Everything else derives from it.
+  // weekDates = the 7 columns, Monday..Sunday, as "YYYY-MM-DD" strings.
+  // Not state — recomputed each render, so it can never disagree with weekStart.
+  const weekDates = [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(weekStart, i));
+  const todayStr = todayString();
+
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [positions, setPositions] = useState<Positions[] | null>(null);
   const [positionId, setPositionId] = useState<string>("");
-  const weekNames = [
-    "Monday",
-    "Tueday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const [selectedDay, setSelectedDay] = useState<string>(todayStr);
 
-  const today = new Date();
-
-  const todayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
-  const [selectedDay, setSelectedDay] = useState<number>(todayIndex);
   const [selectedCell, setSelectedCell] = useState<{
     userId: string;
-    date: Date;
+    date: string;
     firstname: string;
     lastname: string;
   } | null>(null);
@@ -102,18 +74,8 @@ export default function SchedulePage() {
   const [endTime, setEndTime] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const { userId } = useAuth();
-
-  const weekRange = getWeekRange();
-
-  const { token, locationId } = useAuth();
-
   const handleSave = async () => {
     if (!startTime || !endTime || !positionId) {
-      console.log("SOMETHING IS WRONG HERE!");
-      console.log("startTime ", startTime);
-      console.log("endTime ", endTime);
-      console.log("positionId ", positionId);
       return;
     }
 
@@ -145,7 +107,7 @@ export default function SchedulePage() {
   const getSchedules = async () => {
     try {
       const response = await fetch(
-        `/api/shifts?locationId=${locationId}&startDate=${weekRange.startDate.toISOString()}&endDate=${weekRange.endDate.toISOString()}`,
+        `/api/shifts?locationId=${locationId}&startDate=${weekDates[0]}&endDate=${weekDates[6]}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -158,10 +120,13 @@ export default function SchedulePage() {
     }
   };
 
-  // On page load get the Monday and Sunday of the current week and retreive the schedule from that interval with the locadionId
+  // Refetches whenever the week changes (navigation) or auth resolves.
+  // The guard matters: token starts undefined while AuthContext renews it,
+  // and firing early would send "Bearer undefined".
   useEffect(() => {
+    if (!token || !locationId) return;
     getSchedules();
-  }, []);
+  }, [token, locationId, weekStart]);
 
   useEffect(() => {
     const getPositions = async () => {
@@ -185,40 +150,30 @@ export default function SchedulePage() {
     getPositions();
   }, []);
 
-  // Helper function that return the object representing a shift of an individual on a specific day.
-  // It takes in a columnIndex from 0 to 6 representing Monday to Sunday.
-  // Extracts the dayOfWeek from the shifts in  the assignments array, calculates the index and compares it with colIndex
-  // This essentially will be used to build an array of length 7 containing all the days the user might have a shift or undefined
-  // when the user does not have a shift.
-  const getShiftForDay = (assignments: ShiftAssignment[], colIndex: number) => {
-    return assignments.find((shift) => {
-      const dayOfWeek = new Date(shift.date).getDay();
-      const col = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-      return col === colIndex;
-    });
-  };
-
   return (
     <>
       <div className="lg:hidden">
         <div className="grid grid-cols-7 mx-1">
-          {weekNames.map((day, index) => {
-            const date = new Date(weekRange.startDate);
-            date.setDate(weekRange.startDate.getDate() + index);
+          {WEEK_NAMES.map((day, index) => {
+            const date = weekDates[index];
 
+            // Dot indicator — does ANY employee have a shift this day?
+            // .some() short-circuits on the first match; we only need yes/no, not which.
             const hasShifts = schedules.some((s) =>
-              getShiftForDay(s.user.shiftAssignments, index),
+              s.user.shiftAssignments.some((a) => a.date === date),
             );
+
+            const isSelectedDate = date === selectedDay;
 
             return (
               <button
-                onClick={() => setSelectedDay(index)}
-                key={day}
-                className={`relative text-center p-2 rounded-lg my-2 ${index === selectedDay ? "bg-blue-500 text-white" : ""}`}
+                onClick={() => setSelectedDay(date)}
+                key={date}
+                className={`relative text-center p-2 rounded-lg my-2 ${isSelectedDate ? "bg-blue-500 text-white" : ""}`}
               >
                 <div>{day.substring(0, 2)}</div>
                 <div>
-                  {date.getDate()}
+                  {date.split("-")[2]}
                   {hasShifts && (
                     <div className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-white" />
                   )}
@@ -227,17 +182,23 @@ export default function SchedulePage() {
             );
           })}
         </div>
-        <div className="text-xl font-bold px-3 py-2 my-2">{`${weekNames[selectedDay]} ${getDayMonthString(selectedDay)}`}</div>
+        <div className="text-xl font-bold px-3 py-2 my-2">
+          {formatLong(selectedDay)}
+        </div>
         <div className="w-4/5 mb-3">
           <hr className="h-3 border-t-2" />
         </div>
         {schedules
-          .filter((s) => getShiftForDay(s.user.shiftAssignments, selectedDay))
-          .sort((a, b) => (a.user.id === userId ? -1 : 1))
+          .filter((s) =>
+            s.user.shiftAssignments.some((a) => a.date === selectedDay),
+          )
+          .sort(
+            (a, b) =>
+              Number(b.user.id === userId) - Number(a.user.id === userId),
+          )
           .map((s) => {
-            const todayShift = getShiftForDay(
-              s.user.shiftAssignments,
-              selectedDay,
+            const todayShift = s.user.shiftAssignments.find(
+              (a) => a.date === selectedDay,
             )!;
 
             return (
@@ -254,26 +215,57 @@ export default function SchedulePage() {
           })}
       </div>
       <div className="hidden lg:block">
+        <div className="flex items-center justify-between p-4">
+          <button
+            onClick={() => setWeekStart(addDays(weekStart, -7))}
+            className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
+          >
+            ←
+          </button>
+
+          <div className="text-sm font-medium">
+            {weekStart} – {weekDates[6]}
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => setWeekStart(getMonday(new Date()))}
+              className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
+            >
+              Today
+            </button>
+            <button
+              onClick={() => setWeekStart(addDays(weekStart, 7))}
+              className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
+            >
+              →
+            </button>
+          </div>
+        </div>
         <div className="grid grid-cols-8">
           <div className="p-2 text-sm font-medium text-center border-b"></div>
-          {weekNames.map((day, index) => {
-            const date = new Date(weekRange.startDate);
-            date.setDate(weekRange.startDate.getDate() + index);
+          {WEEK_NAMES.map((d, index) => {
+            const date = weekDates[index];
+            const day = date.split("-")[2];
+            const isToday = date === todayStr;
             return (
               <div
-                key={day}
-                className={`p-2 text-sm font-medium text-center border-b ${index === todayIndex ? "text-blue-500" : ""}`}
+                key={date}
+                className={`p-2 text-sm font-medium text-center border-b ${isToday ? "text-blue-500" : ""}`}
               >
-                <div>{day.substring(0, 3)}</div>
-                <div>{date.getDate()}</div>
+                <div>{d.substring(0, 3)}</div>
+                <div>{day}</div>
               </div>
             );
           })}
         </div>
         {schedules.map((schedule: Schedule) => {
-          // Build an array representing a week of a user's schedule, an index may contains a ShiftAssignment object or undefined
-          const days = [0, 1, 2, 3, 4, 5, 6].map((colIndex) =>
-            getShiftForDay(schedule.user.shiftAssignments, colIndex),
+          // One row = one employee. Map the 7 column dates to that employee's shift
+          // on each date, or undefined. Index in this array === column position.
+          // Matching on the exact date string, not weekday — so "Friday" of one week
+          // can't collide with "Friday" of another.
+          const days = weekDates.map((date) =>
+            schedule.user.shiftAssignments.find((s) => s.date === date),
           );
 
           return (
@@ -288,8 +280,6 @@ export default function SchedulePage() {
                       return;
                     }
 
-                    const date = new Date(weekRange.startDate);
-                    date.setDate(weekRange.startDate.getDate() + index);
                     if (shift) {
                       setStartTime(shift.start);
                       setEndTime(shift.end);
@@ -301,7 +291,7 @@ export default function SchedulePage() {
 
                     setSelectedCell({
                       userId: schedule.user.id,
-                      date,
+                      date: weekDates[index],
                       firstname: schedule.user.firstname,
                       lastname: schedule.user.lastname,
                     });
@@ -330,7 +320,7 @@ export default function SchedulePage() {
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-zinc-900 p-6 rounded-xl w-96 flex flex-col gap-3.5">
             <h2 className="text-lg font-bold">{`${isEditing ? "Edit Shift" : "New Shift"}`}</h2>
-            <div className="text-sm text-zinc-400">{`${selectedCell.firstname} ${selectedCell.lastname} - ${selectedCell.date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}`}</div>
+            <div className="text-sm text-zinc-400">{`${selectedCell.firstname} ${selectedCell.lastname} - ${formatLong(selectedCell.date)}`}</div>
             <div className="flex flex-col gap-1">
               <label className="text-sm text-zinc-400">Start</label>
               <input
@@ -356,7 +346,7 @@ export default function SchedulePage() {
                 value={positionId}
                 onChange={(e) => setPositionId(e.target.value)}
               >
-                {positions!.map((p) => (
+                {positions?.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>

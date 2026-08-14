@@ -66,6 +66,10 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
                         ? "bg-blue-600 text-white"
                         : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
                     }`}
+                    onClick={() => {
+                      sessionStorage.removeItem("weekRange");
+                      sessionStorage.removeItem("selectedDay");
+                    }}
                   >
                     <i.icon size={20} />
                     <span>{i.label}</span>
@@ -82,6 +86,10 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
                   key={i.href}
                   href={i.href}
                   className={`flex flex-1 flex-col items-center justify-center py-3 text-xs gap-1 ${pathname === i.href ? "text-blue-500" : "text-zinc-500"}`}
+                  onClick={() => {
+                    sessionStorage.removeItem("weekRange");
+                    sessionStorage.removeItem("selectedDay");
+                  }}
                 >
                   <i.icon size={20} />
                 </Link>
