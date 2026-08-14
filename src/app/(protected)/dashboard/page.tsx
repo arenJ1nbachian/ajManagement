@@ -15,12 +15,7 @@ const dashboard = () => {
     if (response.ok) logout();
   };
 
-  return (
-    <>
-      <div>Dashboard Page</div>
-      <Button onClick={handleClick}>Logout</Button>
-    </>
-  );
+  return <></>;
 };
 
 export default dashboard;

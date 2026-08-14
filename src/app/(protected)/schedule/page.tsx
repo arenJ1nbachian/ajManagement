@@ -83,6 +83,10 @@ export default function SchedulePage() {
 
   const todayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
   const [selectedDay, setSelectedDay] = useState<number>(todayIndex);
+  const [selectedCell, setSelectedCell] = useState<{
+    userId: string;
+    date: Date;
+  } | null>(null);
   const { userId } = useAuth();
 
   const weekRange = getWeekRange();
@@ -195,7 +199,7 @@ export default function SchedulePage() {
             );
           })}
         </div>
-        {schedules.map((schedule) => {
+        {schedules.map((schedule: Schedule) => {
           // Build an array representing a week of a user's schedule, an index may contains a ShiftAssignment object or undefined
           const days = [0, 1, 2, 3, 4, 5, 6].map((colIndex) =>
             getShiftForDay(schedule.user.shiftAssignments, colIndex),
@@ -207,17 +211,26 @@ export default function SchedulePage() {
               {days.map((shift, index) => (
                 <div
                   key={index}
-                  className="p-2 text-sm font-medium text-center border-b"
+                  className="p-2 text-sm font-medium border-b  group cursor-pointer flex items-center w-full"
+                  onClick={() => {
+                    const date = new Date(weekRange.startDate);
+                    date.setDate(weekRange.startDate.getDate() + index);
+                    setSelectedCell({ userId: schedule.user.id, date });
+                  }}
                 >
                   {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
                   {shift ? (
-                    <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center">
+                    <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full ">
                       <div>{shift.position.name}</div>
                       <div>
                         {shift.start} – {shift.end}
                       </div>
                     </div>
-                  ) : null}
+                  ) : (
+                    <div className="opacity-0 group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
+                      +
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
