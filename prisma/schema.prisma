@@ -80,7 +80,7 @@ model ShiftAssignment{
  position Position @relation(fields: [positionId], references: [id])
  createdAt DateTime @default(now())
  requesterShift ShiftSwapRequest[] @relation("RequesterShift")
-targetShift ShiftSwapRequest[]  @relation("TargetShift")
+ targetShift ShiftSwapRequest[]  @relation("TargetShift")
 }
 
 // A model used for swapping 2 users shifts. Since 2 columns have the same references we require 2 named relations to distinguish them.

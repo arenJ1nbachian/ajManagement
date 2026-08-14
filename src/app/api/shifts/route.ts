@@ -40,6 +40,7 @@ export async function GET(request: Request) {
                 position: {
                   select: {
                     name: true,
+                    id: true,
                   },
                 },
               },
@@ -59,4 +60,38 @@ export async function GET(request: Request) {
       { status: 500 },
     );
   }
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const { userId, date, start, end, positionId } = body;
+
+  if (!userId || !date || !start || !end || !positionId) {
+    return NextResponse.json(
+      { message: "Missing required parameters" },
+      { status: 400 },
+    );
+  }
+
+  const existing = await prisma.shiftAssignment.findFirst({
+    where: {
+      userId,
+      date: new Date(date),
+    },
+  });
+
+  let newShift = null;
+
+  if (existing) {
+    newShift = await prisma.shiftAssignment.update({
+      where: { id: existing.id },
+      data: { start, end, positionId },
+    });
+  } else {
+    newShift = await prisma.shiftAssignment.create({
+      data: { userId, date: new Date(date), start, end, positionId },
+    });
+  }
+
+  return NextResponse.json(newShift, { status: 200 });
 }

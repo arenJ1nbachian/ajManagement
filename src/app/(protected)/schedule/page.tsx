@@ -8,7 +8,7 @@ interface ShiftAssignment {
   start: string;
   end: string;
   date: string;
-  position: { name: string };
+  position: { name: string; id: string };
 }
 
 // An object that contains the first and last name of the user along with an array of ShiftAssignment representing all the shifts during a week
@@ -19,6 +19,11 @@ interface Schedule {
     lastname: string;
     shiftAssignments: ShiftAssignment[];
   };
+}
+
+interface Positions {
+  id: string;
+  name: string;
 }
 
 // Grabs today's date and return the range of the current week from startDate (Monday) to endDate (Sunday)
@@ -35,6 +40,9 @@ const getWeekRange = (): { startDate: Date; endDate: Date } => {
 
   const sunday = new Date();
   sunday.setDate(monday.getDate() + 6);
+
+  monday.setHours(0, 0, 0, 0);
+  sunday.setHours(23, 59, 59, 999);
 
   return { startDate: monday, endDate: sunday };
 };
@@ -68,7 +76,8 @@ const getDayMonthString = (day: number): String => {
 
 export default function SchedulePage() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-
+  const [positions, setPositions] = useState<Positions[] | null>(null);
+  const [positionId, setPositionId] = useState<string>("");
   const weekNames = [
     "Monday",
     "Tueday",
@@ -86,32 +95,94 @@ export default function SchedulePage() {
   const [selectedCell, setSelectedCell] = useState<{
     userId: string;
     date: Date;
+    firstname: string;
+    lastname: string;
   } | null>(null);
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+
   const { userId } = useAuth();
 
   const weekRange = getWeekRange();
 
   const { token, locationId } = useAuth();
 
+  const handleSave = async () => {
+    if (!startTime || !endTime || !positionId) {
+      console.log("SOMETHING IS WRONG HERE!");
+      console.log("startTime ", startTime);
+      console.log("endTime ", endTime);
+      console.log("positionId ", positionId);
+      return;
+    }
+
+    const response = await fetch("/api/shifts", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        userId: selectedCell?.userId,
+        date: selectedCell!.date,
+        start: startTime,
+        end: endTime,
+        positionId,
+      }),
+    });
+
+    if (response.ok) {
+      setSelectedCell(null);
+      setStartTime("");
+      setEndTime("");
+
+      getSchedules();
+    }
+  };
+
+  const getSchedules = async () => {
+    try {
+      const response = await fetch(
+        `/api/shifts?locationId=${locationId}&startDate=${weekRange.startDate.toISOString()}&endDate=${weekRange.endDate.toISOString()}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      const data = await response.json();
+      setSchedules(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // On page load get the Monday and Sunday of the current week and retreive the schedule from that interval with the locadionId
   useEffect(() => {
-    const getSchedules = async () => {
+    getSchedules();
+  }, []);
+
+  useEffect(() => {
+    const getPositions = async () => {
       try {
         const response = await fetch(
-          `/api/shifts?locationId=${locationId}&startDate=${weekRange.startDate.toISOString()}&endDate=${weekRange.endDate.toISOString()}`,
+          `/api/positions?locationId=${locationId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
 
         const data = await response.json();
-        setSchedules(data);
+        if (data.length > 0) {
+          setPositionId(data[0].id);
+          setPositions(data);
+        }
       } catch (e) {
         console.log(e);
       }
     };
-
-    getSchedules();
+    getPositions();
   }, []);
 
   // Helper function that return the object representing a shift of an individual on a specific day.
@@ -211,16 +282,34 @@ export default function SchedulePage() {
               {days.map((shift, index) => (
                 <div
                   key={index}
-                  className="p-2 text-sm font-medium border-b  group cursor-pointer flex items-center w-full"
+                  className="p-2 text-sm font-medium border-b  group cursor-pointer flex items-center w-full h-20"
                   onClick={() => {
+                    if (!positions) {
+                      return;
+                    }
+
                     const date = new Date(weekRange.startDate);
                     date.setDate(weekRange.startDate.getDate() + index);
-                    setSelectedCell({ userId: schedule.user.id, date });
+                    if (shift) {
+                      setStartTime(shift.start);
+                      setEndTime(shift.end);
+                      setPositionId(shift.position.id);
+                      setIsEditing(true);
+                    } else {
+                      setIsEditing(false);
+                    }
+
+                    setSelectedCell({
+                      userId: schedule.user.id,
+                      date,
+                      firstname: schedule.user.firstname,
+                      lastname: schedule.user.lastname,
+                    });
                   }}
                 >
                   {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
                   {shift ? (
-                    <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full ">
+                    <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center">
                       <div>{shift.position.name}</div>
                       <div>
                         {shift.start} – {shift.end}
@@ -237,6 +326,65 @@ export default function SchedulePage() {
           );
         })}
       </div>
+      {selectedCell && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-zinc-900 p-6 rounded-xl w-96 flex flex-col gap-3.5">
+            <h2 className="text-lg font-bold">{`${isEditing ? "Edit Shift" : "New Shift"}`}</h2>
+            <div className="text-sm text-zinc-400">{`${selectedCell.firstname} ${selectedCell.lastname} - ${selectedCell.date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}`}</div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-zinc-400">Start</label>
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
+              ></input>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-zinc-400">End</label>
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
+              ></input>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-zinc-400">Position</label>
+              <select
+                className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
+                value={positionId}
+                onChange={(e) => setPositionId(e.target.value)}
+              >
+                {positions!.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-2 justify-end">
+              <button
+                className="text-sm text-zinc-400 hover:text-white px-4 py-2"
+                onClick={() => {
+                  setSelectedCell(null);
+                  setStartTime("");
+                  setEndTime("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
+                onClick={() => handleSave()}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
