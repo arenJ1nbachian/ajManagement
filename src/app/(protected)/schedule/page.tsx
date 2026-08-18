@@ -9,7 +9,7 @@ import {
   fromDateString,
   formatShort,
 } from "@/lib/dateUtils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // DATE MODEL
 // Every date in this component is a "YYYY-MM-DD" string, never a Date object.
@@ -64,6 +64,8 @@ export default function SchedulePage() {
   const [positions, setPositions] = useState<Positions[] | null>(null);
   const [positionId, setPositionId] = useState<string>("");
   const [selectedDay, setSelectedDay] = useState<string>(todayStr);
+
+  const touchStartX = useRef<number>(0);
 
   const [selectedCell, setSelectedCell] = useState<{
     userId: string;
@@ -166,7 +168,17 @@ export default function SchedulePage() {
 
   return (
     <>
-      <div className="lg:hidden">
+      <div
+        className="lg:hidden min-h-screen"
+        onTouchStart={(e) => {
+          touchStartX.current = e.touches[0].clientX;
+        }}
+        onTouchEnd={(e) => {
+          const diff = e.changedTouches[0].clientX - touchStartX.current;
+          if (diff < -400) setWeekStart(addDays(weekStart, 7));
+          if (diff > 400) setWeekStart(addDays(weekStart, -7));
+        }}
+      >
         <div className="grid grid-cols-7 mx-1">
           {WEEK_NAMES.map((day, index) => {
             const date = weekDates[index];
