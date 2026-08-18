@@ -145,7 +145,13 @@ export default function SchedulePage() {
           },
         );
 
+        if (!response.ok) {
+          console.error("Could not retreive positions", response.status);
+          return;
+        }
+
         const data = await response.json();
+
         if (data.length > 0) {
           setPositionId(data[0].id);
           setPositions(data);
