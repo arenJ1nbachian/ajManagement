@@ -113,8 +113,15 @@ export default function SchedulePage() {
         },
       );
 
+      if (!response.ok) {
+        console.error("getSchedules failed:", response.status);
+        setSchedules([]);
+        return;
+      }
+
       const data = await response.json();
-      setSchedules(data);
+
+      if (response.ok) setSchedules(data);
     } catch (e) {
       console.log(e);
     }
