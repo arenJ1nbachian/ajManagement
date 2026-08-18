@@ -175,8 +175,8 @@ export default function SchedulePage() {
         }}
         onTouchEnd={(e) => {
           const diff = e.changedTouches[0].clientX - touchStartX.current;
-          if (diff < -400) setWeekStart(addDays(weekStart, 7));
-          if (diff > 400) setWeekStart(addDays(weekStart, -7));
+          if (diff < -250) setWeekStart(addDays(weekStart, 7));
+          if (diff > 250) setWeekStart(addDays(weekStart, -7));
         }}
       >
         <div className="grid grid-cols-7 mx-1">
