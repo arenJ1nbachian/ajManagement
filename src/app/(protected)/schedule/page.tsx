@@ -159,7 +159,7 @@ export default function SchedulePage() {
 
             // Dot indicator — does ANY employee have a shift this day?
             // .some() short-circuits on the first match; we only need yes/no, not which.
-            const hasShifts = schedules.some((s) =>
+            const hasShifts = schedules?.some((s) =>
               s.user.shiftAssignments.some((a) => a.date === date),
             );
 
@@ -271,47 +271,59 @@ export default function SchedulePage() {
           return (
             <div key={schedule.user.id} className="grid grid-cols-8">
               <div className="p-2 text-sm font-medium border-b flex items-center justify-center">{`${schedule.user.firstname} ${schedule.user.lastname}`}</div>
-              {days.map((shift, index) => (
-                <div
-                  key={index}
-                  className="p-2 text-sm font-medium border-b  group cursor-pointer flex items-center w-full h-20"
-                  onClick={() => {
-                    if (!positions) {
-                      return;
-                    }
+              {days.map((shift, index) => {
+                // true if this day has already passed, false otherwise.
+                // This is to prevent a manager or an owner the functionality of being able to add a shift.
+                const dayHasPassed = weekDates[index] < todayStr;
 
-                    if (shift) {
-                      setStartTime(shift.start);
-                      setEndTime(shift.end);
-                      setPositionId(shift.position.id);
-                      setIsEditing(true);
-                    } else {
-                      setIsEditing(false);
-                    }
+                return (
+                  <div
+                    key={index}
+                    className={`p-2 text-sm font-medium border-b  group ${dayHasPassed ? "" : "cursor-pointer"} flex items-center w-full h-20`}
+                    onClick={() => {
+                      // If the location of the business does not have any positions setup, forbid the modal from opening
+                      if (!positions) {
+                        return;
+                      } else if (dayHasPassed) {
+                        return;
+                      }
+                      if (shift) {
+                        // Preload existing shift details into states to have initial values of the form load up correctly when modal open
+                        setStartTime(shift.start);
+                        setEndTime(shift.end);
+                        setPositionId(shift.position.id);
+                        setIsEditing(true);
+                      } else {
+                        setIsEditing(false); // Changes the title of the modal from "Edit shift" to "New Shift"
+                      }
 
-                    setSelectedCell({
-                      userId: schedule.user.id,
-                      date: weekDates[index],
-                      firstname: schedule.user.firstname,
-                      lastname: schedule.user.lastname,
-                    });
-                  }}
-                >
-                  {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
-                  {shift ? (
-                    <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center">
-                      <div>{shift.position.name}</div>
-                      <div>
-                        {shift.start} – {shift.end}
+                      // Collect relevant information from selected cell for preperations of an api call
+                      setSelectedCell({
+                        userId: schedule.user.id,
+                        date: weekDates[index],
+                        firstname: schedule.user.firstname,
+                        lastname: schedule.user.lastname,
+                      });
+                    }}
+                  >
+                    {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
+                    {shift ? (
+                      <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center">
+                        <div>{shift.position.name}</div>
+                        <div>
+                          {shift.start} – {shift.end}
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="opacity-0 group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
-                      +
-                    </div>
-                  )}
-                </div>
-              ))}
+                    ) : dayHasPassed ? (
+                      false
+                    ) : (
+                      <div className="opacity-0 group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
+                        +
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           );
         })}
