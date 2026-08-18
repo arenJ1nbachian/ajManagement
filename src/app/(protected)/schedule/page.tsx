@@ -5,8 +5,9 @@ import {
   addDays,
   formatLong,
   getMonday,
-  toDateString,
   todayString,
+  fromDateString,
+  formatShort,
 } from "@/lib/dateUtils";
 import { useEffect, useState } from "react";
 
@@ -237,7 +238,7 @@ export default function SchedulePage() {
           </button>
 
           <div className="text-sm font-medium">
-            {weekStart} – {weekDates[6]}
+            {`${formatShort(weekStart)} - ${formatShort(weekDates[6])}`}
           </div>
 
           <div className="flex gap-2">
@@ -256,7 +257,9 @@ export default function SchedulePage() {
           </div>
         </div>
         <div className="grid grid-cols-8">
-          <div className="p-2 text-sm font-medium text-center border-b"></div>
+          <div className="p-2 text-sm font-medium flex justify-center items-center border-b px-10">
+            {`STAFF · ${schedules.length}`}
+          </div>
           {WEEK_NAMES.map((d, index) => {
             const date = weekDates[index];
             const day = date.split("-")[2];

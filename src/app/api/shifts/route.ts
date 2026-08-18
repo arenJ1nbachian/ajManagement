@@ -1,6 +1,7 @@
 import { PrismaClient } from "@generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { NextResponse } from "next/server";
+import { fromDateString } from "@/lib/dateUtils";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -12,16 +13,19 @@ export async function GET(request: Request) {
     const locationId = searchParams.get("locationId");
 
     // The starting Monday date
-    const startDate = searchParams.get("startDate");
+    const stringStartDate: string | null = searchParams.get("startDate");
 
     // The ending Sunday date
-    const endDate = searchParams.get("endDate");
+    const stringEndDate: string | null = searchParams.get("endDate");
 
-    if (!locationId || !startDate || !endDate)
+    if (!locationId || !stringStartDate || !stringEndDate)
       return NextResponse.json(
         { message: "Missing required parameters" },
         { status: 400 },
       );
+
+    const startDate = fromDateString(stringStartDate);
+    const endDate = fromDateString(stringEndDate);
 
     // Retreive every schedules of users along with their first name, last name and their shifts where those shifts fall inclusively in between the start and end date
     const schedules = await prisma.userLocation.findMany({
@@ -45,7 +49,10 @@ export async function GET(request: Request) {
                 },
               },
               where: {
-                date: { gte: new Date(startDate), lte: new Date(endDate) },
+                date: {
+                  gte: startDate,
+                  lte: endDate,
+                },
               },
             },
           },
@@ -83,10 +90,12 @@ export async function POST(request: Request) {
     );
   }
 
+  const dateObj = fromDateString(date);
+
   const existing = await prisma.shiftAssignment.findFirst({
     where: {
       userId,
-      date: new Date(date),
+      date: dateObj,
     },
   });
 
@@ -99,7 +108,7 @@ export async function POST(request: Request) {
     });
   } else {
     newShift = await prisma.shiftAssignment.create({
-      data: { userId, date: new Date(date), start, end, positionId },
+      data: { userId, date: dateObj, start, end, positionId },
     });
   }
 

@@ -33,7 +33,7 @@ export function addDays(dateStr: string, n: number): string {
   return toDateString(date);
 }
 
-function fromDateString(s: string): Date {
+export function fromDateString(s: string): Date {
   const [y, m, d] = s.split("-").map(Number);
 
   return new Date(y, m - 1, d);
@@ -47,6 +47,13 @@ export function formatLong(dateStr: string): string {
   return fromDateString(dateStr).toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
+    day: "numeric",
+  });
+}
+
+export function formatShort(dateStr: string): string {
+  return fromDateString(dateStr).toLocaleDateString("en-US", {
+    month: "short",
     day: "numeric",
   });
 }
