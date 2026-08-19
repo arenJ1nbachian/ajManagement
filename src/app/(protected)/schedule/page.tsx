@@ -317,7 +317,11 @@ export default function SchedulePage() {
       <div className="hidden md:block">
         <div className="flex items-center justify-between p-4">
           <button
-            onClick={() => setWeekStart(addDays(weekStart, -7))}
+            onClick={() => {
+              const lastMonday = addDays(weekStart, -7);
+              setWeekStart(lastMonday);
+              setSelectedDay(lastMonday);
+            }}
             className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
           >
             ←
@@ -335,7 +339,11 @@ export default function SchedulePage() {
               Today
             </button>
             <button
-              onClick={() => setWeekStart(addDays(weekStart, 7))}
+              onClick={() => {
+                const nextMonday = addDays(weekStart, 7);
+                setWeekStart(nextMonday);
+                setSelectedDay(nextMonday);
+              }}
               className="px-3 py-1.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-md transition-colors cursor-pointer"
             >
               →
