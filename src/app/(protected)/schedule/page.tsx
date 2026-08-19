@@ -63,9 +63,11 @@ export default function SchedulePage() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [positions, setPositions] = useState<Positions[] | null>(null);
   const [positionId, setPositionId] = useState<string>("");
+  const [employeeId, setEmployeeId] = useState<string>("");
   const [selectedDay, setSelectedDay] = useState<string>(todayStr);
 
   const touchStartX = useRef<number>(0);
+  const lastTap = useRef<number>(0);
 
   const [selectedCell, setSelectedCell] = useState<{
     userId: string;
@@ -122,9 +124,11 @@ export default function SchedulePage() {
         return;
       }
 
-      const data = await response.json();
+      const data: Schedule[] = await response.json();
 
-      if (response.ok) setSchedules(data);
+      if (response.ok) {
+        setSchedules(data);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -156,7 +160,6 @@ export default function SchedulePage() {
         const data = await response.json();
 
         if (data.length > 0) {
-          setPositionId(data[0].id);
           setPositions(data);
         }
       } catch (e) {
@@ -169,14 +172,22 @@ export default function SchedulePage() {
   return (
     <>
       <div
-        className="lg:hidden min-h-screen"
+        className="lg:hidden  min-h-screen"
         onTouchStart={(e) => {
           touchStartX.current = e.touches[0].clientX;
         }}
         onTouchEnd={(e) => {
           const diff = e.changedTouches[0].clientX - touchStartX.current;
-          if (diff < -250) setWeekStart(addDays(weekStart, 7));
-          if (diff > 250) setWeekStart(addDays(weekStart, -7));
+          if (diff < -250) {
+            const newStart = addDays(weekStart, 7);
+            setWeekStart(newStart);
+            setSelectedDay(newStart);
+          }
+          if (diff > 250) {
+            const newStart = addDays(weekStart, -7);
+            setWeekStart(newStart);
+            setSelectedDay(newStart);
+          }
         }}
       >
         <div className="grid grid-cols-7 mx-1">
@@ -208,39 +219,102 @@ export default function SchedulePage() {
             );
           })}
         </div>
-        <div className="text-xl font-bold px-3 py-2 my-2">
-          {formatLong(selectedDay)}
+        <div className="text-xl font-bold px-3 py-2 my-2 flex items-center">
+          <div className="text-base lg:text-xl">{formatLong(selectedDay)}</div>
+          <div className="ml-auto mr-2 flex gap-1">
+            {selectedDay !== todayStr && (
+              <button
+                onClick={() => {
+                  setWeekStart(getMonday(new Date()));
+                  setSelectedDay(todayStr);
+                }}
+                className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
+              >
+                Today
+              </button>
+            )}
+            {selectedDay >= todayStr && (
+              <button
+                className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
+                // Set selectedCell with the only information known at this point
+                onClick={() => {
+                  setSelectedCell({
+                    userId: "",
+                    firstname: "",
+                    lastname: "",
+                    date: selectedDay,
+                  });
+                }}
+              >
+                Add Shift
+              </button>
+            )}
+          </div>
         </div>
         <div className="w-4/5 mb-3">
           <hr className="h-3 border-t-2" />
         </div>
-        {schedules
-          .filter((s) =>
-            s.user.shiftAssignments.some((a) => a.date === selectedDay),
-          )
-          .sort(
-            (a, b) =>
-              Number(b.user.id === userId) - Number(a.user.id === userId),
-          )
-          .map((s) => {
-            const todayShift = s.user.shiftAssignments.find(
-              (a) => a.date === selectedDay,
-            )!;
+        <div className="overflow-y-auto max-h-[45vh]">
+          {schedules
+            .filter((s) =>
+              s.user.shiftAssignments.some((a) => a.date === selectedDay),
+            )
+            .sort(
+              (a, b) =>
+                Number(b.user.id === userId) - Number(a.user.id === userId),
+            )
+            .map((s) => {
+              const todayShift = s.user.shiftAssignments.find(
+                (a) => a.date === selectedDay,
+              )!;
 
-            return (
-              <div key={s.user.id} className="p-4 mx-4 my-2 rounded-lg border">
-                <div className="font-medium">{`${s.user.firstname} ${s.user.lastname}`}</div>
-                <div className="text-sm text-muted-foreground">
-                  {todayShift.position.name}
+              // Build the cells/card information
+              const cell = {
+                userId: s.user.id,
+                date: selectedDay,
+                firstname: s.user.firstname,
+                lastname: s.user.lastname,
+              };
+
+              return (
+                <div
+                  key={s.user.id}
+                  className="p-4 mx-4 my-4 rounded-lg border cursor-pointer"
+                  onClick={() => {
+                    if (todayShift.date < todayStr) return;
+
+                    // Record the time of the click
+                    const now = Date.now();
+
+                    // Find the difference of time from the last click to the current click
+                    // Lower than 300 implies the card component has been double pressed
+                    if (now - lastTap.current < 300) {
+                      setSelectedCell(cell); // Opens the modal for shift adding/editing
+                      setIsEditing(true); // Sets the modal into editing mode
+
+                      // Preloads the inputs of the modal with the double pressed shift's information
+                      setPositionId(todayShift.position.id);
+                      setStartTime(todayShift.start);
+                      setEndTime(todayShift.end);
+                      setEmployeeId(s.user.id);
+                    }
+                    // Record the current click as the last tap
+                    lastTap.current = now;
+                  }}
+                >
+                  <div className="font-medium">{`${s.user.firstname} ${s.user.lastname}`}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {todayShift.position.name}
+                  </div>
+                  <div className="text-sm">
+                    {todayShift.start} – {todayShift.end}
+                  </div>
                 </div>
-                <div className="text-sm">
-                  {todayShift.start} – {todayShift.end}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+        </div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden md:block">
         <div className="flex items-center justify-between p-4">
           <button
             onClick={() => setWeekStart(addDays(weekStart, -7))}
@@ -269,7 +343,7 @@ export default function SchedulePage() {
           </div>
         </div>
         <div className="grid grid-cols-8">
-          <div className="p-2 text-sm font-medium flex justify-center items-center border-b px-10">
+          <div className="text-sm font-medium flex justify-center items-center border-b md:text-xs">
             {`STAFF · ${schedules.length}`}
           </div>
           {WEEK_NAMES.map((d, index) => {
@@ -298,7 +372,10 @@ export default function SchedulePage() {
 
           return (
             <div key={schedule.user.id} className="grid grid-cols-8">
-              <div className="p-2 text-sm font-medium border-b flex items-center justify-center">{`${schedule.user.firstname} ${schedule.user.lastname}`}</div>
+              <div className="py-2 md:text-xs md:text-center md:flex-col lg:flex-row lg:font-medium border-b flex items-center justify-center gap-1">
+                <div>{`${schedule.user.firstname}`}</div>
+                <div>{`${schedule.user.lastname}`}</div>
+              </div>
               {days.map((shift, index) => {
                 // true if this day has already passed, false otherwise.
                 // This is to prevent a manager or an owner the functionality of being able to add a shift.
@@ -338,14 +415,14 @@ export default function SchedulePage() {
                     {shift ? (
                       <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center">
                         <div>{shift.position.name}</div>
-                        <div>
+                        <div className="md:text-nowrap">
                           {shift.start} – {shift.end}
                         </div>
                       </div>
                     ) : dayHasPassed ? (
                       false
                     ) : (
-                      <div className="opacity-0 group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
+                      <div className="betterhover:opacity-0 opacity-30 border border-blue-500 rounded-md group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
                         +
                       </div>
                     )}
@@ -358,9 +435,58 @@ export default function SchedulePage() {
       </div>
       {selectedCell && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-zinc-900 p-6 rounded-xl w-96 flex flex-col gap-3.5">
+          <div className="bg-zinc-900 p-6 rounded-xl w-96 flex flex-col gap-3.5 overflow-y-auto max-h-[90vh] max-w-[90vw]">
             <h2 className="text-lg font-bold">{`${isEditing ? "Edit Shift" : "New Shift"}`}</h2>
-            <div className="text-sm text-zinc-400">{`${selectedCell.firstname} ${selectedCell.lastname} - ${formatLong(selectedCell.date)}`}</div>
+            <div className="text-sm text-zinc-400">
+              {`${selectedCell.firstname} ${selectedCell.lastname} `}
+              {`${selectedCell.userId ? "-" : ""} ${formatLong(selectedCell.date)}`}
+            </div>
+
+            {/* Input for assigning the shift to an employee only displayed in mobile screens */}
+            <div className="lg:hidden flex flex-col gap-1">
+              <label className="text-sm text-zinc-400">Employee</label>
+              <select
+                className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
+                value={employeeId}
+                onChange={(e) => {
+                  const id = e.target.value;
+                  setEmployeeId(id);
+                  const selected = schedules.find((s) => s.user.id === id); // Retreives the information of the user who's id is target.value
+                  const existingShift = selected?.user.shiftAssignments.find(
+                    (s) => s.date === selectedDay,
+                  ); // Retreive the shift of the selected day of this user. Can possibly be null
+
+                  // Preloads the existing modal input's information of the selected user and sets the modal to editing mode
+                  if (existingShift) {
+                    setStartTime(existingShift.start);
+                    setEndTime(existingShift.end);
+                    setPositionId(existingShift.position.id);
+                    setIsEditing(true);
+                  } else {
+                    setIsEditing(false);
+                  }
+
+                  // Changed selectedCell information with the new values
+                  setSelectedCell((prev) => {
+                    return {
+                      ...prev!,
+                      firstname: selected!.user.firstname,
+                      lastname: selected!.user.lastname,
+                      userId: selected!.user.id,
+                    };
+                  });
+                }}
+              >
+                <option value="" disabled>
+                  Select an employee
+                </option>
+                {schedules?.map((s) => (
+                  <option key={s.user.id} value={s.user.id}>
+                    {`${s.user.firstname} ${s.user.lastname}`}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="flex flex-col gap-1">
               <label className="text-sm text-zinc-400">Start</label>
               <input
@@ -386,6 +512,9 @@ export default function SchedulePage() {
                 value={positionId}
                 onChange={(e) => setPositionId(e.target.value)}
               >
+                <option value="" disabled>
+                  Select a position
+                </option>
                 {positions?.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -398,9 +527,13 @@ export default function SchedulePage() {
               <button
                 className="text-sm text-zinc-400 hover:text-white px-4 py-2"
                 onClick={() => {
+                  // Reset modal to default values
                   setSelectedCell(null);
                   setStartTime("");
                   setEndTime("");
+                  setEmployeeId("");
+                  setPositionId("");
+                  setIsEditing(false);
                 }}
               >
                 Cancel
