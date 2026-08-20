@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { buildColorMap } from "@/lib/colorUtils";
 import {
   addDays,
   formatLong,
@@ -66,6 +67,8 @@ export default function SchedulePage() {
   const [employeeId, setEmployeeId] = useState<string>("");
   const [selectedDay, setSelectedDay] = useState<string>(todayStr);
 
+  const colorMap = positions ? buildColorMap(positions) : {};
+
   const touchStartX = useRef<number>(0);
   const lastTap = useRef<number>(0);
 
@@ -80,7 +83,7 @@ export default function SchedulePage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleSave = async () => {
-    if (!startTime || !endTime || !positionId) {
+    if (!startTime || !positionId) {
       return;
     }
 
@@ -124,9 +127,8 @@ export default function SchedulePage() {
         return;
       }
 
-      const data: Schedule[] = await response.json();
-
       if (response.ok) {
+        const data: Schedule[] = await response.json();
         setSchedules(data);
       }
     } catch (e) {
@@ -172,7 +174,7 @@ export default function SchedulePage() {
   return (
     <>
       <div
-        className="lg:hidden  min-h-screen"
+        className="lg:hidden h-full flex flex-col"
         onTouchStart={(e) => {
           touchStartX.current = e.touches[0].clientX;
         }}
@@ -251,10 +253,10 @@ export default function SchedulePage() {
             )}
           </div>
         </div>
-        <div className="w-4/5 mb-3">
+        <div className="w-4/5 mb-1">
           <hr className="h-3 border-t-2" />
         </div>
-        <div className="overflow-y-auto max-h-[45vh]">
+        <div className="overflow-y-auto flex-1 pb-11">
           {schedules
             .filter((s) =>
               s.user.shiftAssignments.some((a) => a.date === selectedDay),
@@ -279,6 +281,10 @@ export default function SchedulePage() {
               return (
                 <div
                   key={s.user.id}
+                  style={{
+                    backgroundColor: colorMap[todayShift.position.id].bg,
+                    color: colorMap[todayShift.position.id].text,
+                  }}
                   className="p-4 mx-4 my-4 rounded-lg border cursor-pointer"
                   onClick={() => {
                     if (todayShift.date < todayStr) return;
@@ -307,14 +313,15 @@ export default function SchedulePage() {
                     {todayShift.position.name}
                   </div>
                   <div className="text-sm">
-                    {todayShift.start} – {todayShift.end}
+                    {todayShift.start}
+                    {todayShift.end ? ` - ${todayShift.end}` : ""}
                   </div>
                 </div>
               );
             })}
         </div>
       </div>
-      <div className="hidden md:block">
+      <div className="hidden lg:flex lg:flex-col lg:h-full">
         <div className="flex items-center justify-between p-4">
           <button
             onClick={() => {
@@ -369,77 +376,86 @@ export default function SchedulePage() {
             );
           })}
         </div>
-        {schedules.map((schedule: Schedule) => {
-          // One row = one employee. Map the 7 column dates to that employee's shift
-          // on each date, or undefined. Index in this array === column position.
-          // Matching on the exact date string, not weekday — so "Friday" of one week
-          // can't collide with "Friday" of another.
-          const days = weekDates.map((date) =>
-            schedule.user.shiftAssignments.find((s) => s.date === date),
-          );
+        <div className="overflow-y-auto flex-1">
+          {schedules.map((schedule: Schedule) => {
+            // One row = one employee. Map the 7 column dates to that employee's shift
+            // on each date, or undefined. Index in this array === column position.
+            // Matching on the exact date string, not weekday — so "Friday" of one week
+            // can't collide with "Friday" of another.
+            const days = weekDates.map((date) =>
+              schedule.user.shiftAssignments.find((s) => s.date === date),
+            );
 
-          return (
-            <div key={schedule.user.id} className="grid grid-cols-8">
-              <div className="py-2 md:text-xs md:text-center md:flex-col lg:flex-row lg:font-medium border-b flex items-center justify-center gap-1">
-                <div>{`${schedule.user.firstname}`}</div>
-                <div>{`${schedule.user.lastname}`}</div>
-              </div>
-              {days.map((shift, index) => {
-                // true if this day has already passed, false otherwise.
-                // This is to prevent a manager or an owner the functionality of being able to add a shift.
-                const dayHasPassed = weekDates[index] < todayStr;
+            return (
+              <div key={schedule.user.id} className="grid grid-cols-8 ">
+                <div className="py-2 md:text-xs md:text-center md:flex-col lg:flex-row lg:font-medium border-b flex items-center justify-center gap-1">
+                  <div>{`${schedule.user.firstname}`}</div>
+                  <div>{`${schedule.user.lastname}`}</div>
+                </div>
+                {days.map((shift, index) => {
+                  // true if this day has already passed, false otherwise.
+                  // This is to prevent a manager or an owner the functionality of being able to add a shift.
+                  const dayHasPassed = weekDates[index] < todayStr;
 
-                return (
-                  <div
-                    key={index}
-                    className={`p-2 text-sm font-medium border-b  group ${dayHasPassed ? "" : "cursor-pointer"} flex items-center w-full h-20`}
-                    onClick={() => {
-                      // If the location of the business does not have any positions setup, forbid the modal from opening
-                      if (!positions) {
-                        return;
-                      } else if (dayHasPassed) {
-                        return;
-                      }
-                      if (shift) {
-                        // Preload existing shift details into states to have initial values of the form load up correctly when modal open
-                        setStartTime(shift.start);
-                        setEndTime(shift.end);
-                        setPositionId(shift.position.id);
-                        setIsEditing(true);
-                      } else {
-                        setIsEditing(false); // Changes the title of the modal from "Edit shift" to "New Shift"
-                      }
+                  return (
+                    <div
+                      key={index}
+                      className={`p-2 text-sm font-medium border-b  group ${dayHasPassed ? "" : "cursor-pointer"} flex items-center w-full h-20`}
+                      onClick={() => {
+                        // If the location of the business does not have any positions setup, forbid the modal from opening
+                        if (!positions) {
+                          return;
+                        } else if (dayHasPassed) {
+                          return;
+                        }
+                        if (shift) {
+                          // Preload existing shift details into states to have initial values of the form load up correctly when modal open
+                          setStartTime(shift.start);
+                          setEndTime(shift.end);
+                          setPositionId(shift.position.id);
+                          setIsEditing(true);
+                        } else {
+                          setIsEditing(false); // Changes the title of the modal from "Edit shift" to "New Shift"
+                        }
 
-                      // Collect relevant information from selected cell for preperations of an api call
-                      setSelectedCell({
-                        userId: schedule.user.id,
-                        date: weekDates[index],
-                        firstname: schedule.user.firstname,
-                        lastname: schedule.user.lastname,
-                      });
-                    }}
-                  >
-                    {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
-                    {shift ? (
-                      <div className="rounded-md bg-blue-500 text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center">
-                        <div>{shift.position.name}</div>
-                        <div className="md:text-nowrap">
-                          {shift.start} – {shift.end}
+                        // Collect relevant information from selected cell for preperations of an api call
+                        setSelectedCell({
+                          userId: schedule.user.id,
+                          date: weekDates[index],
+                          firstname: schedule.user.firstname,
+                          lastname: schedule.user.lastname,
+                        });
+                      }}
+                    >
+                      {/* If a shift exists for that day then represent that column with the starting hour followed by ending hour of that shift, else null */}
+                      {shift ? (
+                        <div
+                          style={{
+                            backgroundColor: colorMap[shift.position.id].bg,
+                            color: colorMap[shift.position.id].text,
+                          }}
+                          className="rounded-md text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center"
+                        >
+                          <div>{shift.position.name}</div>
+                          <div className="md:text-nowrap">
+                            {shift.start}
+                            {shift.end ? ` - ${shift.end}` : ""}
+                          </div>
                         </div>
-                      </div>
-                    ) : dayHasPassed ? (
-                      false
-                    ) : (
-                      <div className="betterhover:opacity-0 opacity-30 border border-blue-500 rounded-md group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
-                        +
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
+                      ) : dayHasPassed ? (
+                        false
+                      ) : (
+                        <div className="betterhover:opacity-0 opacity-30 border border-blue-500 rounded-md group-hover:opacity-30 text-white text-lg leading-none group-hover:border group-hover:border-blue-500 group-hover:rounded-md w-full h-full flex justify-center items-center">
+                          +
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
       {selectedCell && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">

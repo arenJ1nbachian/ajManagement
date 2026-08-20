@@ -54,7 +54,7 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
       {isLoading && <Loading />}
       {!isLoading && token && (
         <>
-          <div className="flex">
+          <div className="flex h-screen">
             <aside className="hidden lg:flex lg:flex-col w-56 h-screen bg-zinc-900 border-r border-zinc-800 gap-1">
               {navItems.map((i) => {
                 return (

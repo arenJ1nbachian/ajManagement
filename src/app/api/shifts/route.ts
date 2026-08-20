@@ -83,7 +83,7 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { userId, date, start, end, positionId } = body;
 
-  if (!userId || !date || !start || !end || !positionId) {
+  if (!userId || !date || !start || !positionId) {
     return NextResponse.json(
       { message: "Missing required parameters" },
       { status: 400 },
