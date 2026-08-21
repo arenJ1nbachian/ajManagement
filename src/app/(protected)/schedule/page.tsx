@@ -107,7 +107,8 @@ export default function SchedulePage() {
       setSelectedCell(null);
       setStartTime("");
       setEndTime("");
-
+      setPositionId("");
+      setEmployeeId("");
       getSchedules();
     }
   };
@@ -467,50 +468,52 @@ export default function SchedulePage() {
             </div>
 
             {/* Input for assigning the shift to an employee only displayed in mobile screens */}
-            <div className="lg:hidden flex flex-col gap-1">
-              <label className="text-sm text-zinc-400">Employee</label>
-              <select
-                className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
-                value={employeeId}
-                onChange={(e) => {
-                  const id = e.target.value;
-                  setEmployeeId(id);
-                  const selected = schedules.find((s) => s.user.id === id); // Retreives the information of the user who's id is target.value
-                  const existingShift = selected?.user.shiftAssignments.find(
-                    (s) => s.date === selectedDay,
-                  ); // Retreive the shift of the selected day of this user. Can possibly be null
+            {!isEditing && (
+              <div className="lg:hidden flex flex-col gap-1">
+                <label className="text-sm text-zinc-400">Employee</label>
+                <select
+                  className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-sm w-full"
+                  value={employeeId}
+                  onChange={(e) => {
+                    const id = e.target.value;
+                    setEmployeeId(id);
+                    const selected = schedules.find((s) => s.user.id === id); // Retreives the information of the user who's id is target.value
+                    const existingShift = selected?.user.shiftAssignments.find(
+                      (s) => s.date === selectedDay,
+                    ); // Retreive the shift of the selected day of this user. Can possibly be null
 
-                  // Preloads the existing modal input's information of the selected user and sets the modal to editing mode
-                  if (existingShift) {
-                    setStartTime(existingShift.start);
-                    setEndTime(existingShift.end);
-                    setPositionId(existingShift.position.id);
-                    setIsEditing(true);
-                  } else {
-                    setIsEditing(false);
-                  }
+                    // Preloads the existing modal input's information of the selected user and sets the modal to editing mode
+                    if (existingShift) {
+                      setStartTime(existingShift.start);
+                      setEndTime(existingShift.end);
+                      setPositionId(existingShift.position.id);
+                      setIsEditing(true);
+                    } else {
+                      setIsEditing(false);
+                    }
 
-                  // Changed selectedCell information with the new values
-                  setSelectedCell((prev) => {
-                    return {
-                      ...prev!,
-                      firstname: selected!.user.firstname,
-                      lastname: selected!.user.lastname,
-                      userId: selected!.user.id,
-                    };
-                  });
-                }}
-              >
-                <option value="" disabled>
-                  Select an employee
-                </option>
-                {schedules?.map((s) => (
-                  <option key={s.user.id} value={s.user.id}>
-                    {`${s.user.firstname} ${s.user.lastname}`}
+                    // Changed selectedCell information with the new values
+                    setSelectedCell((prev) => {
+                      return {
+                        ...prev!,
+                        firstname: selected!.user.firstname,
+                        lastname: selected!.user.lastname,
+                        userId: selected!.user.id,
+                      };
+                    });
+                  }}
+                >
+                  <option value="" disabled>
+                    Select an employee
                   </option>
-                ))}
-              </select>
-            </div>
+                  {schedules?.map((s) => (
+                    <option key={s.user.id} value={s.user.id}>
+                      {`${s.user.firstname} ${s.user.lastname}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="flex flex-col gap-1">
               <label className="text-sm text-zinc-400">Start</label>
               <input
