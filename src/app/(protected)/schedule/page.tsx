@@ -398,7 +398,7 @@ export default function SchedulePage() {
                   const dayHasPassed = weekDates[index] < todayStr;
 
                   return (
-                    <div
+                    <button
                       key={index}
                       className={`p-2 text-sm font-medium border-b  group ${dayHasPassed ? "" : "cursor-pointer"} flex items-center w-full h-20`}
                       onClick={() => {
@@ -449,7 +449,7 @@ export default function SchedulePage() {
                           +
                         </div>
                       )}
-                    </div>
+                    </button>
                   );
                 })}
               </div>
