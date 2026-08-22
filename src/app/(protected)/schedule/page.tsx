@@ -118,12 +118,7 @@ export default function SchedulePage() {
 
       if (response.ok) {
         toast.success(isEditing ? "Shift updated." : "Shift created.");
-        setSelectedCell(null);
-        setStartTime("");
-        setEndTime("");
-        setPositionId("");
-        setEmployeeId("");
-        setIsEditing(false);
+        resetModal();
         getSchedules();
       } else {
         toast.error("Failed to save shift.");
@@ -154,11 +149,7 @@ export default function SchedulePage() {
 
       if (response.ok) {
         toast.success("Shift deleted.");
-        setSelectedCell(null);
-        setStartTime("");
-        setEndTime("");
-        setPositionId("");
-        setEmployeeId("");
+        resetModal();
         getSchedules();
       } else {
         toast.error("Failed to delete shift.");
@@ -190,6 +181,15 @@ export default function SchedulePage() {
     } catch (e) {
       toast.error("Something went wrong. Please try again later");
     }
+  };
+
+  const resetModal = () => {
+    setSelectedCell(null);
+    setStartTime("");
+    setEndTime("");
+    setPositionId("");
+    setEmployeeId("");
+    setIsEditing(false);
   };
 
   // Refetches whenever the week changes (navigation) or auth resolves.
@@ -637,13 +637,7 @@ export default function SchedulePage() {
               <button
                 className="text-sm text-zinc-400 hover:text-white px-4 py-2"
                 onClick={() => {
-                  // Reset modal to default values
-                  setSelectedCell(null);
-                  setStartTime("");
-                  setEndTime("");
-                  setEmployeeId("");
-                  setPositionId("");
-                  setIsEditing(false);
+                  resetModal();
                 }}
               >
                 Cancel
