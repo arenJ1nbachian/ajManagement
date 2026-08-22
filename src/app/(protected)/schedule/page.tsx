@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { buildColorMap } from "@/lib/colorUtils";
+import { Toaster, toast } from "sonner";
 import {
   addDays,
   formatLong,
@@ -85,7 +86,16 @@ export default function SchedulePage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleSave = async () => {
-    if (!startTime || !positionId || !selectedCell?.userId) {
+    if (!startTime) {
+      toast.error("Please set a start time.");
+      return;
+    }
+    if (!positionId) {
+      toast.error("Please select a position.");
+      return;
+    }
+    if (!selectedCell?.userId) {
+      toast.error("Please select an employee.");
       return;
     }
 
@@ -107,6 +117,7 @@ export default function SchedulePage() {
       });
 
       if (response.ok) {
+        toast.success(isEditing ? "Shift updated." : "Shift created.");
         setSelectedCell(null);
         setStartTime("");
         setEndTime("");
@@ -114,9 +125,11 @@ export default function SchedulePage() {
         setEmployeeId("");
         setIsEditing(false);
         getSchedules();
+      } else {
+        toast.error("Failed to save shift.");
       }
     } catch (e) {
-      console.log(e);
+      toast.error("Something went wrong. Please try again later");
     }
   };
 
@@ -140,15 +153,18 @@ export default function SchedulePage() {
       });
 
       if (response.ok) {
+        toast.success("Shift deleted.");
         setSelectedCell(null);
         setStartTime("");
         setEndTime("");
         setPositionId("");
         setEmployeeId("");
         getSchedules();
+      } else {
+        toast.error("Failed to delete shift.");
       }
     } catch (e) {
-      console.log(e);
+      toast.error("Something went wrong. Please try again later");
     }
   };
 
@@ -172,7 +188,7 @@ export default function SchedulePage() {
         setSchedules(data);
       }
     } catch (e) {
-      console.log(e);
+      toast.error("Something went wrong. Please try again later");
     }
   };
 
@@ -213,6 +229,7 @@ export default function SchedulePage() {
 
   return (
     <>
+      <Toaster position="bottom-right" richColors />
       <div
         className="lg:hidden h-full flex flex-col"
         onTouchStart={(e) => {
@@ -456,6 +473,9 @@ export default function SchedulePage() {
                       onClick={() => {
                         // If the location of the business does not have any positions setup, forbid the modal from opening
                         if (!positions) {
+                          toast.error(
+                            "No positions have been set up for this location.",
+                          );
                           return;
                         } else if (dayHasPassed) {
                           return;
