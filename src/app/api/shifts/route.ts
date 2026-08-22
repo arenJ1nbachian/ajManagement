@@ -38,6 +38,7 @@ export async function GET(request: Request) {
             lastname: true,
             shiftAssignments: {
               select: {
+                id: true,
                 start: true,
                 end: true,
                 date: true,
@@ -92,25 +93,49 @@ export async function POST(request: Request) {
 
   const dateObj = fromDateString(date);
 
-  const existing = await prisma.shiftAssignment.findFirst({
-    where: {
-      userId,
-      date: dateObj,
-    },
-  });
-
-  let newShift = null;
-
-  if (existing) {
-    newShift = await prisma.shiftAssignment.update({
-      where: { id: existing.id },
-      data: { start, end, positionId },
+  try {
+    const existing = await prisma.shiftAssignment.findFirst({
+      where: {
+        userId,
+        date: dateObj,
+      },
     });
-  } else {
-    newShift = await prisma.shiftAssignment.create({
-      data: { userId, date: dateObj, start, end, positionId },
-    });
+
+    let newShift = null;
+
+    if (existing) {
+      newShift = await prisma.shiftAssignment.update({
+        where: { id: existing.id },
+        data: { start, end, positionId },
+      });
+    } else {
+      newShift = await prisma.shiftAssignment.create({
+        data: { userId, date: dateObj, start, end, positionId },
+      });
+    }
+
+    return NextResponse.json(newShift, { status: 200 });
+  } catch (e) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
   }
+}
 
-  return NextResponse.json(newShift, { status: 200 });
+export async function DELETE(request: Request) {
+  const body = await request.json();
+
+  const { sid } = body;
+
+  try {
+    await prisma.shiftAssignment.delete({ where: { id: sid } });
+
+    return NextResponse.json({ message: "Shift deleted" }, { status: 200 });
+  } catch (e) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
+  }
 }

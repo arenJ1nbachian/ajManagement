@@ -7,7 +7,6 @@ import {
   formatLong,
   getMonday,
   todayString,
-  fromDateString,
   formatShort,
 } from "@/lib/dateUtils";
 import { useEffect, useRef, useState } from "react";
@@ -20,6 +19,7 @@ import { useEffect, useRef, useState } from "react";
 // An object that contains the starting and ending hours, the specific date of a shift and the position fulfilled
 interface ShiftAssignment {
   start: string;
+  id: string;
   end: string;
   date: string;
   position: { name: string; id: string };
@@ -75,6 +75,7 @@ export default function SchedulePage() {
 
   const [selectedCell, setSelectedCell] = useState<{
     userId: string;
+    id: string;
     date: string;
     firstname: string;
     lastname: string;
@@ -84,33 +85,70 @@ export default function SchedulePage() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleSave = async () => {
-    if (!startTime || !positionId) {
+    if (!startTime || !positionId || !selectedCell?.userId) {
       return;
     }
 
-    const response = await fetch("/api/shifts", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+    try {
+      const response = await fetch("/api/shifts", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
 
-      body: JSON.stringify({
-        userId: selectedCell?.userId,
-        date: selectedCell!.date,
-        start: startTime,
-        end: endTime,
-        positionId,
-      }),
-    });
+        body: JSON.stringify({
+          userId: selectedCell?.userId,
+          date: selectedCell!.date,
+          start: startTime,
+          end: endTime,
+          positionId,
+        }),
+      });
 
-    if (response.ok) {
-      setSelectedCell(null);
-      setStartTime("");
-      setEndTime("");
-      setPositionId("");
-      setEmployeeId("");
-      getSchedules();
+      if (response.ok) {
+        setSelectedCell(null);
+        setStartTime("");
+        setEndTime("");
+        setPositionId("");
+        setEmployeeId("");
+        setIsEditing(false);
+        getSchedules();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleDelete = async () => {
+    const sid = selectedCell?.id;
+    if (!sid) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/shifts", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          sid,
+        }),
+      });
+
+      if (response.ok) {
+        setSelectedCell(null);
+        setStartTime("");
+        setEndTime("");
+        setPositionId("");
+        setEmployeeId("");
+        getSchedules();
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -254,6 +292,7 @@ export default function SchedulePage() {
                 onClick={() => {
                   setSelectedCell({
                     userId: "",
+                    id: "",
                     firstname: "",
                     lastname: "",
                     date: selectedDay,
@@ -285,6 +324,7 @@ export default function SchedulePage() {
               // Build the cells/card information
               const cell = {
                 userId: s.user.id,
+                id: todayShift.id,
                 date: selectedDay,
                 firstname: s.user.firstname,
                 lastname: s.user.lastname,
@@ -433,6 +473,7 @@ export default function SchedulePage() {
                         // Collect relevant information from selected cell for preperations of an api call
                         setSelectedCell({
                           userId: schedule.user.id,
+                          id: shift ? shift.id : "",
                           date: weekDates[index],
                           firstname: schedule.user.firstname,
                           lastname: schedule.user.lastname,
@@ -587,6 +628,16 @@ export default function SchedulePage() {
               >
                 Cancel
               </button>
+              {isEditing && (
+                <button
+                  className="text-sm bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md"
+                  onClick={() => {
+                    handleDelete();
+                  }}
+                >
+                  Delete
+                </button>
+              )}
               <button
                 className="text-sm bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md"
                 onClick={() => handleSave()}
