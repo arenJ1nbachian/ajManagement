@@ -70,6 +70,7 @@ export default function SchedulePage() {
   const colorMap = positions ? buildColorMap(positions) : {};
 
   const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
   const lastTap = useRef<number>(0);
 
   const [selectedCell, setSelectedCell] = useState<{
@@ -178,18 +179,28 @@ export default function SchedulePage() {
         className="lg:hidden h-full flex flex-col"
         onTouchStart={(e) => {
           touchStartX.current = e.touches[0].clientX;
+          touchStartY.current = e.touches[0].clientY;
         }}
         onTouchEnd={(e) => {
-          const diff = e.changedTouches[0].clientX - touchStartX.current;
-          if (diff < -250) {
-            const newStart = addDays(weekStart, 7);
-            setWeekStart(newStart);
-            setSelectedDay(newStart);
-          }
-          if (diff > 250) {
-            const newStart = addDays(weekStart, -7);
-            setWeekStart(newStart);
-            setSelectedDay(newStart);
+          const dx = e.changedTouches[0].clientX - touchStartX.current;
+          const dy = e.changedTouches[0].clientY - touchStartY.current;
+          const containerWidth = e.currentTarget.offsetWidth;
+
+          const swipeThreshold = 0.2;
+          const hasTraveledFarEnough =
+            containerWidth * swipeThreshold < Math.abs(dx);
+          const isHorizontalSwipe = Math.abs(dx) > Math.abs(dy);
+
+          if (hasTraveledFarEnough && isHorizontalSwipe) {
+            if (dx < 0) {
+              const nextStart = addDays(weekStart, 7);
+              setWeekStart(nextStart);
+              setSelectedDay(nextStart);
+            } else {
+              const nextStart = addDays(weekStart, -7);
+              setWeekStart(nextStart);
+              setSelectedDay(nextStart);
+            }
           }
         }}
       >
@@ -283,8 +294,8 @@ export default function SchedulePage() {
                 <div
                   key={s.user.id}
                   style={{
-                    backgroundColor: colorMap[todayShift.position.id].bg,
-                    color: colorMap[todayShift.position.id].text,
+                    backgroundColor: colorMap[todayShift.position.id]?.bg,
+                    color: colorMap[todayShift.position.id]?.text,
                   }}
                   className="p-4 mx-4 my-4 rounded-lg border cursor-pointer"
                   onClick={() => {
@@ -432,8 +443,8 @@ export default function SchedulePage() {
                       {shift ? (
                         <div
                           style={{
-                            backgroundColor: colorMap[shift.position.id].bg,
-                            color: colorMap[shift.position.id].text,
+                            backgroundColor: colorMap[shift.position.id]?.bg,
+                            color: colorMap[shift.position.id]?.text,
                           }}
                           className="rounded-md text-white text-xs p-1 text-center w-full h-full flex flex-col items-center justify-center"
                         >
@@ -506,11 +517,22 @@ export default function SchedulePage() {
                   <option value="" disabled>
                     Select an employee
                   </option>
-                  {schedules?.map((s) => (
-                    <option key={s.user.id} value={s.user.id}>
-                      {`${s.user.firstname} ${s.user.lastname}`}
-                    </option>
-                  ))}
+                  {schedules?.map((s) => {
+                    // Only show the iterated user's full name as an option to select, when
+                    // a shift hasn't been scheduled for the selected day in question.
+                    // This just makes it clear with the definition of the button being only able
+                    // to add shifts instead of editing.
+                    const hasShiftToday = s.user.shiftAssignments.some(
+                      (shift) => shift.date === selectedDay,
+                    );
+                    if (!hasShiftToday) {
+                      return (
+                        <option key={s.user.id} value={s.user.id}>
+                          {`${s.user.firstname} ${s.user.lastname}`}
+                        </option>
+                      );
+                    }
+                  })}
                 </select>
               </div>
             )}
