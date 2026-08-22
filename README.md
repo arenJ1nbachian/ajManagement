@@ -40,7 +40,7 @@ The schema is built around 10 relational tables covering users, locations, sched
 
 ## Project Status
 
-Currently in active development. Phase 1 (database schema and core models) is complete.
+Currently in active development. Scheduling - (Scheduling page and assignments) is complete.
 
 ### Roadmap
 
