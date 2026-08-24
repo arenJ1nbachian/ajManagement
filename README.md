@@ -56,8 +56,6 @@ Currently in active development. Scheduling - (Scheduling page and assignments) 
 - [ ] Resource library
 
 ## Future Considerations
-
-- Dynamic enum management (e.g. Position) - replace hardcoded enums types with a manager-defined model per location, allowing each restaurant to define their own roles.
 - Ressource document upload with AI analysing, dynamically adding it to the database
 - Texting feature and group chats
 - Clock in/out with geofencing and managerial override
