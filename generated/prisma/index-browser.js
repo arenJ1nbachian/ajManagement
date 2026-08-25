@@ -133,8 +133,17 @@ exports.Prisma.UserScalarFieldEnum = {
   lastname: 'lastname',
   email: 'email',
   passwordHash: 'passwordHash',
+  phone: 'phone',
   role: 'role',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.InviteTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  used: 'used'
 };
 
 exports.Prisma.RefreshTokenScalarFieldEnum = {
@@ -272,6 +281,7 @@ exports.RessourceType = exports.$Enums.RessourceType = {
 exports.Prisma.ModelName = {
   Location: 'Location',
   User: 'User',
+  InviteToken: 'InviteToken',
   RefreshToken: 'RefreshToken',
   UserLocation: 'UserLocation',
   ShiftAssignment: 'ShiftAssignment',

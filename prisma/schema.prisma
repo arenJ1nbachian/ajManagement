@@ -31,7 +31,8 @@ id String @id @default(cuid())
 firstname String
 lastname String
 email String @unique
-passwordHash String
+passwordHash String?
+phone String?
 role Role
 createdAt DateTime @default(now())
 shiftAssignments ShiftAssignment[]
@@ -41,7 +42,18 @@ swapRequestsReceived ShiftSwapRequest[] @relation("SwapTarget")
 inventoryFlags InventoryFlag[]
 issueReports IssueReport[]
 ressources Ressource[]
-refreshTokens RefreshToken[] 
+refreshTokens RefreshToken[]
+inviteTokens InviteToken[]
+}
+
+// A model used for storing a newly created users invite token where it will be used for account setup.
+model InviteToken {
+  id String @id @default(cuid())
+  token String @unique
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  used Boolean @default(false)
 }
 
 // A model used for storing the users hashed refresh token. In case of a data breach, the raw value of refreshToken cannot be used to authenticate
