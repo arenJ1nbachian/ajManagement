@@ -1,12 +1,8 @@
-import { PrismaClient } from "@generated/prisma";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { generateToken } from "@/lib/tokens";
 import crypto from "crypto";
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma = new PrismaClient({ adapter });
 
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const secret = process.env.JWT_REFRESH_SECRET!;

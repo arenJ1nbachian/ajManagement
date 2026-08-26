@@ -1956,6 +1956,7 @@ export namespace Prisma {
     issueReports: number
     ressources: number
     position: number
+    inviteTokens: number
   }
 
   export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1964,6 +1965,7 @@ export namespace Prisma {
     issueReports?: boolean | LocationCountOutputTypeCountIssueReportsArgs
     ressources?: boolean | LocationCountOutputTypeCountRessourcesArgs
     position?: boolean | LocationCountOutputTypeCountPositionArgs
+    inviteTokens?: boolean | LocationCountOutputTypeCountInviteTokensArgs
   }
 
   // Custom InputTypes
@@ -2010,6 +2012,13 @@ export namespace Prisma {
    */
   export type LocationCountOutputTypeCountPositionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PositionWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountInviteTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InviteTokenWhereInput
   }
 
 
@@ -2383,6 +2392,7 @@ export namespace Prisma {
     issueReports?: boolean | Location$issueReportsArgs<ExtArgs>
     ressources?: boolean | Location$ressourcesArgs<ExtArgs>
     position?: boolean | Location$positionArgs<ExtArgs>
+    inviteTokens?: boolean | Location$inviteTokensArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["location"]>
 
@@ -2414,6 +2424,7 @@ export namespace Prisma {
     issueReports?: boolean | Location$issueReportsArgs<ExtArgs>
     ressources?: boolean | Location$ressourcesArgs<ExtArgs>
     position?: boolean | Location$positionArgs<ExtArgs>
+    inviteTokens?: boolean | Location$inviteTokensArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2427,6 +2438,7 @@ export namespace Prisma {
       issueReports: Prisma.$IssueReportPayload<ExtArgs>[]
       ressources: Prisma.$RessourcePayload<ExtArgs>[]
       position: Prisma.$PositionPayload<ExtArgs>[]
+      inviteTokens: Prisma.$InviteTokenPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2832,6 +2844,7 @@ export namespace Prisma {
     issueReports<T extends Location$issueReportsArgs<ExtArgs> = {}>(args?: Subset<T, Location$issueReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IssueReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ressources<T extends Location$ressourcesArgs<ExtArgs> = {}>(args?: Subset<T, Location$ressourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RessourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     position<T extends Location$positionArgs<ExtArgs> = {}>(args?: Subset<T, Location$positionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    inviteTokens<T extends Location$inviteTokensArgs<ExtArgs> = {}>(args?: Subset<T, Location$inviteTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InviteTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3375,6 +3388,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PositionScalarFieldEnum | PositionScalarFieldEnum[]
+  }
+
+  /**
+   * Location.inviteTokens
+   */
+  export type Location$inviteTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InviteToken
+     */
+    select?: InviteTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InviteToken
+     */
+    omit?: InviteTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InviteTokenInclude<ExtArgs> | null
+    where?: InviteTokenWhereInput
+    orderBy?: InviteTokenOrderByWithRelationInput | InviteTokenOrderByWithRelationInput[]
+    cursor?: InviteTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InviteTokenScalarFieldEnum | InviteTokenScalarFieldEnum[]
   }
 
   /**
@@ -4750,6 +4787,7 @@ export namespace Prisma {
     userId: string | null
     expiresAt: Date | null
     used: boolean | null
+    lid: string | null
   }
 
   export type InviteTokenMaxAggregateOutputType = {
@@ -4758,6 +4796,7 @@ export namespace Prisma {
     userId: string | null
     expiresAt: Date | null
     used: boolean | null
+    lid: string | null
   }
 
   export type InviteTokenCountAggregateOutputType = {
@@ -4766,6 +4805,7 @@ export namespace Prisma {
     userId: number
     expiresAt: number
     used: number
+    lid: number
     _all: number
   }
 
@@ -4776,6 +4816,7 @@ export namespace Prisma {
     userId?: true
     expiresAt?: true
     used?: true
+    lid?: true
   }
 
   export type InviteTokenMaxAggregateInputType = {
@@ -4784,6 +4825,7 @@ export namespace Prisma {
     userId?: true
     expiresAt?: true
     used?: true
+    lid?: true
   }
 
   export type InviteTokenCountAggregateInputType = {
@@ -4792,6 +4834,7 @@ export namespace Prisma {
     userId?: true
     expiresAt?: true
     used?: true
+    lid?: true
     _all?: true
   }
 
@@ -4873,6 +4916,7 @@ export namespace Prisma {
     userId: string
     expiresAt: Date
     used: boolean
+    lid: string
     _count: InviteTokenCountAggregateOutputType | null
     _min: InviteTokenMinAggregateOutputType | null
     _max: InviteTokenMaxAggregateOutputType | null
@@ -4898,7 +4942,9 @@ export namespace Prisma {
     userId?: boolean
     expiresAt?: boolean
     used?: boolean
+    lid?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inviteToken"]>
 
   export type InviteTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4907,7 +4953,9 @@ export namespace Prisma {
     userId?: boolean
     expiresAt?: boolean
     used?: boolean
+    lid?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inviteToken"]>
 
   export type InviteTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4916,7 +4964,9 @@ export namespace Prisma {
     userId?: boolean
     expiresAt?: boolean
     used?: boolean
+    lid?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["inviteToken"]>
 
   export type InviteTokenSelectScalar = {
@@ -4925,23 +4975,28 @@ export namespace Prisma {
     userId?: boolean
     expiresAt?: boolean
     used?: boolean
+    lid?: boolean
   }
 
-  export type InviteTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "userId" | "expiresAt" | "used", ExtArgs["result"]["inviteToken"]>
+  export type InviteTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "userId" | "expiresAt" | "used" | "lid", ExtArgs["result"]["inviteToken"]>
   export type InviteTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
   export type InviteTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
   export type InviteTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
 
   export type $InviteTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "InviteToken"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      location: Prisma.$LocationPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4949,6 +5004,7 @@ export namespace Prisma {
       userId: string
       expiresAt: Date
       used: boolean
+      lid: string
     }, ExtArgs["result"]["inviteToken"]>
     composites: {}
   }
@@ -5344,6 +5400,7 @@ export namespace Prisma {
   export interface Prisma__InviteTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5378,6 +5435,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"InviteToken", 'String'>
     readonly expiresAt: FieldRef<"InviteToken", 'DateTime'>
     readonly used: FieldRef<"InviteToken", 'Boolean'>
+    readonly lid: FieldRef<"InviteToken", 'String'>
   }
     
 
@@ -15744,7 +15802,8 @@ export namespace Prisma {
     token: 'token',
     userId: 'userId',
     expiresAt: 'expiresAt',
-    used: 'used'
+    used: 'used',
+    lid: 'lid'
   };
 
   export type InviteTokenScalarFieldEnum = (typeof InviteTokenScalarFieldEnum)[keyof typeof InviteTokenScalarFieldEnum]
@@ -16050,6 +16109,7 @@ export namespace Prisma {
     issueReports?: IssueReportListRelationFilter
     ressources?: RessourceListRelationFilter
     position?: PositionListRelationFilter
+    inviteTokens?: InviteTokenListRelationFilter
   }
 
   export type LocationOrderByWithRelationInput = {
@@ -16062,6 +16122,7 @@ export namespace Prisma {
     issueReports?: IssueReportOrderByRelationAggregateInput
     ressources?: RessourceOrderByRelationAggregateInput
     position?: PositionOrderByRelationAggregateInput
+    inviteTokens?: InviteTokenOrderByRelationAggregateInput
   }
 
   export type LocationWhereUniqueInput = Prisma.AtLeast<{
@@ -16077,6 +16138,7 @@ export namespace Prisma {
     issueReports?: IssueReportListRelationFilter
     ressources?: RessourceListRelationFilter
     position?: PositionListRelationFilter
+    inviteTokens?: InviteTokenListRelationFilter
   }, "id">
 
   export type LocationOrderByWithAggregationInput = {
@@ -16202,7 +16264,9 @@ export namespace Prisma {
     userId?: StringFilter<"InviteToken"> | string
     expiresAt?: DateTimeFilter<"InviteToken"> | Date | string
     used?: BoolFilter<"InviteToken"> | boolean
+    lid?: StringFilter<"InviteToken"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
   }
 
   export type InviteTokenOrderByWithRelationInput = {
@@ -16211,7 +16275,9 @@ export namespace Prisma {
     userId?: SortOrder
     expiresAt?: SortOrder
     used?: SortOrder
+    lid?: SortOrder
     user?: UserOrderByWithRelationInput
+    location?: LocationOrderByWithRelationInput
   }
 
   export type InviteTokenWhereUniqueInput = Prisma.AtLeast<{
@@ -16223,7 +16289,9 @@ export namespace Prisma {
     userId?: StringFilter<"InviteToken"> | string
     expiresAt?: DateTimeFilter<"InviteToken"> | Date | string
     used?: BoolFilter<"InviteToken"> | boolean
+    lid?: StringFilter<"InviteToken"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
   }, "id" | "token">
 
   export type InviteTokenOrderByWithAggregationInput = {
@@ -16232,6 +16300,7 @@ export namespace Prisma {
     userId?: SortOrder
     expiresAt?: SortOrder
     used?: SortOrder
+    lid?: SortOrder
     _count?: InviteTokenCountOrderByAggregateInput
     _max?: InviteTokenMaxOrderByAggregateInput
     _min?: InviteTokenMinOrderByAggregateInput
@@ -16246,6 +16315,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"InviteToken"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"InviteToken"> | Date | string
     used?: BoolWithAggregatesFilter<"InviteToken"> | boolean
+    lid?: StringWithAggregatesFilter<"InviteToken"> | string
   }
 
   export type RefreshTokenWhereInput = {
@@ -16837,6 +16907,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
     position?: PositionCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateInput = {
@@ -16849,6 +16920,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
     position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUpdateInput = {
@@ -16861,6 +16933,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
     position?: PositionUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateInput = {
@@ -16873,6 +16946,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationCreateManyInput = {
@@ -17015,6 +17089,7 @@ export namespace Prisma {
     expiresAt: Date | string
     used?: boolean
     user: UserCreateNestedOneWithoutInviteTokensInput
+    location: LocationCreateNestedOneWithoutInviteTokensInput
   }
 
   export type InviteTokenUncheckedCreateInput = {
@@ -17023,6 +17098,7 @@ export namespace Prisma {
     userId: string
     expiresAt: Date | string
     used?: boolean
+    lid: string
   }
 
   export type InviteTokenUpdateInput = {
@@ -17031,6 +17107,7 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutInviteTokensNestedInput
+    location?: LocationUpdateOneRequiredWithoutInviteTokensNestedInput
   }
 
   export type InviteTokenUncheckedUpdateInput = {
@@ -17039,6 +17116,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
+    lid?: StringFieldUpdateOperationsInput | string
   }
 
   export type InviteTokenCreateManyInput = {
@@ -17047,6 +17125,7 @@ export namespace Prisma {
     userId: string
     expiresAt: Date | string
     used?: boolean
+    lid: string
   }
 
   export type InviteTokenUpdateManyMutationInput = {
@@ -17062,6 +17141,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
+    lid?: StringFieldUpdateOperationsInput | string
   }
 
   export type RefreshTokenCreateInput = {
@@ -17675,6 +17755,12 @@ export namespace Prisma {
     none?: PositionWhereInput
   }
 
+  export type InviteTokenListRelationFilter = {
+    every?: InviteTokenWhereInput
+    some?: InviteTokenWhereInput
+    none?: InviteTokenWhereInput
+  }
+
   export type UserLocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -17692,6 +17778,10 @@ export namespace Prisma {
   }
 
   export type PositionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InviteTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17791,12 +17881,6 @@ export namespace Prisma {
     none?: RefreshTokenWhereInput
   }
 
-  export type InviteTokenListRelationFilter = {
-    every?: InviteTokenWhereInput
-    some?: InviteTokenWhereInput
-    none?: InviteTokenWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -17815,10 +17899,6 @@ export namespace Prisma {
   }
 
   export type RefreshTokenOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type InviteTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17907,12 +17987,18 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
+  }
+
   export type InviteTokenCountOrderByAggregateInput = {
     id?: SortOrder
     token?: SortOrder
     userId?: SortOrder
     expiresAt?: SortOrder
     used?: SortOrder
+    lid?: SortOrder
   }
 
   export type InviteTokenMaxOrderByAggregateInput = {
@@ -17921,6 +18007,7 @@ export namespace Prisma {
     userId?: SortOrder
     expiresAt?: SortOrder
     used?: SortOrder
+    lid?: SortOrder
   }
 
   export type InviteTokenMinOrderByAggregateInput = {
@@ -17929,6 +18016,7 @@ export namespace Prisma {
     userId?: SortOrder
     expiresAt?: SortOrder
     used?: SortOrder
+    lid?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -17974,11 +18062,6 @@ export namespace Prisma {
     in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
-  }
-
-  export type LocationScalarRelationFilter = {
-    is?: LocationWhereInput
-    isNot?: LocationWhereInput
   }
 
   export type UserLocationUserIdLocationIdCompoundUniqueInput = {
@@ -18389,6 +18472,13 @@ export namespace Prisma {
     connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
   }
 
+  export type InviteTokenCreateNestedManyWithoutLocationInput = {
+    create?: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput> | InviteTokenCreateWithoutLocationInput[] | InviteTokenUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: InviteTokenCreateOrConnectWithoutLocationInput | InviteTokenCreateOrConnectWithoutLocationInput[]
+    createMany?: InviteTokenCreateManyLocationInputEnvelope
+    connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+  }
+
   export type UserLocationUncheckedCreateNestedManyWithoutLocationInput = {
     create?: XOR<UserLocationCreateWithoutLocationInput, UserLocationUncheckedCreateWithoutLocationInput> | UserLocationCreateWithoutLocationInput[] | UserLocationUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: UserLocationCreateOrConnectWithoutLocationInput | UserLocationCreateOrConnectWithoutLocationInput[]
@@ -18422,6 +18512,13 @@ export namespace Prisma {
     connectOrCreate?: PositionCreateOrConnectWithoutAtLocationInput | PositionCreateOrConnectWithoutAtLocationInput[]
     createMany?: PositionCreateManyAtLocationInputEnvelope
     connect?: PositionWhereUniqueInput | PositionWhereUniqueInput[]
+  }
+
+  export type InviteTokenUncheckedCreateNestedManyWithoutLocationInput = {
+    create?: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput> | InviteTokenCreateWithoutLocationInput[] | InviteTokenUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: InviteTokenCreateOrConnectWithoutLocationInput | InviteTokenCreateOrConnectWithoutLocationInput[]
+    createMany?: InviteTokenCreateManyLocationInputEnvelope
+    connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -18498,6 +18595,20 @@ export namespace Prisma {
     deleteMany?: PositionScalarWhereInput | PositionScalarWhereInput[]
   }
 
+  export type InviteTokenUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput> | InviteTokenCreateWithoutLocationInput[] | InviteTokenUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: InviteTokenCreateOrConnectWithoutLocationInput | InviteTokenCreateOrConnectWithoutLocationInput[]
+    upsert?: InviteTokenUpsertWithWhereUniqueWithoutLocationInput | InviteTokenUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: InviteTokenCreateManyLocationInputEnvelope
+    set?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    disconnect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    delete?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    update?: InviteTokenUpdateWithWhereUniqueWithoutLocationInput | InviteTokenUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: InviteTokenUpdateManyWithWhereWithoutLocationInput | InviteTokenUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
+  }
+
   export type UserLocationUncheckedUpdateManyWithoutLocationNestedInput = {
     create?: XOR<UserLocationCreateWithoutLocationInput, UserLocationUncheckedCreateWithoutLocationInput> | UserLocationCreateWithoutLocationInput[] | UserLocationUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: UserLocationCreateOrConnectWithoutLocationInput | UserLocationCreateOrConnectWithoutLocationInput[]
@@ -18566,6 +18677,20 @@ export namespace Prisma {
     update?: PositionUpdateWithWhereUniqueWithoutAtLocationInput | PositionUpdateWithWhereUniqueWithoutAtLocationInput[]
     updateMany?: PositionUpdateManyWithWhereWithoutAtLocationInput | PositionUpdateManyWithWhereWithoutAtLocationInput[]
     deleteMany?: PositionScalarWhereInput | PositionScalarWhereInput[]
+  }
+
+  export type InviteTokenUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput> | InviteTokenCreateWithoutLocationInput[] | InviteTokenUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: InviteTokenCreateOrConnectWithoutLocationInput | InviteTokenCreateOrConnectWithoutLocationInput[]
+    upsert?: InviteTokenUpsertWithWhereUniqueWithoutLocationInput | InviteTokenUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: InviteTokenCreateManyLocationInputEnvelope
+    set?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    disconnect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    delete?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+    update?: InviteTokenUpdateWithWhereUniqueWithoutLocationInput | InviteTokenUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: InviteTokenUpdateManyWithWhereWithoutLocationInput | InviteTokenUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
   }
 
   export type ShiftAssignmentCreateNestedManyWithoutEmployeeInput = {
@@ -18964,6 +19089,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type LocationCreateNestedOneWithoutInviteTokensInput = {
+    create?: XOR<LocationCreateWithoutInviteTokensInput, LocationUncheckedCreateWithoutInviteTokensInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutInviteTokensInput
+    connect?: LocationWhereUniqueInput
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -18974,6 +19105,14 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutInviteTokensInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInviteTokensInput, UserUpdateWithoutInviteTokensInput>, UserUncheckedUpdateWithoutInviteTokensInput>
+  }
+
+  export type LocationUpdateOneRequiredWithoutInviteTokensNestedInput = {
+    create?: XOR<LocationCreateWithoutInviteTokensInput, LocationUncheckedCreateWithoutInviteTokensInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutInviteTokensInput
+    upsert?: LocationUpsertWithoutInviteTokensInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutInviteTokensInput, LocationUpdateWithoutInviteTokensInput>, LocationUncheckedUpdateWithoutInviteTokensInput>
   }
 
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -19818,6 +19957,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type InviteTokenCreateWithoutLocationInput = {
+    id?: string
+    token: string
+    expiresAt: Date | string
+    used?: boolean
+    user: UserCreateNestedOneWithoutInviteTokensInput
+  }
+
+  export type InviteTokenUncheckedCreateWithoutLocationInput = {
+    id?: string
+    token: string
+    userId: string
+    expiresAt: Date | string
+    used?: boolean
+  }
+
+  export type InviteTokenCreateOrConnectWithoutLocationInput = {
+    where: InviteTokenWhereUniqueInput
+    create: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput>
+  }
+
+  export type InviteTokenCreateManyLocationInputEnvelope = {
+    data: InviteTokenCreateManyLocationInput | InviteTokenCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserLocationUpsertWithWhereUniqueWithoutLocationInput = {
     where: UserLocationWhereUniqueInput
     update: XOR<UserLocationUpdateWithoutLocationInput, UserLocationUncheckedUpdateWithoutLocationInput>
@@ -19953,6 +20118,34 @@ export namespace Prisma {
     id?: StringFilter<"Position"> | string
     name?: StringFilter<"Position"> | string
     locationId?: StringFilter<"Position"> | string
+  }
+
+  export type InviteTokenUpsertWithWhereUniqueWithoutLocationInput = {
+    where: InviteTokenWhereUniqueInput
+    update: XOR<InviteTokenUpdateWithoutLocationInput, InviteTokenUncheckedUpdateWithoutLocationInput>
+    create: XOR<InviteTokenCreateWithoutLocationInput, InviteTokenUncheckedCreateWithoutLocationInput>
+  }
+
+  export type InviteTokenUpdateWithWhereUniqueWithoutLocationInput = {
+    where: InviteTokenWhereUniqueInput
+    data: XOR<InviteTokenUpdateWithoutLocationInput, InviteTokenUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type InviteTokenUpdateManyWithWhereWithoutLocationInput = {
+    where: InviteTokenScalarWhereInput
+    data: XOR<InviteTokenUpdateManyMutationInput, InviteTokenUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type InviteTokenScalarWhereInput = {
+    AND?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
+    OR?: InviteTokenScalarWhereInput[]
+    NOT?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
+    id?: StringFilter<"InviteToken"> | string
+    token?: StringFilter<"InviteToken"> | string
+    userId?: StringFilter<"InviteToken"> | string
+    expiresAt?: DateTimeFilter<"InviteToken"> | Date | string
+    used?: BoolFilter<"InviteToken"> | boolean
+    lid?: StringFilter<"InviteToken"> | string
   }
 
   export type ShiftAssignmentCreateWithoutEmployeeInput = {
@@ -20178,6 +20371,7 @@ export namespace Prisma {
     token: string
     expiresAt: Date | string
     used?: boolean
+    location: LocationCreateNestedOneWithoutInviteTokensInput
   }
 
   export type InviteTokenUncheckedCreateWithoutUserInput = {
@@ -20185,6 +20379,7 @@ export namespace Prisma {
     token: string
     expiresAt: Date | string
     used?: boolean
+    lid: string
   }
 
   export type InviteTokenCreateOrConnectWithoutUserInput = {
@@ -20392,17 +20587,6 @@ export namespace Prisma {
     data: XOR<InviteTokenUpdateManyMutationInput, InviteTokenUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type InviteTokenScalarWhereInput = {
-    AND?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
-    OR?: InviteTokenScalarWhereInput[]
-    NOT?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
-    id?: StringFilter<"InviteToken"> | string
-    token?: StringFilter<"InviteToken"> | string
-    userId?: StringFilter<"InviteToken"> | string
-    expiresAt?: DateTimeFilter<"InviteToken"> | Date | string
-    used?: BoolFilter<"InviteToken"> | boolean
-  }
-
   export type UserCreateWithoutInviteTokensInput = {
     id?: string
     firstname: string
@@ -20444,6 +20628,35 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutInviteTokensInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutInviteTokensInput, UserUncheckedCreateWithoutInviteTokensInput>
+  }
+
+  export type LocationCreateWithoutInviteTokensInput = {
+    id?: string
+    name: string
+    address: string
+    phone: string
+    users?: UserLocationCreateNestedManyWithoutLocationInput
+    inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
+    issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
+    ressources?: RessourceCreateNestedManyWithoutLocationInput
+    position?: PositionCreateNestedManyWithoutAtLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutInviteTokensInput = {
+    id?: string
+    name: string
+    address: string
+    phone: string
+    users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
+    inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
+    issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
+    ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
+    position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutInviteTokensInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutInviteTokensInput, LocationUncheckedCreateWithoutInviteTokensInput>
   }
 
   export type UserUpsertWithoutInviteTokensInput = {
@@ -20493,6 +20706,41 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutReportByNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type LocationUpsertWithoutInviteTokensInput = {
+    update: XOR<LocationUpdateWithoutInviteTokensInput, LocationUncheckedUpdateWithoutInviteTokensInput>
+    create: XOR<LocationCreateWithoutInviteTokensInput, LocationUncheckedCreateWithoutInviteTokensInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutInviteTokensInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutInviteTokensInput, LocationUncheckedUpdateWithoutInviteTokensInput>
+  }
+
+  export type LocationUpdateWithoutInviteTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    users?: UserLocationUpdateManyWithoutLocationNestedInput
+    inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
+    issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
+    ressources?: RessourceUpdateManyWithoutLocationNestedInput
+    position?: PositionUpdateManyWithoutAtLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutInviteTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
+    inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
+    issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
+    ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
+    position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
   }
 
   export type UserCreateWithoutRefreshTokensInput = {
@@ -20639,6 +20887,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
     position?: PositionCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutUsersInput = {
@@ -20650,6 +20899,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
     position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutUsersInput = {
@@ -20726,6 +20976,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
     position?: PositionUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutUsersInput = {
@@ -20737,6 +20988,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type UserCreateWithoutShiftAssignmentsInput = {
@@ -21272,6 +21524,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
     position?: PositionCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutInventoryItemsInput = {
@@ -21283,6 +21536,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
     position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutInventoryItemsInput = {
@@ -21336,6 +21590,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
     position?: PositionUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutInventoryItemsInput = {
@@ -21347,6 +21602,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type InventoryFlagUpsertWithWhereUniqueWithoutInventoryItemInput = {
@@ -21565,6 +21821,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
     position?: PositionCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutIssueReportsInput = {
@@ -21576,6 +21833,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
     position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutIssueReportsInput = {
@@ -21652,6 +21910,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
     position?: PositionUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutIssueReportsInput = {
@@ -21663,6 +21922,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type UserCreateWithoutRessourcesInput = {
@@ -21717,6 +21977,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     position?: PositionCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutRessourcesInput = {
@@ -21728,6 +21989,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     position?: PositionUncheckedCreateNestedManyWithoutAtLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutRessourcesInput = {
@@ -21804,6 +22066,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     position?: PositionUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutRessourcesInput = {
@@ -21815,6 +22078,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationCreateWithoutPositionInput = {
@@ -21826,6 +22090,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutPositionInput = {
@@ -21837,6 +22102,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutPositionInput = {
@@ -21896,6 +22162,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutPositionInput = {
@@ -21907,6 +22174,7 @@ export namespace Prisma {
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type ShiftAssignmentUpsertWithWhereUniqueWithoutPositionInput = {
@@ -21960,6 +22228,14 @@ export namespace Prisma {
   export type PositionCreateManyAtLocationInput = {
     id?: string
     name: string
+  }
+
+  export type InviteTokenCreateManyLocationInput = {
+    id?: string
+    token: string
+    userId: string
+    expiresAt: Date | string
+    used?: boolean
   }
 
   export type UserLocationUpdateWithoutLocationInput = {
@@ -22077,6 +22353,30 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
   }
 
+  export type InviteTokenUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutInviteTokensNestedInput
+  }
+
+  export type InviteTokenUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type InviteTokenUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type ShiftAssignmentCreateManyEmployeeInput = {
     id?: string
     date: Date | string
@@ -22149,6 +22449,7 @@ export namespace Prisma {
     token: string
     expiresAt: Date | string
     used?: boolean
+    lid: string
   }
 
   export type ShiftAssignmentUpdateWithoutEmployeeInput = {
@@ -22361,6 +22662,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
+    location?: LocationUpdateOneRequiredWithoutInviteTokensNestedInput
   }
 
   export type InviteTokenUncheckedUpdateWithoutUserInput = {
@@ -22368,6 +22670,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
+    lid?: StringFieldUpdateOperationsInput | string
   }
 
   export type InviteTokenUncheckedUpdateManyWithoutUserInput = {
@@ -22375,6 +22678,7 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
+    lid?: StringFieldUpdateOperationsInput | string
   }
 
   export type ShiftSwapRequestCreateManyRequesterShiftInput = {

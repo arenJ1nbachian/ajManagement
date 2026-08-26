@@ -143,7 +143,8 @@ exports.Prisma.InviteTokenScalarFieldEnum = {
   token: 'token',
   userId: 'userId',
   expiresAt: 'expiresAt',
-  used: 'used'
+  used: 'used',
+  lid: 'lid'
 };
 
 exports.Prisma.RefreshTokenScalarFieldEnum = {

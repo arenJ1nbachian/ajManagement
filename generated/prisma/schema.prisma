@@ -23,6 +23,7 @@ model Location {
   issueReports   IssueReport[]
   ressources     Ressource[]
   position       Position[]
+  inviteTokens   InviteToken[]
 }
 
 // User is a model that represents an individual working in a company.
@@ -54,6 +55,8 @@ model InviteToken {
   user      User     @relation(fields: [userId], references: [id])
   expiresAt DateTime
   used      Boolean  @default(false)
+  lid       String
+  location  Location @relation(fields: [lid], references: [id])
 }
 
 // A model used for storing the users hashed refresh token. In case of a data breach, the raw value of refreshToken cannot be used to authenticate
