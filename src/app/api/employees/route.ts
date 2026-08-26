@@ -13,6 +13,9 @@ interface InitialInformation {
   lid: string;
 }
 
+// Endpoint for when an owner or manager adds an employee to a location.
+// An account gets created in the database without a password
+// An invite token gets created and an email gets sent to the employee with a link to an endpoint to confirm their account
 export const POST = async (request: Request) => {
   const body: InitialInformation = await request.json();
 
@@ -63,6 +66,8 @@ export const POST = async (request: Request) => {
   }
 };
 
+// Retreives all employees at a given location and return the status of the employee along with relevant information such
+// as their first and last name, email address, phone number and their job title
 export const GET = async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
 
@@ -100,6 +105,7 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
+// Removes an employee at a given location
 export const DELETE = async (request: NextRequest) => {
   try {
     const body = await request.json();
