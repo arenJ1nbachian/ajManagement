@@ -52,8 +52,9 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       return NextResponse.json({ message: "User not found" }, { status: 404 }); // The user does not exist
     }
 
-    const location = await prisma.userLocation.findFirst({
+    const locations = await prisma.userLocation.findMany({
       where: { userId: user.id },
+      select: { location: true, status: true },
     });
 
     // Generate new tokens and return it to the client
@@ -68,7 +69,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       accessToken: tokens.accessToken,
       id: user.id,
       role: user.role,
-      locationId: location?.locationId,
+      locations: locations,
     });
 
     // Attach refreshToken as an httpOnly cookie. This cookie will only be attached with the request if the api call is hits this file

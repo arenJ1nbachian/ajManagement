@@ -52,7 +52,8 @@ const WEEK_NAMES = [
 ];
 
 export default function SchedulePage() {
-  const { userId, token, locationId } = useAuth();
+  const { userId, token, locations, activeLocationId, setActiveLocationId } =
+    useAuth();
 
   const [weekStart, setWeekStart] = useState(() => getMonday(new Date()));
 
@@ -113,6 +114,7 @@ export default function SchedulePage() {
           start: startTime,
           end: endTime,
           positionId,
+          locationId: activeLocationId,
         }),
       });
 
@@ -162,7 +164,7 @@ export default function SchedulePage() {
   const getSchedules = async () => {
     try {
       const response = await fetch(
-        `/api/shifts?locationId=${locationId}&startDate=${weekDates[0]}&endDate=${weekDates[6]}`,
+        `/api/shifts?locationId=${activeLocationId}&startDate=${weekDates[0]}&endDate=${weekDates[6]}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -196,15 +198,15 @@ export default function SchedulePage() {
   // The guard matters: token starts undefined while AuthContext renews it,
   // and firing early would send "Bearer undefined".
   useEffect(() => {
-    if (!token || !locationId) return;
+    if (!token || !activeLocationId) return;
     getSchedules();
-  }, [token, locationId, weekStart]);
+  }, [token, activeLocationId, weekStart]);
 
   useEffect(() => {
     const getPositions = async () => {
       try {
         const response = await fetch(
-          `/api/positions?locationId=${locationId}`,
+          `/api/positions?locationId=${activeLocationId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -225,7 +227,7 @@ export default function SchedulePage() {
       }
     };
     getPositions();
-  }, []);
+  }, [activeLocationId]);
 
   return (
     <>
@@ -288,39 +290,57 @@ export default function SchedulePage() {
             );
           })}
         </div>
-        <div className="text-xl font-bold px-3 py-2 my-2 flex items-center">
-          <div className="text-base lg:text-xl">{formatLong(selectedDay)}</div>
-          <div className="ml-auto mr-2 flex gap-1">
-            {selectedDay !== todayStr && (
-              <button
-                onClick={() => {
-                  setWeekStart(getMonday(new Date()));
-                  setSelectedDay(todayStr);
-                }}
-                className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
-              >
-                Today
-              </button>
-            )}
-            {selectedDay >= todayStr && (
-              <button
-                className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
-                // Set selectedCell with the only information known at this point
-                onClick={() => {
-                  setSelectedCell({
-                    userId: "",
-                    id: "",
-                    firstname: "",
-                    lastname: "",
-                    date: selectedDay,
-                  });
-                }}
-              >
-                Add Shift
-              </button>
-            )}
+        <div className="flex flex-col px-3 py-2 my-2 gap-2">
+          <div className="text-xl font-bold flex items-center flex-wrap gap-4 justify-between">
+            <select
+              className="text-sm rounded-2xl border bg-blue-500 p-0.5 h-7 w-80"
+              value={activeLocationId!}
+              onChange={(e) => setActiveLocationId(e.target.value)}
+            >
+              {locations?.map((l) => (
+                <option
+                  key={l.location.id}
+                  value={l.location.id}
+                >{`${l.location.name} ${l.location.address}`}</option>
+              ))}
+            </select>
+
+            <div className="flex gap-1">
+              {selectedDay !== todayStr && (
+                <button
+                  onClick={() => {
+                    setWeekStart(getMonday(new Date()));
+                    setSelectedDay(todayStr);
+                  }}
+                  className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
+                >
+                  Today
+                </button>
+              )}
+              {selectedDay >= todayStr && (
+                <button
+                  className="bg-blue-500 px-3 py-1 rounded-full text-white text-xs w-fit "
+                  // Set selectedCell with the only information known at this point
+                  onClick={() => {
+                    setSelectedCell({
+                      userId: "",
+                      id: "",
+                      firstname: "",
+                      lastname: "",
+                      date: selectedDay,
+                    });
+                  }}
+                >
+                  Add Shift
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="text-base font-bold lg:text-xl">
+            {formatLong(selectedDay)}
           </div>
         </div>
+
         <div className="w-4/5 mb-1">
           <hr className="h-3 border-t-2" />
         </div>

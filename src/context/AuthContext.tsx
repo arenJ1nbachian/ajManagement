@@ -1,17 +1,31 @@
 "use client";
 import { createContext, useState, useContext, useEffect } from "react";
 
+interface locations {
+  location: location;
+  status: string;
+}
+
+interface location {
+  address: string;
+  id: string;
+  name: string;
+  phone: string;
+}
+
 type AuthContextType = {
   token: string | null;
   userId: string | null;
   role: string | null;
   isLoading: boolean;
-  locationId: string | null;
+  activeLocationId: string | null;
+  setActiveLocationId: (id: string) => void;
+  locations: locations[];
   login: (
     token: string,
     userId: string,
     role: string,
-    locationId: string,
+    location: locations[],
   ) => void;
   logout: () => void;
 };
@@ -23,7 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [locationId, setLocationId] = useState<string | null>(null);
+  const [locations, setLocations] = useState<locations[]>([]);
+  const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
 
   /*  Upon initial load generate a new access token and refresh token
       This will set the states to a specific value which the root layouts
@@ -44,8 +59,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.status === 404 || response.status === 401) {
         setIsLoading(false);
       } else {
-        const data = await response.json();
-        login(data.accessToken, data.id, data.role, data.locationId);
+        const data: {
+          accessToken: string;
+          id: string;
+          role: string;
+          locations: locations[];
+        } = await response.json();
+        login(data.accessToken, data.id, data.role, data.locations);
+        if (data.locations.length > 0) {
+          setActiveLocationId(data.locations[0].location.id);
+        }
         setIsLoading(false);
       }
     };
@@ -57,24 +80,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token: string,
     userId: string,
     role: string,
-    locationId: string,
+    locations: locations[],
   ) => {
     setToken(token);
     setUserId(userId);
     setRole(role);
-    setLocationId(locationId);
+    setLocations(locations);
   };
 
   const logout = () => {
     setToken(null);
     setUserId(null);
     setRole(null);
-    setLocationId(null);
+    setLocations([]);
+    setActiveLocationId(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ token, userId, role, isLoading, locationId, login, logout }}
+      value={{
+        token,
+        userId,
+        role,
+        isLoading,
+        activeLocationId,
+        setActiveLocationId,
+        locations,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -50,6 +50,9 @@ export async function GET(request: Request) {
                   gte: startDate,
                   lte: endDate,
                 },
+                position: {
+                  locationId,
+                },
               },
             },
           },
@@ -78,7 +81,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { userId, date, start, end, positionId } = body;
+  const { userId, date, start, end, positionId, locationId } = body;
 
   if (!userId || !date || !start || !positionId) {
     return NextResponse.json(
@@ -94,6 +97,7 @@ export async function POST(request: Request) {
       where: {
         userId,
         date: dateObj,
+        position: { locationId },
       },
     });
 

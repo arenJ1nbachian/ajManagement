@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   LucideIcon,
   Package,
+  Users2,
 } from "lucide-react";
 
 interface NavItem {
@@ -44,6 +45,7 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
   const navItems: NavItem[] = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { label: "Schedule", href: "/schedule", icon: Calendar },
+    { label: "Staff", href: "/staff", icon: Users2 },
     { label: "Inventory", href: "/inventory", icon: Package },
     { label: "Issues", href: "/issues", icon: AlertTriangle },
     { label: "Resources", href: "/resources", icon: BookOpen },
