@@ -86,6 +86,7 @@ export const GET = async (request: NextRequest) => {
         status: true,
         user: {
           select: {
+            id: true,
             firstname: true,
             lastname: true,
             email: true,

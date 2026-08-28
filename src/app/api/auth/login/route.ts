@@ -41,8 +41,9 @@ export async function POST(request: Request) {
       rememberMe,
     ); // Destructure accessToken and refreshToken from the helper function
 
-    const location = await prisma.userLocation.findFirst({
+    const locations = await prisma.userLocation.findMany({
       where: { userId: user.id },
+      select: { location: true, status: true },
     });
 
     const response = NextResponse.json(
@@ -50,7 +51,7 @@ export async function POST(request: Request) {
         accessToken: accessToken,
         id: user.id,
         role: user.role,
-        locationId: location?.locationId,
+        locations,
       },
       { status: 200 },
     ); // return the tokens, id, role and locationId

@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>(""); // Holds the value of the password input
   const [error, setError] = useState<string>(""); // Holds the error message if request's response returns an error
   const [rememberMe, setRememberMe] = useState<boolean>(false); // Hold the state of the remember me checkbox
-  const { login } = useAuth(); // Destructures login function from the externally created authContext
+  const { login, setActiveLocationId } = useAuth(); // Destructures login function from the externally created authContext
   const router = useRouter(); // Router for page redirection
 
   const handleLogin = async () => {
@@ -32,9 +32,13 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      const { accessToken, id, role, locationId } = data;
+      const { accessToken, id, role, locations } = data;
 
-      login(accessToken, id, role, locationId);
+      login(accessToken, id, role, locations);
+
+      if (locations.length > 0) {
+        setActiveLocationId(data.locations[0].location.id);
+      }
 
       router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
