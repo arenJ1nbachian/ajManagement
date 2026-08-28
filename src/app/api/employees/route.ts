@@ -53,7 +53,33 @@ export const POST = async (request: Request) => {
       from: "noreply@ajmanagement.ca",
       to: email,
       subject: "You've been invited to ajManagement",
-      html: `<p>Hi ${firstname} ${lastname},</p><p>Click the link below to set up your account:</p><a href="${process.env.NEXT_PUBLIC_APP_URL}/invite?token=${token}">Set up your account</a><p>This link expires in 48 hours.</p>`,
+      html: `
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:32px 16px;background:#0C0C0E;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <div style="max-width:520px;margin:0 auto;">
+    <div style="background:#2A1F00;border:1px solid #78450A;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#FBB040;">
+      <strong style="display:block;margin-bottom:2px;">Employee invitation — feature test</strong>
+      If you received this email, the invite flow is working correctly.
+    </div>
+    <div style="background:#141417;border:1px solid #242428;border-radius:16px;overflow:hidden;">
+      <div style="padding:28px 32px 24px;border-bottom:1px solid #242428;">
+        <span style="font-size:14px;font-weight:600;color:#F2F2F4;">ajManagement</span>
+      </div>
+      <div style="padding:32px;">
+        <h1 style="font-size:22px;font-weight:600;color:#F2F2F4;margin:0 0 12px;">You've been invited, ${firstname}.</h1>
+        <p style="font-size:14px;color:#71717A;margin:0 0 28px;line-height:1.65;">A manager has added you to their team. Set up your account using the link below.</p>
+        <a href="${process.env.NEXT_PUBLIC_APP_URL}/invite?token=${token}" style="display:inline-block;background:#3B82F6;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:10px;text-decoration:none;">Set up your account →</a>
+        <p style="font-size:12px;color:#3B82F6;margin:20px 0 0;">This link expires in 48 hours.</p>
+      </div>
+      <div style="padding:20px 32px;border-top:1px solid #242428;">
+        <p style="font-size:12px;color:#71717A;margin:0;">If you weren't expecting this, you can safely ignore this email.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`,
     });
 
     return NextResponse.json({ message: "Employee created" }, { status: 201 });
