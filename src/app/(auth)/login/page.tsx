@@ -1,13 +1,10 @@
 "use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ChefHat } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
+import Input from "@/components/Input";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>(""); // Holds the value of the email input
@@ -16,8 +13,14 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState<boolean>(false); // Hold the state of the remember me checkbox
   const { login, setActiveLocationId } = useAuth(); // Destructures login function from the externally created authContext
   const router = useRouter(); // Router for page redirection
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const loginInProgress = useRef(false);
 
   const handleLogin = async () => {
+    if (loginInProgress.current) return;
+    loginInProgress.current = true;
+    setIsLoading(true);
+    setError("");
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -43,83 +46,101 @@ export default function LoginPage() {
       router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
       setError("Something went wrong. Please try again.");
+    } finally {
+      loginInProgress.current = false;
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-sm gap-6">
-        <CardHeader className="flex flex-col items-center gap-4">
+    <main className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-sm gap-6 flex flex-col">
+        <header className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 flex items-center justify-center bg-accent rounded-md">
             <ChefHat size={20} className="text-accent-foreground" />
           </div>
           <p className="text-lg font-medium">ajManagement</p>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-sm text-muted-foreground">
             Sign in to your account
-          </p>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-5">
+          </h1>
+        </header>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+          aria-busy={isLoading}
+          className="flex flex-col gap-5"
+        >
           <div className="flex flex-col gap-2">
-            <Label className="text-muted-foreground" htmlFor="email">
+            <label className="text-muted-foreground" htmlFor="email">
               Email
-            </Label>
+            </label>
             <Input
-              className=""
               id="email"
               type="email"
               value={email}
               placeholder="you@restaurant.com"
+              required
+              autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label className="text-muted-foreground" htmlFor="password">
+            <label className="text-muted-foreground" htmlFor="password">
               Password
-            </Label>
+            </label>
             <Input
-              className=""
               id="password"
               type="password"
               value={password}
               placeholder="•••••••••••••"
+              required
+              autoComplete="current-password"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Checkbox
+              <input
+                type="checkbox"
                 id="rememberMe"
-                onCheckedChange={() =>
+                onChange={() =>
                   setRememberMe((prev) => {
                     return !prev;
                   })
                 }
                 checked={rememberMe}
+                className="accent-primary"
               />
-              <Label htmlFor="rememberMe" className="text-muted-foreground">
+              <label htmlFor="rememberMe" className="text-muted-foreground">
                 Remember me
-              </Label>
+              </label>
             </div>
             <a className="text-sm text-primary hover:underline" href="#">
               Forgot password?
             </a>
           </div>
-          {error && <p className="text-destructive text-sm">{error}</p>}
-          <Button className="w-full cursor-pointer" onClick={handleLogin}>
-            Sign in
-          </Button>
-          <div className="text-center">
-            Don't have an account?
-            <Button
-              className="text-primary hover:underline"
-              onClick={() => router.push("/register")}
-              variant="link"
-            >
+          {error && (
+            <p role="alert" className="text-destructive text-sm">
+              {error}
+            </p>
+          )}
+          <button
+            disabled={isLoading}
+            className="w-full cursor-pointer bg-primary text-primary-foreground px-4 py-2 rounded-md enabled:hover:opacity-90 transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            type="submit"
+          >
+            {isLoading ? "Signing in..." : "Sign in"}
+          </button>
+          <div className="text-center text-sm">
+            Don't have an account?{" "}
+            <Link className="text-primary hover:underline" href="/register">
               Create one
-            </Button>
+            </Link>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </form>
+      </div>
+    </main>
   );
 }
