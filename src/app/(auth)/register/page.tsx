@@ -1,19 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -74,24 +62,20 @@ export default function RegisterPage() {
   return (
     <>
       <div className="flex items-center justify-center min-h-screen px-4">
-        <Card className="w-100 max-w-sm flex ">
-          <CardHeader>
-            <CardTitle>Register an account</CardTitle>
-            <CardDescription>
-              Enter the fields below to register an account
-            </CardDescription>
-            <CardAction>
-              <Button onClick={() => router.push("/login")} variant="link">
-                Login
-              </Button>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
+        <div className="w-100 max-w-sm flex ">
+          <div>
+            <div>Register an account</div>
+            <div>Enter the fields below to register an account</div>
+            <div>
+              <button onClick={() => router.push("/login")}>Login</button>
+            </div>
+          </div>
+          <div>
             <form>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Firstname</Label>
-                  <Input
+                  <label htmlFor="email">Firstname</label>
+                  <input
                     id="firstname"
                     type="text"
                     placeholder="John"
@@ -104,8 +88,8 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Lastname</Label>
-                  <Input
+                  <label htmlFor="email">Lastname</label>
+                  <input
                     id="lastname"
                     type="text"
                     placeholder="Doe"
@@ -118,8 +102,8 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
+                  <label htmlFor="email">Email</label>
+                  <input
                     id="email"
                     type="email"
                     placeholder="JohnDoe@example.com"
@@ -133,7 +117,7 @@ export default function RegisterPage() {
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
+                    <label htmlFor="password">Password</label>
                     <a
                       href="#"
                       className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
@@ -141,7 +125,7 @@ export default function RegisterPage() {
                       Forgot your password?
                     </a>
                   </div>
-                  <Input
+                  <input
                     id="password"
                     type="password"
                     required
@@ -151,8 +135,8 @@ export default function RegisterPage() {
                       })
                     }
                   />
-                  <Label htmlFor="password">Confirm Password</Label>
-                  <Input
+                  <label htmlFor="password">Confirm Password</label>
+                  <input
                     id="password"
                     type="password"
                     required
@@ -170,13 +154,13 @@ export default function RegisterPage() {
                 </div>
               </div>
             </form>
-          </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full" onClick={handleRegister}>
+          </div>
+          <div className="flex-col gap-2">
+            <button type="submit" className="w-full" onClick={handleRegister}>
               Register
-            </Button>
-          </CardFooter>
-        </Card>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

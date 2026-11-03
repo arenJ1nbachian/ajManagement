@@ -1,13 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { ChefHat } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>(""); // Holds the value of the email input
@@ -48,8 +43,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-sm gap-6">
-        <CardHeader className="flex flex-col items-center gap-4">
+      <div className="w-full max-w-sm gap-6">
+        <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 flex items-center justify-center bg-accent rounded-md">
             <ChefHat size={20} className="text-accent-foreground" />
           </div>
@@ -57,13 +52,13 @@ export default function LoginPage() {
           <p className="text-sm text-muted-foreground">
             Sign in to your account
           </p>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-5">
+        </div>
+        <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <Label className="text-muted-foreground" htmlFor="email">
+            <label className="text-muted-foreground" htmlFor="email">
               Email
-            </Label>
-            <Input
+            </label>
+            <input
               className=""
               id="email"
               type="email"
@@ -73,10 +68,10 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label className="text-muted-foreground" htmlFor="password">
+            <label className="text-muted-foreground" htmlFor="password">
               Password
-            </Label>
-            <Input
+            </label>
+            <input
               className=""
               id="password"
               type="password"
@@ -87,39 +82,39 @@ export default function LoginPage() {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Checkbox
+              <input
+                type="checkbox"
                 id="rememberMe"
-                onCheckedChange={() =>
+                onChange={() =>
                   setRememberMe((prev) => {
                     return !prev;
                   })
                 }
                 checked={rememberMe}
               />
-              <Label htmlFor="rememberMe" className="text-muted-foreground">
+              <label htmlFor="rememberMe" className="text-muted-foreground">
                 Remember me
-              </Label>
+              </label>
             </div>
             <a className="text-sm text-primary hover:underline" href="#">
               Forgot password?
             </a>
           </div>
           {error && <p className="text-destructive text-sm">{error}</p>}
-          <Button className="w-full cursor-pointer" onClick={handleLogin}>
+          <button className="w-full cursor-pointer" onClick={handleLogin}>
             Sign in
-          </Button>
+          </button>
           <div className="text-center">
             Don't have an account?
-            <Button
+            <button
               className="text-primary hover:underline"
               onClick={() => router.push("/register")}
-              variant="link"
             >
               Create one
-            </Button>
+            </button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

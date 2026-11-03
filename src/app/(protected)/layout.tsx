@@ -1,6 +1,5 @@
 "use client";
 
-import { Loading } from "@/components/loading";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -53,7 +52,7 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {isLoading && <div>Loading...</div>}
       {!isLoading && token && (
         <>
           <div className="flex h-screen">
