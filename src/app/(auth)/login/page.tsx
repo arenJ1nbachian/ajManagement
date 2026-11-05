@@ -181,7 +181,7 @@ export default function LoginPage() {
             )}
             <button
               disabled={isLoading}
-              className="w-full cursor-pointer bg-primary text-primary-foreground px-4 rounded-md enabled:hover:opacity-90 transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed h-12 rounded-xl font-semibold"
+              className="w-full cursor-pointer bg-primary text-primary-foreground px-4 enabled:hover:opacity-90 transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed h-12 rounded-xl font-semibold"
               type="submit"
             >
               {isLoading ? "Signing in..." : "Sign in"}
