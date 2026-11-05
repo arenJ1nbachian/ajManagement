@@ -21,6 +21,10 @@
   --accent-foreground: #115e59;
   --brand: #c2410c;
   --brand-foreground: #ffffff;
+  --panel: #134e4a;
+  --panel-foreground: #f0fdfa;
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
 }
 
 .dark {
@@ -41,6 +45,10 @@
   --accent-foreground: #ccfbf1;
   --brand: #fb923c;
   --brand-foreground: #1c1917;
+  --panel: #134e4a;
+  --panel-foreground: #f0fdfa;
+  -destructive: #f87171;
+  --destructive-foreground: #1c1917;
 }
 
 @theme inline {
@@ -61,6 +69,10 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
+  --color-panel: var(--panel);
+  --color-panel-foreground: var(--panel-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 @layer base {
