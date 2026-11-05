@@ -54,150 +54,119 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen lg:flex">
-      <aside className="hidden lg:flex flex-col bg-panel text-panel-foreground p-12 flex-1">
-        <header className="flex items-center gap-3">
-          <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md">
-            <ChefHat size={20} className="text-brand-foreground" />
-          </div>
-          <span className="text-lg font-bold">ajManagement</span>
-        </header>
-        <div className="my-auto flex flex-col gap-5 max-w-md">
-          <h2 className="text-4xl font-bold leading-tight">
-            Your restaurant's schedule, in one place.
-          </h2>
-          <ul className="flex flex-col gap-3 text-panel-foreground/80">
-            <li className="flex items-center gap-2">
-              <Check size={18} />
-              Build the week's shifts in minutes
-            </li>
-            <li className="flex items-center gap-2">
-              <Check size={18} />
-              Your team sees their hours on their phone
-            </li>
-            <li className="flex items-center gap-2">
-              <Check size={18} />
-              Invite staff with just an email
-            </li>
-          </ul>
+    <section className="w-full max-w-sm min-h-screen mx-auto gap-6 flex flex-col justify-center">
+      <header className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
+          <ChefHat size={20} className="text-brand-foreground" />
         </div>
-      </aside>
-      <main className="flex flex-[1.4] items-center justify-center px-6">
-        <section className="w-full max-w-sm min-h-screen mx-auto gap-6 flex flex-col justify-center">
-          <header className="flex flex-col items-center gap-4">
-            <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
-              <ChefHat size={20} className="text-brand-foreground" />
-            </div>
-            <h1 className="text-3xl font-bold">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">
-              Sign in to see your shifts and team
-            </p>
-          </header>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleLogin();
-            }}
-            aria-busy={isLoading}
-            className="flex flex-col gap-5"
-          >
-            <div className="flex flex-col gap-2">
-              <label className="text-muted-foreground" htmlFor="email">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                placeholder="you@restaurant.com"
-                required
-                autoComplete="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between">
-                <label className="text-muted-foreground" htmlFor="password">
-                  Password
-                </label>
-                <a className="text-sm text-primary hover:underline" href="#">
-                  Forgot password?
-                </a>
-              </div>
+        <h1 className="text-3xl font-bold">Welcome back</h1>
+        <p className="text-sm text-muted-foreground">
+          Sign in to see your shifts and team
+        </p>
+      </header>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
+        aria-busy={isLoading}
+        className="flex flex-col gap-5"
+      >
+        <div className="flex flex-col gap-2">
+          <label className="text-muted-foreground" htmlFor="email">
+            Email
+          </label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            placeholder="you@restaurant.com"
+            required
+            autoComplete="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between">
+            <label className="text-muted-foreground" htmlFor="password">
+              Password
+            </label>
+            <a className="text-sm text-primary hover:underline" href="#">
+              Forgot password?
+            </a>
+          </div>
 
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  placeholder="•••••••••••••"
-                  required
-                  autoComplete="current-password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pr-10"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff
-                      className="text-muted-foreground hover:text-foreground cursor-pointer "
-                      size={18}
-                    />
-                  ) : (
-                    <Eye
-                      className="text-muted-foreground hover:text-foreground cursor-pointer"
-                      size={18}
-                    />
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  onChange={() =>
-                    setRememberMe((prev) => {
-                      return !prev;
-                    })
-                  }
-                  checked={rememberMe}
-                  className="accent-primary"
-                />
-                <label htmlFor="rememberMe" className="text-muted-foreground">
-                  Keep me signed in on this device
-                </label>
-              </div>
-            </div>
-            {error && (
-              <p role="alert" className="text-destructive text-sm">
-                {error}
-              </p>
-            )}
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              placeholder="•••••••••••••"
+              required
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full pr-10"
+            />
             <button
-              disabled={isLoading}
-              className="w-full cursor-pointer bg-primary text-primary-foreground px-4 enabled:hover:opacity-90 transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed h-12 rounded-xl font-semibold"
-              type="submit"
+              type="button"
+              className="absolute right-3 top-1/2 -translate-y-1/2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {showPassword ? (
+                <EyeOff
+                  className="text-muted-foreground hover:text-foreground cursor-pointer "
+                  size={18}
+                />
+              ) : (
+                <Eye
+                  className="text-muted-foreground hover:text-foreground cursor-pointer"
+                  size={18}
+                />
+              )}
             </button>
-            <footer className="text-center text-sm">
-              <p>Work here? Your manager will send you an invite.</p>
-              <p>
-                Opening a new restaurant?{" "}
-                <Link className="text-primary hover:underline" href="/register">
-                  Create an account
-                </Link>
-              </p>
-            </footer>
-          </form>
-        </section>
-      </main>
-    </div>
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              onChange={() =>
+                setRememberMe((prev) => {
+                  return !prev;
+                })
+              }
+              checked={rememberMe}
+              className="accent-primary"
+            />
+            <label htmlFor="rememberMe" className="text-muted-foreground">
+              Keep me signed in on this device
+            </label>
+          </div>
+        </div>
+        {error && (
+          <p role="alert" className="text-destructive text-sm">
+            {error}
+          </p>
+        )}
+        <button
+          disabled={isLoading}
+          className="w-full cursor-pointer bg-primary text-primary-foreground px-4 enabled:hover:opacity-90 transition-opacity duration-300 disabled:opacity-50 disabled:cursor-not-allowed h-12 rounded-xl font-semibold"
+          type="submit"
+        >
+          {isLoading ? "Signing in..." : "Sign in"}
+        </button>
+        <footer className="text-center text-sm text-muted-foreground">
+          <p>Work here? Your manager will send you an invite.</p>
+          <p>
+            Opening a new restaurant?{" "}
+            <Link className="text-primary hover:underline" href="/register">
+              Create an account
+            </Link>
+          </p>
+        </footer>
+      </form>
+    </section>
   );
 }

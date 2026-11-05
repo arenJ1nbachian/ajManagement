@@ -1,6 +1,8 @@
 "use client";
 
+import { Loading } from "@/components/loading";
 import { useAuth } from "@/context/AuthContext";
+import { Check, ChefHat } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -24,8 +26,41 @@ const AuthRootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && !token && children}
+      {isLoading && <Loading />}
+      {!isLoading && !token && (
+        <div className="min-h-screen lg:flex">
+          <aside className="hidden lg:flex flex-col bg-panel text-panel-foreground p-12 flex-1">
+            <header className="flex items-center gap-3">
+              <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md">
+                <ChefHat size={20} className="text-brand-foreground" />
+              </div>
+              <span className="text-lg font-bold">ajManagement</span>
+            </header>
+            <div className="my-auto flex flex-col gap-5 max-w-md">
+              <h2 className="text-4xl font-bold leading-tight">
+                Your restaurant's schedule, in one place.
+              </h2>
+              <ul className="flex flex-col gap-3 text-panel-foreground/80">
+                <li className="flex items-center gap-2">
+                  <Check size={18} />
+                  Build the week's shifts in minutes
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check size={18} />
+                  Your team sees their hours on their phone
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check size={18} />
+                  Invite staff with just an email
+                </li>
+              </ul>
+            </div>
+          </aside>
+          <main className="flex flex-[1.4] items-center justify-center px-6">
+            {children}
+          </main>
+        </div>
+      )}
     </>
   );
 };
