@@ -76,10 +76,14 @@ export default function RegisterPage() {
             <ChefHat size={20} className="text-brand-foreground" />
           </div>
           <h1 className="text-2xl font-bold">Set up your restaurant</h1>
-          <p className="text-sm text-muted-foreground">
-            Create the owner account. You'll add your location and team in the
-            next steps
-          </p>
+          <div className="text-center lg:text-left">
+            <p className="text-sm text-muted-foreground">
+              Create the owner account.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              You'll add your location and team in the next steps
+            </p>
+          </div>
         </header>
         <form
           className="flex flex-col gap-5"
