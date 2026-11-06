@@ -64,11 +64,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex items-center justify-center min-h-screen px-4 py-8 sm:py-12">
-      <div className="w-full max-w-sm flex flex-col gap-6">
-        <header className="flex flex-col gap-2">
-          <div className="w-10 h-10 flex items-center justify-center bg-accent rounded-md">
-            <ChefHat size={20} className="text-accent-foreground" />
+    <section className="flex flex-col items-center justify-center min-h-screen px-4 py-3">
+      <div className="w-full max-w-sm flex flex-col flex-1 lg:flex-none lg:my-3 gap-6 justify-center">
+        <header className="flex flex-col gap-2 items-center lg:items-baseline">
+          <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
+            <ChefHat size={20} className="text-brand-foreground" />
           </div>
           <h1 className="text-2xl font-bold">Set up your restaurant</h1>
           <p className="text-sm text-muted-foreground">
@@ -136,20 +136,20 @@ export default function RegisterPage() {
           >
             Create account
           </button>
-          <div className="flex flex-col gap-2">
-            <p className="text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
-                Sign in
-              </Link>
-            </p>
-
-            <p className="text-center text-sm text-muted-foreground">
-              Joining a team? Use the link in your invite email.
-            </p>
-          </div>
         </form>
       </div>
-    </main>
+      <footer className="flex flex-col gap-1">
+        <p className="text-center text-sm">
+          Already have an account?{" "}
+          <Link href="/login" className="text-primary hover:underline">
+            Sign in
+          </Link>
+        </p>
+
+        <p className="text-center text-sm text-muted-foreground">
+          Joining a team? Use the link in your invite email.
+        </p>
+      </footer>
+    </section>
   );
 }

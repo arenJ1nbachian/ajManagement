@@ -58,7 +58,7 @@ export default function LoginPage() {
 
   return (
     <section className="w-full max-w-sm min-h-screen mx-auto flex flex-col justify-center py-2 lg:py-0">
-      <div className="flex-1 flex flex-col justify-center lg:flex-none gap-6 my-3">
+      <div className="flex-1 flex flex-col justify-center lg:flex-none gap-6 lg:my-3">
         <header className="flex flex-col items-center lg:items-start gap-4">
           <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
             <ChefHat size={20} className="text-brand-foreground" />
