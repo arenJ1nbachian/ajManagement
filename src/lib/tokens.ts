@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@generated/prisma";
+import { PrismaClient, Role, User } from "@generated/prisma";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
@@ -6,6 +6,11 @@ import crypto from "crypto";
 type GenerateTokenResult = {
   accessToken: string;
   refreshToken: string;
+};
+
+type TokenUser = {
+  userId: string;
+  role: Role;
 };
 
 export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
@@ -26,6 +31,23 @@ export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
     if (e instanceof JsonWebTokenError) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 }); // Wrong token provided
     }
+  }
+};
+
+export const getTokenUser = (request: NextRequest): TokenUser | null => {
+  const authorization = request.headers.get("Authorization"); // Retreive the authorization header
+
+  if (!authorization) return null; // No authorization was provided
+
+  const accessToken = authorization.split(" ")[1]; // Retreive the access token
+  const accessSecretKey = process.env.JWT_ACCESS_SECRET!; // Retreive the access token's secret key
+
+  try {
+    const payload = jwt.verify(accessToken, accessSecretKey) as TokenUser; // Validate the token and read what’s inside
+
+    return { userId: payload.userId, role: payload.role };
+  } catch {
+    return null;
   }
 };
 
