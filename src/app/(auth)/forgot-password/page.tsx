@@ -28,7 +28,7 @@ export default function ForgotPage() {
   };
 
   return (
-    <section className="w-full max-w-sm min-h-screen mx-auto flex flex-col gap-6 justify-center py-2 lg:py-0 pt-4">
+    <section className="w-full max-w-sm min-h-screen mx-auto flex flex-col gap-6 justify-center pb-2 lg:py-0 pt-4">
       <Link
         className="flex items-center gap-1 self-start text-sm font-semibold text-foreground hover:text-primary h-11 "
         href={"/login"}
