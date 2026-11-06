@@ -6,7 +6,7 @@ const FormError = ({ message }: { message: string }) => {
       role="alert"
       className="bg-destructive/10 border border-destructive/30 text-destructive rounded-xl p-3 flex gap-2 items-start text-sm "
     >
-      <CircleAlert />
+      <CircleAlert size={18} className="shrink-0 mt-0.5" />
       <p className="pr-9">{message}</p>
     </div>
   );
