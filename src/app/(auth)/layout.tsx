@@ -1,8 +1,9 @@
 "use client";
 
 import { Loading } from "@/components/loading";
+import Logo from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
-import { Check, ChefHat } from "lucide-react";
+import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -31,9 +32,7 @@ const AuthRootLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="min-h-screen lg:flex">
           <aside className="hidden lg:flex flex-col bg-panel text-panel-foreground p-12 flex-1">
             <header className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md">
-                <ChefHat size={20} className="text-brand-foreground" />
-              </div>
+              <Logo size={20} />
               <span className="text-lg font-bold">ajManagement</span>
             </header>
             <div className="my-auto flex flex-col gap-5 max-w-md">
