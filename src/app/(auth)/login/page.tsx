@@ -7,6 +7,7 @@ import Link from "next/link";
 import Input from "@/components/Input";
 import FormError from "@/components/FormError";
 import Logo from "@/components/Logo";
+import { AuthenticationResponse } from "@/types/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>(""); // Holds the value of the email input
@@ -39,7 +40,7 @@ export default function LoginPage() {
         return;
       }
 
-      const data = await response.json();
+      const data: AuthenticationResponse = await response.json();
       const { accessToken, id, role, locations } = data;
 
       login(accessToken, id, role, locations);

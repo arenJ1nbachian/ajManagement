@@ -1,17 +1,6 @@
 "use client";
+import { AuthenticationResponse, UserLocation } from "@/types/auth";
 import { createContext, useState, useContext, useEffect } from "react";
-
-interface locations {
-  location: location;
-  status: string;
-}
-
-interface location {
-  address: string;
-  id: string;
-  name: string;
-  phone: string;
-}
 
 type AuthContextType = {
   token: string | null;
@@ -20,12 +9,12 @@ type AuthContextType = {
   isLoading: boolean;
   activeLocationId: string | null;
   setActiveLocationId: (id: string) => void;
-  locations: locations[];
+  locations: UserLocation[];
   login: (
     token: string,
     userId: string,
     role: string,
-    location: locations[],
+    location: UserLocation[],
   ) => void;
   logout: () => void;
 };
@@ -37,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [locations, setLocations] = useState<locations[]>([]);
+  const [locations, setLocations] = useState<UserLocation[]>([]);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
 
   /*  Upon initial load generate a new access token and refresh token
@@ -59,12 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.status === 404 || response.status === 401) {
         setIsLoading(false);
       } else {
-        const data: {
-          accessToken: string;
-          id: string;
-          role: string;
-          locations: locations[];
-        } = await response.json();
+        const data: AuthenticationResponse = await response.json();
         login(data.accessToken, data.id, data.role, data.locations);
         if (data.locations.length > 0) {
           setActiveLocationId(data.locations[0].location.id);
@@ -80,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     token: string,
     userId: string,
     role: string,
-    locations: locations[],
+    locations: UserLocation[],
   ) => {
     setToken(token);
     setUserId(userId);

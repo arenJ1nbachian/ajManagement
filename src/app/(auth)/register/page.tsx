@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { ChefHat, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Input from "@/components/Input";
 import Link from "next/link";
 import FormError from "@/components/FormError";
 import Logo from "@/components/Logo";
+import { AuthenticationResponse } from "@/types/auth";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -24,7 +24,6 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { login } = useAuth();
-  const router = useRouter();
 
   const handleRegister = async () => {
     setError("");
@@ -51,12 +50,10 @@ export default function RegisterPage() {
         setError("Something went wrong, please try again later.");
         return;
       }
-      const data = await response.json();
-      const { accessToken, id, role, locationId } = data; // Destructure to obtain token, id and role
+      const data: AuthenticationResponse = await response.json();
+      const { accessToken, id, role, locations } = data; // Destructure to obtain token, id and role
 
-      login(accessToken, id, role, locationId); // Login
-
-      router.push("/dashboard"); // Redirect to dashboard page
+      login(accessToken, id, role, locations); // Login
     } catch (e) {
       setError("Something went wrong. Please try again");
     } finally {

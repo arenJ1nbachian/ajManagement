@@ -31,16 +31,12 @@ export async function POST(request: Request) {
       false,
     ); // Destructure accessToken and refreshToken from the helper function
 
-    const location = await prisma.userLocation.findFirst({
-      where: { userId: user.id },
-    });
-
     const response = NextResponse.json(
       {
         accessToken: accessToken,
         id: user.id,
         role: user.role,
-        locationId: location?.locationId,
+        locations: [],
       },
       { status: 200 },
     ); // return the tokens, id and role
