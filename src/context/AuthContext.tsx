@@ -1,11 +1,12 @@
 "use client";
 import { AuthenticationResponse, UserLocation } from "@/types/auth";
+import { $Enums } from "@generated/prisma";
 import { createContext, useState, useContext, useEffect } from "react";
 
 type AuthContextType = {
   token: string | null;
   userId: string | null;
-  role: string | null;
+  role: $Enums.Role | null;
   isLoading: boolean;
   activeLocationId: string | null;
   setActiveLocationId: (id: string) => void;
@@ -13,7 +14,7 @@ type AuthContextType = {
   login: (
     token: string,
     userId: string,
-    role: string,
+    role: $Enums.Role,
     location: UserLocation[],
   ) => void;
   logout: () => void;
@@ -24,7 +25,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<$Enums.Role | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [locations, setLocations] = useState<UserLocation[]>([]);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (
     token: string,
     userId: string,
-    role: string,
+    role: $Enums.Role,
     locations: UserLocation[],
   ) => {
     setToken(token);
