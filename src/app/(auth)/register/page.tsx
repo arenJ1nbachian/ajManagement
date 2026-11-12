@@ -70,7 +70,7 @@ export default function RegisterPage() {
     <section className="flex flex-col items-center justify-center min-h-screen py-3">
       <div className="w-full max-w-sm flex flex-col flex-1 lg:flex-none lg:my-3 gap-6 justify-center">
         <header className="flex flex-col gap-2 items-center lg:items-start">
-          <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
+          <div className="lg:hidden">
             <Logo size={20} />
           </div>
           <h1 className="text-2xl font-bold">Set up your restaurant</h1>
