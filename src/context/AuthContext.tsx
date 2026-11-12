@@ -1,6 +1,6 @@
 "use client";
 import { AuthenticationResponse, UserLocation } from "@/types/auth";
-import { $Enums } from "@generated/prisma";
+import { $Enums, Location } from "@generated/prisma";
 import { createContext, useState, useContext, useEffect } from "react";
 
 type AuthContextType = {
@@ -18,6 +18,7 @@ type AuthContextType = {
     location: UserLocation[],
   ) => void;
   logout: () => void;
+  addLocation: (location: Location) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -81,6 +82,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setActiveLocationId(null);
   };
 
+  const addLocation = (location: Location) => {
+    setLocations((prev) => [
+      ...prev,
+      { location, status: $Enums.Status.active },
+    ]);
+
+    if (!activeLocationId) {
+      setActiveLocationId(location.id);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -93,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         locations,
         login,
         logout,
+        addLocation,
       }}
     >
       {children}
