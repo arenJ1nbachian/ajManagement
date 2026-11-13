@@ -27,9 +27,15 @@ export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
   } catch (e) {
     if (e instanceof TokenExpiredError) {
       return NextResponse.json({ message: "Token expired" }, { status: 401 }); // Expired access token
-    }
-    if (e instanceof JsonWebTokenError) {
+    } else if (e instanceof JsonWebTokenError) {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 }); // Wrong token provided
+    } else {
+      // Catch any other error
+      console.error(e);
+      return NextResponse.json(
+        { message: "Something went wrong, please try again later" },
+        { status: 500 },
+      );
     }
   }
 };
