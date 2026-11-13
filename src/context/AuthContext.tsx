@@ -1,33 +1,24 @@
 "use client";
+import { AuthenticationResponse, UserLocation } from "@/types/auth";
+import { $Enums, Location } from "@generated/prisma";
 import { createContext, useState, useContext, useEffect } from "react";
-
-interface locations {
-  location: location;
-  status: string;
-}
-
-interface location {
-  address: string;
-  id: string;
-  name: string;
-  phone: string;
-}
 
 type AuthContextType = {
   token: string | null;
   userId: string | null;
-  role: string | null;
+  role: $Enums.Role | null;
   isLoading: boolean;
   activeLocationId: string | null;
   setActiveLocationId: (id: string) => void;
-  locations: locations[];
+  locations: UserLocation[];
   login: (
     token: string,
     userId: string,
-    role: string,
-    location: locations[],
+    role: $Enums.Role,
+    location: UserLocation[],
   ) => void;
   logout: () => void;
+  addLocation: (location: Location) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -35,9 +26,9 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<$Enums.Role | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [locations, setLocations] = useState<locations[]>([]);
+  const [locations, setLocations] = useState<UserLocation[]>([]);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
 
   /*  Upon initial load generate a new access token and refresh token
@@ -59,12 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.status === 404 || response.status === 401) {
         setIsLoading(false);
       } else {
-        const data: {
-          accessToken: string;
-          id: string;
-          role: string;
-          locations: locations[];
-        } = await response.json();
+        const data: AuthenticationResponse = await response.json();
         login(data.accessToken, data.id, data.role, data.locations);
         if (data.locations.length > 0) {
           setActiveLocationId(data.locations[0].location.id);
@@ -79,8 +65,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (
     token: string,
     userId: string,
-    role: string,
-    locations: locations[],
+    role: $Enums.Role,
+    locations: UserLocation[],
   ) => {
     setToken(token);
     setUserId(userId);
@@ -96,6 +82,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setActiveLocationId(null);
   };
 
+  const addLocation = (location: Location) => {
+    setLocations((prev) => [
+      ...prev,
+      { location, status: $Enums.Status.active },
+    ]);
+
+    if (!activeLocationId) {
+      setActiveLocationId(location.id);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -108,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         locations,
         login,
         logout,
+        addLocation,
       }}
     >
       {children}

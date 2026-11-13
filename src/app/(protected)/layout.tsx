@@ -14,6 +14,8 @@ import {
   Package,
   Users2,
 } from "lucide-react";
+import { $Enums } from "@generated/prisma";
+import { Loading } from "@/components/loading";
 
 interface NavItem {
   label: string;
@@ -22,22 +24,27 @@ interface NavItem {
 }
 
 const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
-  const { token, isLoading } = useAuth();
+  const { token, isLoading, role, locations } = useAuth();
   const router = useRouter();
+  const needsSetup = role === $Enums.Role.owner && locations.length === 0; // Tracks if the user is an owner and needs to setup a location
 
-  /* Effect that runs on inital page load or when isLoading or token changes value.
+  /* Effect that runs on initial page load or when isLoading or token or needsSetup changes value.
      Since refreshing the page results in losing our access token, React needs more context 
      in order to decide if we had been previously authenticated or not. By renewing the access token
      by virtue of the refreshToken stored as an httpcookie, we get the neccesarry information to distinguish between
-     previously authenticated vs not authenticated. A boolean flag isLoading is used to distinguish between an inital null value 
+     previously authenticated vs not authenticated. A boolean flag isLoading is used to distinguish between an initial null value 
      of the access token state and an unchanged null value after the api returns an error (e.g. not authenticated)
      */
   useEffect(() => {
     // Indicates that generating a new access token failed (e.g. no refresh token provided)
     if (!isLoading && !token) {
       router.push("/login"); // User is required to log in
+    } else if (!isLoading && token) {
+      // If an owner has yet to have a location setup redirect them to /setup
+
+      if (needsSetup) router.push("/setup");
     }
-  }, [isLoading, token]);
+  }, [isLoading, token, needsSetup]);
 
   const pathname = usePathname();
 
@@ -52,8 +59,8 @@ const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && token && (
+      {(isLoading || !token || needsSetup) && <Loading />}
+      {!isLoading && !needsSetup && token && (
         <>
           <div className="flex h-screen">
             <aside className="hidden lg:flex lg:flex-col w-56 h-screen bg-zinc-900 border-r border-zinc-800 gap-1">

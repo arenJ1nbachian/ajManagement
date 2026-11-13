@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { ChefHat, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Input from "@/components/Input";
 import Link from "next/link";
 import FormError from "@/components/FormError";
+import Logo from "@/components/Logo";
+import { AuthenticationResponse } from "@/types/auth";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -23,7 +24,6 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { login } = useAuth();
-  const router = useRouter();
 
   const handleRegister = async () => {
     setError("");
@@ -50,12 +50,10 @@ export default function RegisterPage() {
         setError("Something went wrong, please try again later.");
         return;
       }
-      const data = await response.json();
-      const { accessToken, id, role, locationId } = data; // Destructure to obtain token, id and role
+      const data: AuthenticationResponse = await response.json();
+      const { accessToken, id, role, locations } = data; // Destructure to obtain token, id and role
 
-      login(accessToken, id, role, locationId); // Login
-
-      router.push("/dashboard"); // Redirect to dashboard page
+      login(accessToken, id, role, locations); // Login
     } catch (e) {
       setError("Something went wrong. Please try again");
     } finally {
@@ -72,8 +70,8 @@ export default function RegisterPage() {
     <section className="flex flex-col items-center justify-center min-h-screen py-3">
       <div className="w-full max-w-sm flex flex-col flex-1 lg:flex-none lg:my-3 gap-6 justify-center">
         <header className="flex flex-col gap-2 items-center lg:items-start">
-          <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
-            <ChefHat size={20} className="text-brand-foreground" />
+          <div className="lg:hidden">
+            <Logo size={20} />
           </div>
           <h1 className="text-2xl font-bold">Set up your restaurant</h1>
           <div className="text-center lg:text-left">

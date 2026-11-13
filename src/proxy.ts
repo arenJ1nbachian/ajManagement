@@ -32,7 +32,7 @@ export function proxy(request: NextRequest): NextResponse {
     return verifyAccessJwt(request) ?? NextResponse.next();
   }
 
-  const urlPages = ["/dashboard"];
+  const urlPages = ["/dashboard", "/setup", "/staff", "/schedule"];
   const isPageUrl = urlPages.some((page) => pathname.startsWith(page));
   const secret = process.env.JWT_REFRESH_SECRET!;
 
@@ -62,5 +62,5 @@ export function proxy(request: NextRequest): NextResponse {
 export const config = {
   // "(?!auth)" - what comes next must not be "auth".
   // .* - zero or more of any single character
-  matcher: ["/dashboard", "/api/((?!auth).*)"],
+  matcher: ["/dashboard", "/setup", "/staff", "/schedule", "/api/((?!auth).*)"],
 };

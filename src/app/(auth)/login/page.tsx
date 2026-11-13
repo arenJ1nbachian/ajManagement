@@ -2,10 +2,12 @@
 import { useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { Check, ChefHat, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import Input from "@/components/Input";
 import FormError from "@/components/FormError";
+import Logo from "@/components/Logo";
+import { AuthenticationResponse } from "@/types/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState<string>(""); // Holds the value of the email input
@@ -38,7 +40,7 @@ export default function LoginPage() {
         return;
       }
 
-      const data = await response.json();
+      const data: AuthenticationResponse = await response.json();
       const { accessToken, id, role, locations } = data;
 
       login(accessToken, id, role, locations);
@@ -60,8 +62,8 @@ export default function LoginPage() {
     <section className="w-full max-w-sm min-h-screen mx-auto flex flex-col justify-center py-2 lg:py-0">
       <div className="flex-1 flex flex-col justify-center lg:flex-none gap-6 lg:my-3">
         <header className="flex flex-col items-center lg:items-start gap-4">
-          <div className="w-10 h-10 flex items-center justify-center bg-brand rounded-md lg:hidden">
-            <ChefHat size={20} className="text-brand-foreground" />
+          <div className="lg:hidden">
+            <Logo size={20} />
           </div>
           <h1 className="text-3xl font-bold">Welcome back</h1>
           <p className="text-sm text-muted-foreground">
