@@ -43,7 +43,10 @@ export async function POST(request: Request) {
 
     const locations = await prisma.userLocation.findMany({
       where: { userId: user.id },
-      select: { location: true, status: true },
+      select: {
+        location: { include: { _count: { select: { position: true } } } },
+        status: true,
+      },
     });
 
     const response = NextResponse.json(

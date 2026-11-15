@@ -85,7 +85,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const addLocation = (location: Location) => {
     setLocations((prev) => [
       ...prev,
-      { location, status: $Enums.Status.active },
+      {
+        location: { ...location, _count: { position: 0 } },
+        status: $Enums.Status.active,
+      },
     ]);
 
     if (!activeLocationId) {
