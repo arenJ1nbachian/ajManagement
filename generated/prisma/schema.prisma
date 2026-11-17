@@ -171,6 +171,7 @@ model Position {
   locationId       String
   atLocation       Location          @relation(fields: [locationId], references: [id])
   shiftAssignments ShiftAssignment[]
+  color            String            @default("gray")
 }
 
 enum Status {

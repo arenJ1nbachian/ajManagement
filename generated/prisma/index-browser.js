@@ -225,7 +225,8 @@ exports.Prisma.RessourceScalarFieldEnum = {
 exports.Prisma.PositionScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  locationId: 'locationId'
+  locationId: 'locationId',
+  color: 'color'
 };
 
 exports.Prisma.SortOrder = {

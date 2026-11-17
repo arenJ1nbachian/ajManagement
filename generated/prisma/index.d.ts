@@ -14706,18 +14706,21 @@ export namespace Prisma {
     id: string | null
     name: string | null
     locationId: string | null
+    color: string | null
   }
 
   export type PositionMaxAggregateOutputType = {
     id: string | null
     name: string | null
     locationId: string | null
+    color: string | null
   }
 
   export type PositionCountAggregateOutputType = {
     id: number
     name: number
     locationId: number
+    color: number
     _all: number
   }
 
@@ -14726,18 +14729,21 @@ export namespace Prisma {
     id?: true
     name?: true
     locationId?: true
+    color?: true
   }
 
   export type PositionMaxAggregateInputType = {
     id?: true
     name?: true
     locationId?: true
+    color?: true
   }
 
   export type PositionCountAggregateInputType = {
     id?: true
     name?: true
     locationId?: true
+    color?: true
     _all?: true
   }
 
@@ -14817,6 +14823,7 @@ export namespace Prisma {
     id: string
     name: string
     locationId: string
+    color: string
     _count: PositionCountAggregateOutputType | null
     _min: PositionMinAggregateOutputType | null
     _max: PositionMaxAggregateOutputType | null
@@ -14840,6 +14847,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     locationId?: boolean
+    color?: boolean
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
     shiftAssignments?: boolean | Position$shiftAssignmentsArgs<ExtArgs>
     _count?: boolean | PositionCountOutputTypeDefaultArgs<ExtArgs>
@@ -14849,6 +14857,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     locationId?: boolean
+    color?: boolean
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["position"]>
 
@@ -14856,6 +14865,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     locationId?: boolean
+    color?: boolean
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["position"]>
 
@@ -14863,9 +14873,10 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     locationId?: boolean
+    color?: boolean
   }
 
-  export type PositionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "locationId", ExtArgs["result"]["position"]>
+  export type PositionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "locationId" | "color", ExtArgs["result"]["position"]>
   export type PositionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
     shiftAssignments?: boolean | Position$shiftAssignmentsArgs<ExtArgs>
@@ -14888,6 +14899,7 @@ export namespace Prisma {
       id: string
       name: string
       locationId: string
+      color: string
     }, ExtArgs["result"]["position"]>
     composites: {}
   }
@@ -15316,6 +15328,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Position", 'String'>
     readonly name: FieldRef<"Position", 'String'>
     readonly locationId: FieldRef<"Position", 'String'>
+    readonly color: FieldRef<"Position", 'String'>
   }
     
 
@@ -15911,7 +15924,8 @@ export namespace Prisma {
   export const PositionScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    locationId: 'locationId'
+    locationId: 'locationId',
+    color: 'color'
   };
 
   export type PositionScalarFieldEnum = (typeof PositionScalarFieldEnum)[keyof typeof PositionScalarFieldEnum]
@@ -16856,6 +16870,7 @@ export namespace Prisma {
     id?: StringFilter<"Position"> | string
     name?: StringFilter<"Position"> | string
     locationId?: StringFilter<"Position"> | string
+    color?: StringFilter<"Position"> | string
     atLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     shiftAssignments?: ShiftAssignmentListRelationFilter
   }
@@ -16864,6 +16879,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     locationId?: SortOrder
+    color?: SortOrder
     atLocation?: LocationOrderByWithRelationInput
     shiftAssignments?: ShiftAssignmentOrderByRelationAggregateInput
   }
@@ -16875,6 +16891,7 @@ export namespace Prisma {
     NOT?: PositionWhereInput | PositionWhereInput[]
     name?: StringFilter<"Position"> | string
     locationId?: StringFilter<"Position"> | string
+    color?: StringFilter<"Position"> | string
     atLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     shiftAssignments?: ShiftAssignmentListRelationFilter
   }, "id">
@@ -16883,6 +16900,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     locationId?: SortOrder
+    color?: SortOrder
     _count?: PositionCountOrderByAggregateInput
     _max?: PositionMaxOrderByAggregateInput
     _min?: PositionMinOrderByAggregateInput
@@ -16895,6 +16913,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Position"> | string
     name?: StringWithAggregatesFilter<"Position"> | string
     locationId?: StringWithAggregatesFilter<"Position"> | string
+    color?: StringWithAggregatesFilter<"Position"> | string
   }
 
   export type LocationCreateInput = {
@@ -17668,6 +17687,7 @@ export namespace Prisma {
   export type PositionCreateInput = {
     id?: string
     name: string
+    color?: string
     atLocation: LocationCreateNestedOneWithoutPositionInput
     shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutPositionInput
   }
@@ -17676,12 +17696,14 @@ export namespace Prisma {
     id?: string
     name: string
     locationId: string
+    color?: string
     shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     atLocation?: LocationUpdateOneRequiredWithoutPositionNestedInput
     shiftAssignments?: ShiftAssignmentUpdateManyWithoutPositionNestedInput
   }
@@ -17690,6 +17712,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput
   }
 
@@ -17697,17 +17720,20 @@ export namespace Prisma {
     id?: string
     name: string
     locationId: string
+    color?: string
   }
 
   export type PositionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type PositionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -18423,18 +18449,21 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     locationId?: SortOrder
+    color?: SortOrder
   }
 
   export type PositionMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     locationId?: SortOrder
+    color?: SortOrder
   }
 
   export type PositionMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     locationId?: SortOrder
+    color?: SortOrder
   }
 
   export type UserLocationCreateNestedManyWithoutLocationInput = {
@@ -19938,12 +19967,14 @@ export namespace Prisma {
   export type PositionCreateWithoutAtLocationInput = {
     id?: string
     name: string
+    color?: string
     shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUncheckedCreateWithoutAtLocationInput = {
     id?: string
     name: string
+    color?: string
     shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput
   }
 
@@ -20118,6 +20149,7 @@ export namespace Prisma {
     id?: StringFilter<"Position"> | string
     name?: StringFilter<"Position"> | string
     locationId?: StringFilter<"Position"> | string
+    color?: StringFilter<"Position"> | string
   }
 
   export type InviteTokenUpsertWithWhereUniqueWithoutLocationInput = {
@@ -21037,6 +21069,7 @@ export namespace Prisma {
   export type PositionCreateWithoutShiftAssignmentsInput = {
     id?: string
     name: string
+    color?: string
     atLocation: LocationCreateNestedOneWithoutPositionInput
   }
 
@@ -21044,6 +21077,7 @@ export namespace Prisma {
     id?: string
     name: string
     locationId: string
+    color?: string
   }
 
   export type PositionCreateOrConnectWithoutShiftAssignmentsInput = {
@@ -21170,6 +21204,7 @@ export namespace Prisma {
   export type PositionUpdateWithoutShiftAssignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     atLocation?: LocationUpdateOneRequiredWithoutPositionNestedInput
   }
 
@@ -21177,6 +21212,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type ShiftSwapRequestUpsertWithWhereUniqueWithoutRequesterShiftInput = {
@@ -22228,6 +22264,7 @@ export namespace Prisma {
   export type PositionCreateManyAtLocationInput = {
     id?: string
     name: string
+    color?: string
   }
 
   export type InviteTokenCreateManyLocationInput = {
@@ -22339,18 +22376,21 @@ export namespace Prisma {
   export type PositionUpdateWithoutAtLocationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateWithoutAtLocationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateManyWithoutAtLocationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
   }
 
   export type InviteTokenUpdateWithoutLocationInput = {
