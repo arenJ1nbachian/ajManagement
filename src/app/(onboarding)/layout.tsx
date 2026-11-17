@@ -3,6 +3,7 @@
 import { Loading } from "@/components/loading";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
+import getSetupPath from "@/lib/setup";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -14,7 +15,9 @@ const steps = [
 
 const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const { token, isLoading } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
+  const { token, isLoading, role, locations } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
+  const setupPath = getSetupPath(role, locations);
+  const mustRedirect = setupPath !== pathname && setupPath !== null;
 
   const router = useRouter();
 
@@ -29,13 +32,13 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
     // Indicates that generating a new access token failed
     if (!isLoading && !token) {
       router.push("/login"); // User is brought to the login page
-    }
-  }, [isLoading, token]);
+    } else if (!isLoading && mustRedirect) router.push(setupPath);
+  }, [isLoading, token, setupPath, pathname]);
 
   return (
     <>
-      {isLoading && <Loading />}
-      {!isLoading && token && (
+      {(isLoading || mustRedirect || !token) && <Loading />}
+      {!isLoading && token && !mustRedirect && (
         <div className="min-h-screen lg:flex">
           <aside className="w-80 shrink-0 hidden lg:flex flex-col bg-card border-r border-border p-8 pr-7 gap-10">
             <header className="flex items-center gap-3 text-lg font-bold">
