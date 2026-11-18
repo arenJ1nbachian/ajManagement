@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import getSetupPath from "@/lib/setup";
 import { getTokenUser } from "@/lib/tokens";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -19,6 +20,26 @@ export const POST = async (request: NextRequest) => {
     ); // If the role is not an owner return status 403
 
   try {
+    // Retreive all the locations of the owner including the count of positions for each restaurant and their status
+    const locations = await prisma.userLocation.findMany({
+      where: { userId: user.userId },
+      select: {
+        location: { include: { _count: { select: { position: true } } } },
+        status: true,
+      },
+    });
+
+    // Figure out if the owner has yet to finish setting up their first restaurant (NO ADDING NEW RESTAURANTS UNTIL THE FIRST RESTAURANT HAS FINISHED SETUP)
+    const setupPath = getSetupPath(user.role, locations);
+
+    // Prevent the api from creating the restaurant in the requests' body since the user hasn't finished setting up their first restaurant
+    if (setupPath === "/setup/roles") {
+      return NextResponse.json(
+        { message: "Finish setting up your current restaurant first" },
+        { status: 409 },
+      );
+    }
+
     // The data expected and required is the name, address and phone from the request body.
     const body = await request.json();
     const { name, address, phone } = body;

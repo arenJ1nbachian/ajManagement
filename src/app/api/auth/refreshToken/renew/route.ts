@@ -54,7 +54,10 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
 
     const locations = await prisma.userLocation.findMany({
       where: { userId: user.id },
-      select: { location: true, status: true },
+      select: {
+        location: { include: { _count: { select: { position: true } } } },
+        status: true,
+      },
     });
 
     // Generate new tokens and return it to the client

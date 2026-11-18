@@ -19,6 +19,7 @@ type AuthContextType = {
   ) => void;
   logout: () => void;
   addLocation: (location: Location) => void;
+  addPositions: (locationId: string, count: number) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -85,12 +86,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const addLocation = (location: Location) => {
     setLocations((prev) => [
       ...prev,
-      { location, status: $Enums.Status.active },
+      {
+        location: { ...location, _count: { position: 0 } },
+        status: $Enums.Status.active,
+      },
     ]);
 
     if (!activeLocationId) {
       setActiveLocationId(location.id);
     }
+  };
+
+  const addPositions = (locationId: string, count: number) => {
+    setLocations((prev) =>
+      prev.map((uL) =>
+        uL.location.id === locationId
+          ? {
+              ...uL,
+              location: {
+                ...uL.location,
+                _count: {
+                  ...uL.location._count,
+                  position: uL.location._count.position + count,
+                },
+              },
+            }
+          : uL,
+      ),
+    );
   };
 
   return (
@@ -106,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         addLocation,
+        addPositions,
       }}
     >
       {children}
