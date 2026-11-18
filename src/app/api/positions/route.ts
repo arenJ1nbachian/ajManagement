@@ -1,3 +1,4 @@
+import { PALETTE } from "@/lib/roleColorPalette";
 import { getTokenUser } from "@/lib/tokens";
 import { $Enums, PrismaClient } from "@generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -5,16 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
-const PALETTE = [
-  "orange",
-  "blue",
-  "green",
-  "purple",
-  "pink",
-  "yellow",
-  "teal",
-  "red",
-];
 
 export async function POST(request: NextRequest) {
   const user = getTokenUser(request);
