@@ -4,6 +4,7 @@ import { Loading } from "@/components/loading";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
 import getSetupPath from "@/lib/setup";
+import { Check } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -18,6 +19,7 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
   const { token, isLoading, role, locations } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
   const setupPath = getSetupPath(role, locations);
   const mustRedirect = setupPath !== pathname && setupPath !== null;
+  const currentIndex = steps.findIndex((s) => s.href === pathname);
 
   const router = useRouter();
 
@@ -54,15 +56,16 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
             <ol className="flex flex-col gap-1.5">
               {steps.map((step, index) => {
                 const isCurrent = pathname === step.href;
+                const isDone = index < currentIndex;
                 return (
                   <li
                     key={step.title}
                     className={`flex gap-3.5 px-3 py-2.5 rounded-xl ${isCurrent ? "bg-accent" : ""}`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-full border-2 ${isCurrent ? "border-primary text-primary" : "border-muted-foreground text-muted-foreground"} text-sm font-bold flex items-center justify-center shrink-0`}
+                      className={`w-8 h-8 rounded-full border-2 ${isCurrent ? "border-primary text-primary" : isDone ? "bg-primary border-primary text-primary-foreground" : "border-border text-muted-foreground"} text-sm font-bold flex items-center justify-center shrink-0`}
                     >
-                      {index + 1}
+                      {isDone ? <Check size={16} /> : index + 1}
                     </div>
                     <div className="flex flex-col">
                       <span
@@ -73,7 +76,7 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
                       <span
                         className={`text-[13px] ${isCurrent ? "text-accent-foreground" : "text-muted-foreground"}`}
                       >
-                        {step.sub}
+                        {isDone ? "Done" : step.sub}
                       </span>
                     </div>
                   </li>
