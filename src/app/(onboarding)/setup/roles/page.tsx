@@ -96,7 +96,7 @@ const Roles = () => {
           <p className="text-[15px] text-muted-foreground leading-snug">
             {"Tap the ones you use at " +
               (activeLocation?.location.name ?? "your restaurant") +
-              ". Each gets its own colour on the schedule."}
+              ". Each gets its own colour so you can read the schedule at a glance."}
           </p>
         </div>
         <div className="flex flex-wrap gap-2.5">
@@ -146,7 +146,7 @@ const Roles = () => {
             }
             setDraft("");
           }}
-          className="flex flex-col flex-1 gap-1.5"
+          className="flex flex-col gap-1.5"
         >
           <label
             className="text-sm font-medium text-muted-foreground"
@@ -154,7 +154,7 @@ const Roles = () => {
           >
             Add your own
           </label>
-          <div className="flex gap-2">
+          <div className="flex gap-2 lg:max-w-110">
             <Input
               placeholder="e.g. Pastry Chef"
               className="flex-1 min-w-0 h-[50px] text-base"
@@ -171,12 +171,30 @@ const Roles = () => {
             </button>
           </div>
         </form>
+        {selected.length > 0 && (
+          <div className="hidden lg:flex flex-col gap-3 bg-card border border-border rounded-2xl px-[18px] py-4">
+            <div className="text-[13px] font-semibold uppercase tracking-wider text-muted-foreground">
+              How your roles will look
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {selected.map((role, i) => (
+                <span
+                  key={role}
+                  className={`text-[13px] font-semibold px-3 py-1 rounded-full border ${ROLE_COLOR_CLASSES[PALETTE[i % PALETTE.length]]}`}
+                >
+                  {role}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className="flex-1 lg:hidden" />
         {error && <FormError message={error} />}
         <button
           type="button"
           disabled={selected.length === 0 || isLoading}
           onClick={() => handleContinue()}
-          className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed lg:self-end lg:w-auto lg:px-5 lg:h-13"
         >
           {isLoading ? (
             <>Saving...</>
