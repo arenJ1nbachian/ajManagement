@@ -29,11 +29,11 @@ export const POST = async (request: Request) => {
       );
 
     const user = await prisma.user.create({
-      data: { firstname, lastname, email, phone, role: role },
+      data: { firstname, lastname, email, phone },
     });
 
     await prisma.userLocation.create({
-      data: { userId: user.id, locationId: lid, status: "pending" },
+      data: { userId: user.id, locationId: lid, status: "pending", role: role },
     });
 
     const token = crypto.randomBytes(32).toString("hex");
@@ -110,6 +110,7 @@ export const GET = async (request: NextRequest) => {
       where: { locationId: lid },
       select: {
         status: true,
+        role: true,
         user: {
           select: {
             id: true,
@@ -117,7 +118,6 @@ export const GET = async (request: NextRequest) => {
             lastname: true,
             email: true,
             phone: true,
-            role: true,
           },
         },
       },

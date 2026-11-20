@@ -51,9 +51,9 @@ export default function RegisterPage() {
         return;
       }
       const data: AuthenticationResponse = await response.json();
-      const { accessToken, id, role, locations } = data; // Destructure to obtain token, id and role
+      const { accessToken, id, locations } = data; // Destructure to obtain token, id and locations
 
-      login(accessToken, id, role, locations); // Login
+      login(accessToken, id, locations); // Login
     } catch (e) {
       setError("Something went wrong. Please try again");
     } finally {

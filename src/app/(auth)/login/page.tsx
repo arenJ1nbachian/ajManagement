@@ -41,9 +41,9 @@ export default function LoginPage() {
       }
 
       const data: AuthenticationResponse = await response.json();
-      const { accessToken, id, role, locations } = data;
+      const { accessToken, id, locations } = data;
 
-      login(accessToken, id, role, locations);
+      login(accessToken, id, locations);
 
       if (locations.length > 0) {
         setActiveLocationId(data.locations[0].location.id);

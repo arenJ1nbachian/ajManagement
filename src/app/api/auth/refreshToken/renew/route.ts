@@ -57,6 +57,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       select: {
         location: { include: { _count: { select: { position: true } } } },
         status: true,
+        role: true,
       },
     });
 
@@ -71,7 +72,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const response = NextResponse.json({
       accessToken: tokens.accessToken,
       id: user.id,
-      role: user.role,
       locations: locations,
     });
 

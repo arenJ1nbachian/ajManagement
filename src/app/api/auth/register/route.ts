@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(password, 10); // Hash the password
 
     const user = await prisma.user.create({
-      data: { firstname, lastname, email, passwordHash, role: "owner" },
+      data: { firstname, lastname, email, passwordHash },
     }); // Create new user in db
 
     const { accessToken, refreshToken } = await generateToken(
@@ -35,7 +35,6 @@ export async function POST(request: Request) {
       {
         accessToken: accessToken,
         id: user.id,
-        role: user.role,
         locations: [],
       },
       { status: 200 },

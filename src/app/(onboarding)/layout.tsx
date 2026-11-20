@@ -16,8 +16,8 @@ const steps = [
 
 const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const { token, isLoading, role, locations } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
-  const setupPath = getSetupPath(role, locations);
+  const { token, isLoading, locations } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
+  const setupPath = getSetupPath(!!token, locations);
   const mustRedirect = setupPath !== pathname && setupPath !== null;
   const currentIndex = steps.findIndex((s) => s.href === pathname);
 
