@@ -18,7 +18,7 @@ const getSetupPath = (
   const owned = locations.filter((l) => l.role === $Enums.Role.owner);
 
   // User owns no restaurants therefore setup has nothing to do with them
-  if (!owned) return null;
+  if (owned.length === 0) return null;
 
   // Check if at least one restaurant has positions setup.
   const hasAnyPositions = owned.some((l) => {
