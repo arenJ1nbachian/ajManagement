@@ -6,17 +6,12 @@ import { createContext, useState, useContext, useEffect } from "react";
 type AuthContextType = {
   token: string | null;
   userId: string | null;
-  role: $Enums.Role | null;
   isLoading: boolean;
   activeLocationId: string | null;
   setActiveLocationId: (id: string) => void;
+  role: $Enums.Role | null;
   locations: UserLocation[];
-  login: (
-    token: string,
-    userId: string,
-    role: $Enums.Role,
-    location: UserLocation[],
-  ) => void;
+  login: (token: string, userId: string, location: UserLocation[]) => void;
   logout: () => void;
   addLocation: (location: Location) => void;
   addPositions: (locationId: string, count: number) => void;
@@ -27,7 +22,6 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [role, setRole] = useState<$Enums.Role | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [locations, setLocations] = useState<UserLocation[]>([]);
   const [activeLocationId, setActiveLocationId] = useState<string | null>(null);
@@ -52,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       } else {
         const data: AuthenticationResponse = await response.json();
-        login(data.accessToken, data.id, data.role, data.locations);
+        login(data.accessToken, data.id, data.locations);
         if (data.locations.length > 0) {
           setActiveLocationId(data.locations[0].location.id);
         }
@@ -63,22 +57,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     renewRefreshToken();
   }, []);
 
-  const login = (
-    token: string,
-    userId: string,
-    role: $Enums.Role,
-    locations: UserLocation[],
-  ) => {
+  const login = (token: string, userId: string, locations: UserLocation[]) => {
     setToken(token);
     setUserId(userId);
-    setRole(role);
     setLocations(locations);
   };
 
   const logout = () => {
     setToken(null);
     setUserId(null);
-    setRole(null);
     setLocations([]);
     setActiveLocationId(null);
   };
@@ -89,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {
         location: { ...location, _count: { position: 0 } },
         status: $Enums.Status.active,
+        role: $Enums.Role.owner,
       },
     ]);
 
@@ -116,15 +104,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  const role =
+    locations.find((l) => {
+      return l.location.id === activeLocationId;
+    })?.role ?? null;
+
   return (
     <AuthContext.Provider
       value={{
         token,
         userId,
-        role,
         isLoading,
         activeLocationId,
         setActiveLocationId,
+        role,
         locations,
         login,
         logout,
@@ -138,7 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 /* Since this function can be called from any component we throw an error to limit the function call to only components that are children of AuthContext.
-   Nothing pr beevents this function froming called by any component but it reduces human developer mistakes */
+   Nothing prevents this function from being called by any component but it reduces human developer mistakes */
 
 export function useAuth() {
   const context = useContext(AuthContext);

@@ -1,4 +1,4 @@
-import { PrismaClient, Role, User } from "@generated/prisma";
+import { PrismaClient, User } from "@generated/prisma";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
@@ -10,7 +10,6 @@ type GenerateTokenResult = {
 
 type TokenUser = {
   userId: string;
-  role: Role;
 };
 
 export const verifyAccessJwt = (request: NextRequest): NextResponse | void => {
@@ -51,7 +50,7 @@ export const getTokenUser = (request: NextRequest): TokenUser | null => {
   try {
     const payload = jwt.verify(accessToken, accessSecretKey) as TokenUser; // Validate the token and read what’s inside
 
-    return { userId: payload.userId, role: payload.role };
+    return { userId: payload.userId };
   } catch {
     return null;
   }
@@ -67,7 +66,7 @@ export const generateToken = async (
   const refreshSecret = process.env.JWT_REFRESH_SECRET!;
 
   const accessToken = jwt.sign(
-    { userId: user.id, role: user.role, jti: crypto.randomUUID() },
+    { userId: user.id, jti: crypto.randomUUID() },
     accessSecret,
     {
       expiresIn: "5m",

@@ -46,6 +46,7 @@ export async function POST(request: Request) {
       select: {
         location: { include: { _count: { select: { position: true } } } },
         status: true,
+        role: true,
       },
     });
 
@@ -53,7 +54,6 @@ export async function POST(request: Request) {
       {
         accessToken: accessToken,
         id: user.id,
-        role: user.role,
         locations,
       },
       { status: 200 },

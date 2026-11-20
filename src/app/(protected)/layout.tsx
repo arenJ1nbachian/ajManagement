@@ -24,9 +24,9 @@ interface NavItem {
 }
 
 const ProtectedRootLayout = ({ children }: { children: React.ReactNode }) => {
-  const { token, isLoading, role, locations } = useAuth();
+  const { token, isLoading, locations } = useAuth();
   const router = useRouter();
-  const setupPath = getSetupPath(role, locations);
+  const setupPath = getSetupPath(!!token, locations);
 
   /* Effect that runs on initial page load or when isLoading or token or setupPath changes value.
      Since refreshing the page results in losing our access token, React needs more context 

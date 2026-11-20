@@ -34,7 +34,6 @@ lastname String
 email String @unique
 passwordHash String?
 phone String?
-role Role
 createdAt DateTime @default(now())
 shiftAssignments ShiftAssignment[]
 locations UserLocation[]
@@ -78,6 +77,7 @@ model UserLocation{
   locationId String
   location Location @relation(fields: [locationId], references: [id])
   status Status
+  role Role
   @@id([userId, locationId])
 }
 

@@ -4,11 +4,11 @@ type LocationCount = Location & { _count: { position: number } };
 export interface UserLocation {
   location: LocationCount;
   status: $Enums.Status;
+  role: $Enums.Role;
 }
 
 export interface AuthenticationResponse {
   accessToken: string;
   id: string;
-  role: $Enums.Role;
   locations: UserLocation[];
 }

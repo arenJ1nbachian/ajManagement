@@ -13,12 +13,6 @@ export const POST = async (request: NextRequest) => {
   if (!user)
     return NextResponse.json({ message: "Not signed in" }, { status: 401 }); // If the server cannot identify the user behind this request return 401
 
-  if (user.role !== "owner")
-    return NextResponse.json(
-      { message: "Only owners can create a restaurant" },
-      { status: 403 },
-    ); // If the role is not an owner return status 403
-
   try {
     // Retreive all the locations of the owner including the count of positions for each restaurant and their status
     const locations = await prisma.userLocation.findMany({
@@ -26,11 +20,12 @@ export const POST = async (request: NextRequest) => {
       select: {
         location: { include: { _count: { select: { position: true } } } },
         status: true,
+        role: true,
       },
     });
 
     // Figure out if the owner has yet to finish setting up their first restaurant (NO ADDING NEW RESTAURANTS UNTIL THE FIRST RESTAURANT HAS FINISHED SETUP)
-    const setupPath = getSetupPath(user.role, locations);
+    const setupPath = getSetupPath(true, locations);
 
     // Prevent the api from creating the restaurant in the requests' body since the user hasn't finished setting up their first restaurant
     if (setupPath === "/setup/roles") {
@@ -60,7 +55,7 @@ export const POST = async (request: NextRequest) => {
         address: address.trim(),
         phone: phone.trim(),
         users: {
-          create: { status: "active", userId: user.userId },
+          create: { status: "active", userId: user.userId, role: "owner" },
         },
       },
     });

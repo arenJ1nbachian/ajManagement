@@ -13,12 +13,6 @@ export async function POST(request: NextRequest) {
   if (!user)
     return NextResponse.json({ message: "Not signed in" }, { status: 401 }); // If the server cannot identify the user behind this request return 401
 
-  if (user.role !== $Enums.Role.owner && user.role !== $Enums.Role.manager)
-    return NextResponse.json(
-      { message: "Only owners and managers can create a position" },
-      { status: 403 },
-    ); // If the role is not an owner nor a manager return status 403
-
   try {
     const body = await request.json();
     const { locationId, names } = body;
@@ -40,6 +34,15 @@ export async function POST(request: NextRequest) {
         { message: "You don't have access to this restaurant" },
         { status: 403 },
       );
+
+    if (
+      foundLocation.role !== $Enums.Role.owner &&
+      foundLocation.role !== $Enums.Role.manager
+    )
+      return NextResponse.json(
+        { message: "Only owners and managers can create a position" },
+        { status: 403 },
+      ); // If the role is not an owner nor a manager return status 403
 
     if (!Array.isArray(names))
       return NextResponse.json(

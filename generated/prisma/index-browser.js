@@ -134,7 +134,6 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   phone: 'phone',
-  role: 'role',
   createdAt: 'createdAt'
 };
 
@@ -160,7 +159,8 @@ exports.Prisma.RefreshTokenScalarFieldEnum = {
 exports.Prisma.UserLocationScalarFieldEnum = {
   userId: 'userId',
   locationId: 'locationId',
-  status: 'status'
+  status: 'status',
+  role: 'role'
 };
 
 exports.Prisma.ShiftAssignmentScalarFieldEnum = {
@@ -243,16 +243,16 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.Role = exports.$Enums.Role = {
-  owner: 'owner',
-  manager: 'manager',
-  employee: 'employee'
-};
-
 exports.Status = exports.$Enums.Status = {
   active: 'active',
   inactive: 'inactive',
   pending: 'pending'
+};
+
+exports.Role = exports.$Enums.Role = {
+  owner: 'owner',
+  manager: 'manager',
+  employee: 'employee'
 };
 
 exports.SwapStatus = exports.$Enums.SwapStatus = {
