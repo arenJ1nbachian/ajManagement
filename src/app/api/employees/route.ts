@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@generated/prisma";
+import { $Enums, Role } from "@generated/prisma";
 import crypto from "crypto";
 import { Resend } from "resend";
+import { getTokenUser } from "@/lib/tokens";
 
 interface InitialInformation {
   firstname: string;
   lastname: string;
   email: string;
-  phone: string;
+  phone?: string;
   role: Role;
   lid: string;
 }
@@ -16,24 +17,89 @@ interface InitialInformation {
 // Endpoint for when an owner or manager adds an employee to a location.
 // An account gets created in the database without a password
 // An invite token gets created and an email gets sent to the employee with a link to an endpoint to confirm their account
-export const POST = async (request: Request) => {
-  const body: InitialInformation = await request.json();
+export const POST = async (request: NextRequest) => {
+  const user = getTokenUser(request);
+
+  if (!user)
+    return NextResponse.json({ message: "Not signed in" }, { status: 401 }); // If the server cannot identify the user behind this request return 401
 
   try {
+    const body: InitialInformation = await request.json();
+
     const { firstname, lastname, email, phone, role, lid } = body;
 
-    if (!firstname || !lastname || !email || !phone || !role || !lid)
+    if (typeof lid !== "string")
+      return NextResponse.json(
+        { message: "Please provide a location!" },
+        { status: 400 },
+      );
+
+    const userLocation = await prisma.userLocation.findUnique({
+      where: { userId_locationId: { locationId: lid, userId: user.userId } },
+    });
+
+    if (!userLocation)
+      return NextResponse.json(
+        { message: "You don't have access to this restaurant" },
+        { status: 403 },
+      );
+
+    if (userLocation.role === $Enums.Role.employee) {
+      return NextResponse.json(
+        { message: "Only owners and managers can invite people" },
+        { status: 403 },
+      ); // Only owners and managers can create employee's
+    }
+
+    // If the access level for the person being invited is something other than an employee or manager
+    if (role !== $Enums.Role.employee && role !== $Enums.Role.manager)
+      return NextResponse.json(
+        { message: "Role must be employee or manager" },
+        { status: 400 },
+      );
+
+    // If the access level for the person being invited is a manager with the sender of the invitation being someone other than an owner
+    if (role === $Enums.Role.manager && userLocation.role !== $Enums.Role.owner)
+      return NextResponse.json(
+        { message: "Only the owner can invite managers" },
+        { status: 403 },
+      );
+
+    if (!firstname || !lastname || !email)
       return NextResponse.json(
         { message: "Please fill out all information" },
         { status: 400 },
       );
 
-    const user = await prisma.user.create({
-      data: { firstname, lastname, email, phone },
-    });
+    let invitedUser = await prisma.user.findUnique({ where: { email } });
+
+    if (invitedUser) {
+      const location = await prisma.userLocation.findUnique({
+        where: {
+          userId_locationId: { locationId: lid, userId: invitedUser.id },
+        },
+      });
+
+      if (location)
+        return NextResponse.json(
+          {
+            message: "This person is already on your team",
+          },
+          { status: 409 },
+        );
+    } else {
+      invitedUser = await prisma.user.create({
+        data: { firstname, lastname, email, phone },
+      });
+    }
 
     await prisma.userLocation.create({
-      data: { userId: user.id, locationId: lid, status: "pending", role: role },
+      data: {
+        userId: invitedUser.id,
+        locationId: lid,
+        status: "pending",
+        role: role,
+      },
     });
 
     const token = crypto.randomBytes(32).toString("hex");
@@ -41,7 +107,7 @@ export const POST = async (request: Request) => {
     await prisma.inviteToken.create({
       data: {
         token,
-        userId: user.id,
+        userId: invitedUser.id,
         expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000),
         lid,
       },
