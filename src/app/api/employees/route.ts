@@ -172,7 +172,7 @@ export const POST = async (request: NextRequest) => {
           <tr>
             <td style="background:#ffffff;border:1px solid #e7e5e4;border-radius:16px;padding:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
               <h1 style="margin:0 0 12px;font-size:22px;line-height:1.3;font-weight:600;color:#1c1917;">${heading}</h1>
-              <p style="margin:0 0 28px;font-size:15px;line-height:1.6;color:#78716c;">${body}</p>
+              <p style="margin:0 0 28px;font-size:15px;line-height:1.6;color:#78716c;">${bodyText}</p>
 
               <!-- Button -->
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
