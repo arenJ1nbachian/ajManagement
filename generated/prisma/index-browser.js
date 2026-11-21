@@ -124,7 +124,8 @@ exports.Prisma.LocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
-  phone: 'phone'
+  phone: 'phone',
+  setupCompletedAt: 'setupCompletedAt'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

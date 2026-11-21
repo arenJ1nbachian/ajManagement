@@ -14,16 +14,17 @@ datasource db {
 
 // Location is a model where owners represent their business and add ressources, employees and other relevant needs
 model Location {
-  id             String          @id @default(cuid())
-  name           String
-  address        String
-  phone          String
-  users          UserLocation[]
-  inventoryItems InventoryItem[]
-  issueReports   IssueReport[]
-  ressources     Ressource[]
-  position       Position[]
-  inviteTokens   InviteToken[]
+  id               String          @id @default(cuid())
+  name             String
+  address          String
+  phone            String
+  setupCompletedAt DateTime?
+  users            UserLocation[]
+  inventoryItems   InventoryItem[]
+  issueReports     IssueReport[]
+  ressources       Ressource[]
+  position         Position[]
+  inviteTokens     InviteToken[]
 }
 
 // User is a model that represents an individual working in a company.

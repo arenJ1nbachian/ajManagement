@@ -2246,6 +2246,7 @@ export namespace Prisma {
     name: string | null
     address: string | null
     phone: string | null
+    setupCompletedAt: Date | null
   }
 
   export type LocationMaxAggregateOutputType = {
@@ -2253,6 +2254,7 @@ export namespace Prisma {
     name: string | null
     address: string | null
     phone: string | null
+    setupCompletedAt: Date | null
   }
 
   export type LocationCountAggregateOutputType = {
@@ -2260,6 +2262,7 @@ export namespace Prisma {
     name: number
     address: number
     phone: number
+    setupCompletedAt: number
     _all: number
   }
 
@@ -2269,6 +2272,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
   }
 
   export type LocationMaxAggregateInputType = {
@@ -2276,6 +2280,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
   }
 
   export type LocationCountAggregateInputType = {
@@ -2283,6 +2288,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
     _all?: true
   }
 
@@ -2363,6 +2369,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt: Date | null
     _count: LocationCountAggregateOutputType | null
     _min: LocationMinAggregateOutputType | null
     _max: LocationMaxAggregateOutputType | null
@@ -2387,6 +2394,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
     users?: boolean | Location$usersArgs<ExtArgs>
     inventoryItems?: boolean | Location$inventoryItemsArgs<ExtArgs>
     issueReports?: boolean | Location$issueReportsArgs<ExtArgs>
@@ -2401,6 +2409,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }, ExtArgs["result"]["location"]>
 
   export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2408,6 +2417,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }, ExtArgs["result"]["location"]>
 
   export type LocationSelectScalar = {
@@ -2415,9 +2425,10 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }
 
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone", ExtArgs["result"]["location"]>
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone" | "setupCompletedAt", ExtArgs["result"]["location"]>
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Location$usersArgs<ExtArgs>
     inventoryItems?: boolean | Location$inventoryItemsArgs<ExtArgs>
@@ -2445,6 +2456,7 @@ export namespace Prisma {
       name: string
       address: string
       phone: string
+      setupCompletedAt: Date | null
     }, ExtArgs["result"]["location"]>
     composites: {}
   }
@@ -2878,6 +2890,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Location", 'String'>
     readonly address: FieldRef<"Location", 'String'>
     readonly phone: FieldRef<"Location", 'String'>
+    readonly setupCompletedAt: FieldRef<"Location", 'DateTime'>
   }
     
 
@@ -15790,7 +15803,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     address: 'address',
-    phone: 'phone'
+    phone: 'phone',
+    setupCompletedAt: 'setupCompletedAt'
   };
 
   export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
@@ -16118,6 +16132,7 @@ export namespace Prisma {
     name?: StringFilter<"Location"> | string
     address?: StringFilter<"Location"> | string
     phone?: StringFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableFilter<"Location"> | Date | string | null
     users?: UserLocationListRelationFilter
     inventoryItems?: InventoryItemListRelationFilter
     issueReports?: IssueReportListRelationFilter
@@ -16131,6 +16146,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrderInput | SortOrder
     users?: UserLocationOrderByRelationAggregateInput
     inventoryItems?: InventoryItemOrderByRelationAggregateInput
     issueReports?: IssueReportOrderByRelationAggregateInput
@@ -16147,6 +16163,7 @@ export namespace Prisma {
     name?: StringFilter<"Location"> | string
     address?: StringFilter<"Location"> | string
     phone?: StringFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableFilter<"Location"> | Date | string | null
     users?: UserLocationListRelationFilter
     inventoryItems?: InventoryItemListRelationFilter
     issueReports?: IssueReportListRelationFilter
@@ -16160,6 +16177,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrderInput | SortOrder
     _count?: LocationCountOrderByAggregateInput
     _max?: LocationMaxOrderByAggregateInput
     _min?: LocationMinOrderByAggregateInput
@@ -16173,6 +16191,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Location"> | string
     address?: StringWithAggregatesFilter<"Location"> | string
     phone?: StringWithAggregatesFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableWithAggregatesFilter<"Location"> | Date | string | null
   }
 
   export type UserWhereInput = {
@@ -16921,6 +16940,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -16934,6 +16954,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -16947,6 +16968,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -16960,6 +16982,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -16973,6 +16996,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
   }
 
   export type LocationUpdateManyMutationInput = {
@@ -16980,6 +17004,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LocationUncheckedUpdateManyInput = {
@@ -16987,6 +17012,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateInput = {
@@ -17751,6 +17777,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type UserLocationListRelationFilter = {
     every?: UserLocationWhereInput
     some?: UserLocationWhereInput
@@ -17787,6 +17824,11 @@ export namespace Prisma {
     none?: InviteTokenWhereInput
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type UserLocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -17816,6 +17858,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type LocationMaxOrderByAggregateInput = {
@@ -17823,6 +17866,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type LocationMinOrderByAggregateInput = {
@@ -17830,6 +17874,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -17848,6 +17893,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -17898,11 +17957,6 @@ export namespace Prisma {
     every?: RefreshTokenWhereInput
     some?: RefreshTokenWhereInput
     none?: RefreshTokenWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type ShiftAssignmentOrderByRelationAggregateInput = {
@@ -18326,17 +18380,6 @@ export namespace Prisma {
     _max?: NestedEnumFlagStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumReportStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
@@ -18372,20 +18415,6 @@ export namespace Prisma {
     note?: SortOrder
     reportStatus?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -18552,6 +18581,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserLocationUpdateManyWithoutLocationNestedInput = {
@@ -19470,10 +19503,6 @@ export namespace Prisma {
     connect?: LocationWhereUniqueInput
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type EnumReportStatusFieldUpdateOperationsInput = {
     set?: $Enums.ReportStatus
   }
@@ -19596,6 +19625,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -19622,6 +19662,31 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -19664,17 +19729,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -19799,36 +19853,11 @@ export namespace Prisma {
     _max?: NestedEnumFlagStatusFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumReportStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumReportStatusFilter<$PrismaModel> | $Enums.ReportStatus
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -20670,6 +20699,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -20682,6 +20712,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -20757,6 +20788,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -20769,6 +20801,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -20910,6 +20943,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -20922,6 +20956,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -20997,6 +21032,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21009,6 +21045,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
@@ -21537,6 +21574,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -21549,6 +21587,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -21603,6 +21642,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21615,6 +21655,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
@@ -21828,6 +21869,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -21840,6 +21882,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -21915,6 +21958,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21927,6 +21971,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
@@ -21980,6 +22025,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -21992,6 +22038,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -22067,6 +22114,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -22079,6 +22127,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -22091,6 +22140,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -22103,6 +22153,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -22163,6 +22214,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -22175,6 +22227,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
