@@ -20,13 +20,8 @@ const getSetupPath = (
     (uL) => uL.location.id === activeLocationId,
   );
 
-<<<<<<< Updated upstream
-  // User owns no restaurants therefore setup has nothing to do with them
-  if (owned.length === 0) return null;
-=======
   // No active restaurant yet, or the user isn't its owner
   if (currentRestaurant?.role !== $Enums.Role.owner) return null;
->>>>>>> Stashed changes
 
   // Owner hasn't setup positions yet
   if (currentRestaurant.location._count.position === 0) return "/setup/roles";
