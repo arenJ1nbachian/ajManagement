@@ -14,165 +14,176 @@ datasource db {
 
 // Location is a model where owners represent their business and add ressources, employees and other relevant needs
 model Location {
-id String @id @default(cuid())
-name String
-address String
-phone String
-setupCompletedAt DateTime?
-users UserLocation[]
-inventoryItems InventoryItem[]
-issueReports IssueReport[]
-ressources Ressource[]
-position Position[]
-inviteTokens InviteToken[]
+  id               String          @id @default(cuid())
+  name             String
+  address          String
+  phone            String
+  setupCompletedAt DateTime?
+  users            UserLocation[]
+  inventoryItems   InventoryItem[]
+  issueReports     IssueReport[]
+  ressources       Ressource[]
+  position         Position[]
+  inviteTokens     InviteToken[]
 }
 
 // User is a model that represents an individual working in a company.
 model User {
-id String @id @default(cuid())
-firstname String
-lastname String
-email String @unique
-passwordHash String?
-phone String?
-createdAt DateTime @default(now())
-shiftAssignments ShiftAssignment[]
-locations UserLocation[]
-swapRequestsSent ShiftSwapRequest[] @relation("SwapRequester")
-swapRequestsReceived ShiftSwapRequest[] @relation("SwapTarget")
-inventoryFlags InventoryFlag[]
-issueReports IssueReport[]
-ressources Ressource[]
-refreshTokens RefreshToken[]
-inviteTokens InviteToken[]
+  id                   String             @id @default(cuid())
+  firstname            String
+  lastname             String
+  email                String             @unique
+  passwordHash         String?
+  phone                String?
+  createdAt            DateTime           @default(now())
+  shiftAssignments     ShiftAssignment[]
+  locations            UserLocation[]
+  swapRequestsSent     ShiftSwapRequest[] @relation("SwapRequester")
+  swapRequestsReceived ShiftSwapRequest[] @relation("SwapTarget")
+  inventoryFlags       InventoryFlag[]
+  issueReports         IssueReport[]
+  ressources           Ressource[]
+  refreshTokens        RefreshToken[]
+  inviteTokens         InviteToken[]
+  userPositions        UserPosition[]
 }
 
 // A model used for storing a newly created users invite token where it will be used for account setup.
 model InviteToken {
-  id String @id @default(cuid())
-  token String @unique
-  userId String
-  user User @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
   expiresAt DateTime
-  used Boolean @default(false)
-  lid String
-  location Location @relation(fields: [lid], references: [id])
+  used      Boolean  @default(false)
+  lid       String
+  location  Location @relation(fields: [lid], references: [id])
 }
 
 // A model used for storing the users hashed refresh token. In case of a data breach, the raw value of refreshToken cannot be used to authenticate
 model RefreshToken {
-id String @id @default(uuid())
-refreshToken String @unique
-userId String
-user User @relation(fields: [userId], references: [id])
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt()
-expiresAt DateTime
-revoked Boolean  @default(false)
+  id           String   @id @default(uuid())
+  refreshToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt()
+  expiresAt    DateTime
+  revoked      Boolean  @default(false)
 }
 
 // A model used for assigning a user to a specific location with flags that indicates their status to that location
-model UserLocation{
-  userId String
-  user User @relation(fields: [userId], references: [id])
+model UserLocation {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
   locationId String
-  location Location @relation(fields: [locationId], references: [id])
-  status Status
-  role Role
+  location   Location @relation(fields: [locationId], references: [id])
+  status     Status
+  role       Role
+
   @@id([userId, locationId])
 }
 
+// A model used for assigning a user to a specific position
+model UserPosition {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade) 
+  @@id([userId, positionId])
+}
 
 // A model used for assigning a shift to a user with their position for that shift. Since a user can occupy many positions on different shifts, position
 // belongs on the shift not on the user.
-model ShiftAssignment{
- id String @id @default(cuid())
- userId String
- employee User @relation(fields: [userId], references: [id])
- date DateTime @db.Date
- start String
- end String
- positionId String
- position Position @relation(fields: [positionId], references: [id])
- createdAt DateTime @default(now())
- requesterShift ShiftSwapRequest[] @relation("RequesterShift")
- targetShift ShiftSwapRequest[]  @relation("TargetShift")
+model ShiftAssignment {
+  id             String             @id @default(cuid())
+  userId         String
+  employee       User               @relation(fields: [userId], references: [id])
+  date           DateTime           @db.Date
+  start          String
+  end            String
+  positionId     String
+  position       Position           @relation(fields: [positionId], references: [id])
+  createdAt      DateTime           @default(now())
+  requesterShift ShiftSwapRequest[] @relation("RequesterShift")
+  targetShift    ShiftSwapRequest[] @relation("TargetShift")
 }
 
 // A model used for swapping 2 users shifts. Since 2 columns have the same references we require 2 named relations to distinguish them.
 model ShiftSwapRequest {
-  id String @id @default(cuid())
-  requesterId String
-  targetId String
-  requesterUser User @relation("SwapRequester", fields: [requesterId], references: [id]) 
-  targetUser User @relation("SwapTarget", fields: [targetId], references: [id])
+  id               String          @id @default(cuid())
+  requesterId      String
+  targetId         String
+  requesterUser    User            @relation("SwapRequester", fields: [requesterId], references: [id])
+  targetUser       User            @relation("SwapTarget", fields: [targetId], references: [id])
   requesterShiftId String
-  targetShiftId String
-  requesterShift ShiftAssignment @relation("RequesterShift", fields: [requesterShiftId], references: [id])
-  targetShift ShiftAssignment @relation("TargetShift", fields: [targetShiftId], references: [id])
-  status SwapStatus
-createdAt DateTime
+  targetShiftId    String
+  requesterShift   ShiftAssignment @relation("RequesterShift", fields: [requesterShiftId], references: [id])
+  targetShift      ShiftAssignment @relation("TargetShift", fields: [targetShiftId], references: [id])
+  status           SwapStatus
+  createdAt        DateTime
 }
 
 // A model used to track a specific ressource. Information such as quantity, location, low in stock threshold and flags about the item initiated from a user are tracked
 model InventoryItem {
-  id String @id @default(cuid())
-  name String
-  quantity Int
-  unit String
-  locationId String
-  location Location @relation(fields: [locationId], references: [id])
-  lowThreshold Int
-  updatedAt DateTime @updatedAt
+  id             String          @id @default(cuid())
+  name           String
+  quantity       Int
+  unit           String
+  locationId     String
+  location       Location        @relation(fields: [locationId], references: [id])
+  lowThreshold   Int
+  updatedAt      DateTime        @updatedAt
   inventoryFlags InventoryFlag[]
 }
 
 // A model used to create a flag about an item in the inventory.
 model InventoryFlag {
-  id String @id @default(cuid())
+  id              String        @id @default(cuid())
   inventoryItemId String
-  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
-  userId String
-  flaggedBy User @relation(fields: [userId], references: [id])
-  note String
-  flagStatus FlagStatus
-  createdAt DateTime
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  userId          String
+  flaggedBy       User          @relation(fields: [userId], references: [id])
+  note            String
+  flagStatus      FlagStatus
+  createdAt       DateTime
 }
 
 // A model used to issue reports such as a broken equipment or an incident or any problem. resolvedAt is optional, it's null when first reported because it hasn't been resolved yet
-model IssueReport{
-  id String @id @default(cuid())
-  userId String
-  reportBy User @relation(fields: [userId], references: [id])
-  locationId String
-  atLocation Location @relation(fields: [locationId], references: [id])
-  resolvedAt DateTime?
-  note String
+model IssueReport {
+  id           String       @id @default(cuid())
+  userId       String
+  reportBy     User         @relation(fields: [userId], references: [id])
+  locationId   String
+  atLocation   Location     @relation(fields: [locationId], references: [id])
+  resolvedAt   DateTime?
+  note         String
   reportStatus ReportStatus
-  createdAt DateTime @default(now())
+  createdAt    DateTime     @default(now())
 }
 
 // A model used for any ressource a business may have (e.g. recipe, procedures, contracts, etc)
 model Ressource {
-  id String @id @default(cuid())
-  userId String
-  createdBy User @relation(fields: [userId], references: [id])
+  id         String        @id @default(cuid())
+  userId     String
+  createdBy  User          @relation(fields: [userId], references: [id])
   locationId String
-  location Location @relation(fields: [locationId], references: [id])
-  title String
-  content String
-  category RessourceType
-  createdAt DateTime @default(now())
+  location   Location      @relation(fields: [locationId], references: [id])
+  title      String
+  content    String
+  category   RessourceType
+  createdAt  DateTime      @default(now())
 }
 
 // A model where owners can define their own roles within their business. It belongs to a specific location and one position can belong to many different shifts
 model Position {
-  id String @id @default(cuid())
-  name String
-  locationId String
-  atLocation Location @relation(fields: [locationId], references: [id])
+  id               String            @id @default(cuid())
+  name             String
+  locationId       String
+  atLocation       Location          @relation(fields: [locationId], references: [id])
   shiftAssignments ShiftAssignment[]
-  color String @default("gray")
+  color            String            @default("gray")
+  userPositions    UserPosition[]
 }
 
 enum Status {
@@ -190,14 +201,14 @@ enum SwapStatus {
 }
 
 enum FlagStatus {
-    open
-    resolved
+  open
+  resolved
 }
 
 enum ReportStatus {
- open
- acknowledged
- resolved
+  open
+  acknowledged
+  resolved
 }
 
 enum RessourceType {

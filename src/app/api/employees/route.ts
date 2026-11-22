@@ -12,6 +12,7 @@ interface InitialInformation {
   phone?: string;
   role: Role;
   lid: string;
+  positionIds?: string[];
 }
 
 // Endpoint for when an owner or manager adds an employee to a location.
@@ -26,7 +27,24 @@ export const POST = async (request: NextRequest) => {
   try {
     const body: InitialInformation = await request.json();
 
-    const { firstname, lastname, email, phone, role, lid } = body;
+    const {
+      firstname,
+      lastname,
+      email,
+      phone,
+      role,
+      lid,
+      positionIds = [],
+    } = body;
+
+    if (
+      !Array.isArray(positionIds) ||
+      !positionIds.every((pid) => typeof pid === "string")
+    )
+      return NextResponse.json(
+        { message: "Invalid position ids" },
+        { status: 400 },
+      );
 
     if (typeof lid !== "string")
       return NextResponse.json(
@@ -69,6 +87,18 @@ export const POST = async (request: NextRequest) => {
     if (!firstname || !lastname || !email)
       return NextResponse.json(
         { message: "Please fill out all information" },
+        { status: 400 },
+      );
+
+    const validPositionCount = await prisma.position.count({
+      where: { id: { in: positionIds }, locationId: lid },
+    });
+
+    if (validPositionCount !== positionIds.length)
+      return NextResponse.json(
+        {
+          message: "Some roles don't belong to this restaurant",
+        },
         { status: 400 },
       );
 
@@ -120,6 +150,14 @@ export const POST = async (request: NextRequest) => {
         status: "pending",
         role: role,
       },
+    });
+
+    await prisma.userPosition.createMany({
+      data: positionIds.map((pid) => ({
+        userId: invitedUser.id,
+        positionId: pid,
+      })),
+      skipDuplicates: true,
     });
 
     const token = crypto.randomBytes(32).toString("hex");
