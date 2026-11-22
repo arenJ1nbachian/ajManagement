@@ -102,28 +102,47 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(request: NextRequest) {
+  const user = getTokenUser(request);
 
-  const locationId = searchParams.get("locationId");
+  if (!user)
+    return NextResponse.json({ message: "Not signed in" }, { status: 401 }); // If the server cannot identify the user behind this request return 401
 
-  if (!locationId) {
+  try {
+    const { searchParams } = new URL(request.url);
+
+    const locationId = searchParams.get("locationId");
+
+    if (!locationId) {
+      return NextResponse.json(
+        { message: "Missing required parameters" },
+        { status: 400 },
+      );
+    }
+
+    const location = await prisma.userLocation.findUnique({
+      where: { userId_locationId: { locationId, userId: user.userId } },
+    });
+
+    if (!location)
+      return NextResponse.json(
+        {
+          message: "You are not part of this restaurant",
+        },
+        { status: 403 },
+      );
+
+    const positions = await prisma.position.findMany({
+      where: { locationId },
+      select: { id: true, name: true, color: true },
+    });
+
+    return NextResponse.json(positions, { status: 200 });
+  } catch (e) {
+    console.error(e);
     return NextResponse.json(
-      { message: "Missing required parameters" },
-      { status: 400 },
+      { message: "Internal server error" },
+      { status: 500 },
     );
   }
-  const positions = await prisma.position.findMany({
-    where: { locationId },
-    select: { id: true, name: true },
-  });
-
-  if (positions.length === 0) {
-    return NextResponse.json(
-      { message: "No positions exists" },
-      { status: 404 },
-    );
-  }
-
-  return NextResponse.json(positions, { status: 200 });
 }
