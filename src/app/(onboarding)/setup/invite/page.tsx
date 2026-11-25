@@ -184,7 +184,7 @@ const Setup = () => {
           <h1 className="text-[26px] lg:text-[32px] font-bold tracking-tight">
             Invite your team
           </h1>
-          <p className="text-[15px] text-muted-foreground leading-snug">
+          <p className="text-[15px] text-muted-foreground leading-snug ">
             Each person gets an email to set a password. They'll show as Pending
             until they do.
           </p>
