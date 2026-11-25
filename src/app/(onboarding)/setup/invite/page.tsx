@@ -13,6 +13,7 @@ type Invitee = {
   phone?: string;
   role: "employee" | "manager";
   positionIds: string[];
+  error?: string;
 };
 
 type Role = {
@@ -32,6 +33,8 @@ const Setup = () => {
   const sendingRef = useRef<boolean>(false);
   const [roles, setRoles] = useState<Role[]>([]);
   const savingRef = useRef(false);
+  const hasFailures = invitees.some((invitee) => !!invitee.error);
+  const allFailed = invitees.every((invitee) => !!invitee.error);
   const handleContinue = async () => {
     if (savingRef.current === true) return;
     if (!activeLocationId) return;
@@ -107,7 +110,7 @@ const Setup = () => {
     if (sendingRef.current) return;
     sendingRef.current = true;
     setIsSending(true);
-    const failed: string[] = [];
+    const failed: Invitee[] = [];
     for (const invitee of invitees) {
       try {
         const res = await fetch(`/api/employees`, {
@@ -119,12 +122,21 @@ const Setup = () => {
           body: JSON.stringify({ ...invitee, lid: activeLocationId }),
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-          failed.push(invitee.email);
+          failed.push({
+            ...invitee,
+            error: data.message ?? "Couldn't send the invite",
+          });
         }
       } catch (e) {
         console.error(e);
-        failed.push(invitee.email);
+        failed.push({
+          ...invitee,
+          error:
+            "Couldn't reach the server. Check your connection and try again.",
+        });
       }
     }
 
@@ -134,7 +146,7 @@ const Setup = () => {
     if (failed.length === 0) {
       handleContinue();
     } else {
-      console.log(failed);
+      setInvitees(failed);
     }
   };
 
@@ -187,6 +199,9 @@ const Setup = () => {
                   <p className="text-xs font-medium">
                     {getInviteeDetails(invitee)}
                   </p>
+                  {invitee.error && (
+                    <p className="text-xs text-destructive">{invitee.error}</p>
+                  )}
                 </div>
                 <button
                   onClick={() =>
@@ -223,14 +238,20 @@ const Setup = () => {
               disabled={isSending}
               onClick={handleSend}
               className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-            >{`Send ${invitees.length} invite${invitees.length > 1 ? "s" : ""} and finish`}</button>
+            >
+              {allFailed
+                ? "Try again"
+                : `Send ${invitees.length} invite${invitees.length > 1 ? "s" : ""} and finish`}
+            </button>
           )}
           <button
             disabled={isSaving}
             onClick={handleContinue}
             className="h-11 text-[15px] font-semibold text-primary cursor-pointer disabled:opacity-50"
           >
-            Skip, I'll invite people later
+            {hasFailures
+              ? `Finish without ${invitees.length === 1 ? invitees[0].firstname : `${invitees.length} people`}`
+              : "Skip, I'll invite people later"}
           </button>
           {error && (
             <p className="text-sm text-destructive text-center">{error}</p>
