@@ -2,7 +2,7 @@
 
 import { AddPersonSheet } from "@/components/AddPersonSheet";
 import { useAuth } from "@/context/AuthContext";
-import { Plus, XIcon } from "lucide-react";
+import { Check, CircleAlert, Plus, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,6 +14,7 @@ type Invitee = {
   role: "employee" | "manager";
   positionIds: string[];
   error?: string;
+  sent?: boolean;
 };
 
 type Role = {
@@ -34,7 +35,10 @@ const Setup = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const savingRef = useRef(false);
   const hasFailures = invitees.some((invitee) => !!invitee.error);
-  const allFailed = invitees.every((invitee) => !!invitee.error);
+  const unsent = invitees.filter((invitee) => !invitee.sent);
+  const allFailed = unsent.every((invitee) => !!invitee.error);
+  const sentCount = invitees.length - unsent.length;
+  const failedCount = invitees.filter((invitee) => !!invitee.error).length;
   const handleContinue = async () => {
     if (savingRef.current === true) return;
     if (!activeLocationId) return;
@@ -110,8 +114,8 @@ const Setup = () => {
     if (sendingRef.current) return;
     sendingRef.current = true;
     setIsSending(true);
-    const failed: Invitee[] = [];
-    for (const invitee of invitees) {
+    const result: Invitee[] = [];
+    for (const invitee of unsent) {
       try {
         const res = await fetch(`/api/employees`, {
           method: "POST",
@@ -125,14 +129,20 @@ const Setup = () => {
         const data = await res.json();
 
         if (!res.ok) {
-          failed.push({
+          result.push({
             ...invitee,
             error: data.message ?? "Couldn't send the invite",
+          });
+        } else {
+          result.push({
+            ...invitee,
+            sent: true,
+            error: undefined,
           });
         }
       } catch (e) {
         console.error(e);
-        failed.push({
+        result.push({
           ...invitee,
           error:
             "Couldn't reach the server. Check your connection and try again.",
@@ -143,10 +153,11 @@ const Setup = () => {
     setIsSending(false);
     sendingRef.current = false;
 
-    if (failed.length === 0) {
+    if (!result.some((invitee) => !!invitee.error)) {
       handleContinue();
     } else {
-      setInvitees(failed);
+      const sent = invitees.filter((invitee) => !!invitee.sent);
+      setInvitees([...result, ...sent]);
     }
   };
 
@@ -178,14 +189,25 @@ const Setup = () => {
             until they do.
           </p>
         </div>
+        {hasFailures && (
+          <div
+            className="text-destructive bg-destructive/10 border border-destructive/30 py-3 px-3.5 text-sm rounded-xl flex gap-2"
+            role="alert"
+          >
+            <CircleAlert className="flex-none" size={18} />
+            {`${sentCount > 0 ? `${sentCount} ${sentCount === 1 ? "invite" : "invites"} sent.` : ""} ${failedCount} ${failedCount === 1 ? "invite" : "invites"} didn't go through. Fix or remove ${failedCount === 1 ? "it" : "them"}, then finish.`}
+          </div>
+        )}
         {invitees.length > 0 ? (
           <ul className="bg-card border border-border rounded-2xl overflow-hidden">
             {invitees.map((invitee) => (
               <li
                 key={invitee.email}
-                className="flex items-center gap-3 min-h-16 py-2.5 pl-3.5 pr-2 border-b border-muted dark:border-border last:border-b-0"
+                className={`flex items-center gap-3 min-h-16 py-2.5 pl-3.5 pr-2 border-b border-muted dark:border-border last:border-b-0 ${invitee.error ? "bg-destructive/10" : ""}`}
               >
-                <span className="size-[38px] flex-none rounded-full bg-muted flex items-center justify-center text-[13px] font-semibold text-muted-foreground uppercase dark:bg-border">
+                <span
+                  className={`size-[38px] flex-none rounded-full flex items-center justify-center text-[13px] font-semibold  uppercase  ${invitee.error ? "text-destructive bg-destructive/20" : "text-muted-foreground dark:bg-border bg-muted"}`}
+                >
                   {invitee.firstname[0]}
                   {invitee.lastname[0]}
                 </span>
@@ -203,18 +225,25 @@ const Setup = () => {
                     <p className="text-xs text-destructive">{invitee.error}</p>
                   )}
                 </div>
-                <button
-                  onClick={() =>
-                    setInvitees((prev) =>
-                      prev.filter((inv) => inv.email !== invitee.email),
-                    )
-                  }
-                  className="size-11 flex-none flex items-center justify-center rounded-lg text-muted-foreground hover:bg-muted cursor-pointer dark:hover:bg-border"
-                  type="button"
-                  aria-label={`Remove ${invitee.firstname} ${invitee.lastname}`}
-                >
-                  <XIcon size={18} />
-                </button>
+                {invitee.sent ? (
+                  <span className="flex gap-2 items-center text-primary">
+                    <Check size={18} />
+                    Sent
+                  </span>
+                ) : (
+                  <button
+                    onClick={() =>
+                      setInvitees((prev) =>
+                        prev.filter((inv) => inv.email !== invitee.email),
+                      )
+                    }
+                    className="size-11 flex-none flex items-center justify-center rounded-lg text-muted-foreground hover:bg-muted cursor-pointer dark:hover:bg-border"
+                    type="button"
+                    aria-label={`Remove ${invitee.firstname} ${invitee.lastname}`}
+                  >
+                    <XIcon size={18} />
+                  </button>
+                )}
               </li>
             ))}
           </ul>
@@ -239,20 +268,26 @@ const Setup = () => {
               onClick={handleSend}
               className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {allFailed
-                ? "Try again"
-                : `Send ${invitees.length} invite${invitees.length > 1 ? "s" : ""} and finish`}
+              {isSending
+                ? "Sending..."
+                : unsent.length === 0
+                  ? "Finish"
+                  : allFailed
+                    ? "Try again"
+                    : `Send ${unsent.length} invite${unsent.length > 1 ? "s" : ""} and finish`}
             </button>
           )}
-          <button
-            disabled={isSaving}
-            onClick={handleContinue}
-            className="h-11 text-[15px] font-semibold text-primary cursor-pointer disabled:opacity-50"
-          >
-            {hasFailures
-              ? `Finish without ${invitees.length === 1 ? invitees[0].firstname : `${invitees.length} people`}`
-              : "Skip, I'll invite people later"}
-          </button>
+          {!(invitees.length > 0 && unsent.length === 0) && (
+            <button
+              disabled={isSaving || isSending}
+              onClick={handleContinue}
+              className="h-11 text-[15px] font-semibold text-primary cursor-pointer disabled:opacity-50"
+            >
+              {hasFailures || sentCount > 0
+                ? `Finish without ${unsent.length === 1 ? unsent[0].firstname : `${unsent.length} people`}`
+                : "Skip, I'll invite people later"}
+            </button>
+          )}
           {error && (
             <p className="text-sm text-destructive text-center">{error}</p>
           )}
