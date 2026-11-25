@@ -28,12 +28,13 @@ const Setup = () => {
   const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [invitees, setInvitees] = useState<Invitee[]>([]);
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const sendingRef = useRef<boolean>(false);
   const [roles, setRoles] = useState<Role[]>([]);
   const savingRef = useRef(false);
   const handleContinue = async () => {
     if (savingRef.current === true) return;
     if (!activeLocationId) return;
-
     savingRef.current = true;
     setIsSaving(true);
     setError("");
@@ -49,9 +50,7 @@ const Setup = () => {
           locationId: activeLocationId,
         }),
       });
-
       const data = await res.json();
-
       if (!res.ok) {
         setError(data.message);
         return;
@@ -102,6 +101,41 @@ const Setup = () => {
       .join(", ");
 
     return roleName ? `${access} · ${roleName}` : access;
+  };
+
+  const handleSend = async () => {
+    if (sendingRef.current) return;
+    sendingRef.current = true;
+    setIsSending(true);
+    const failed: string[] = [];
+    for (const invitee of invitees) {
+      try {
+        const res = await fetch(`/api/employees`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...invitee, lid: activeLocationId }),
+        });
+
+        if (!res.ok) {
+          failed.push(invitee.email);
+        }
+      } catch (e) {
+        console.error(e);
+        failed.push(invitee.email);
+      }
+    }
+
+    setIsSending(false);
+    sendingRef.current = false;
+
+    if (failed.length === 0) {
+      handleContinue();
+    } else {
+      console.log(failed);
+    }
   };
 
   return (
@@ -185,7 +219,11 @@ const Setup = () => {
         </button>
         <div className="mt-auto flex flex-col gap-1.5">
           {invitees.length > 0 && (
-            <button className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">{`Send ${invitees.length} invite${invitees.length > 1 ? "s" : ""} and finish`}</button>
+            <button
+              disabled={isSending}
+              onClick={handleSend}
+              className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >{`Send ${invitees.length} invite${invitees.length > 1 ? "s" : ""} and finish`}</button>
           )}
           <button
             disabled={isSaving}
@@ -194,6 +232,9 @@ const Setup = () => {
           >
             Skip, I'll invite people later
           </button>
+          {error && (
+            <p className="text-sm text-destructive text-center">{error}</p>
+          )}
         </div>
       </div>
       {isSheetOpen && (
