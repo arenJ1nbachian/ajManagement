@@ -178,7 +178,7 @@ export const POST = async (request: NextRequest) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const { data, error } = await resend.emails.send({
-      from: "nope",
+      from: "noreply@ajmanagement.ca",
       to: email,
       subject: `${subject}`,
       html: `
