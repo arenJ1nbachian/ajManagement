@@ -84,7 +84,7 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
               })}
             </ol>
           </aside>
-          <main className="flex-1 flex min-h-dvh px-6 pt-5 pb-7 lg:py-16 lg:px-8">
+          <main className="flex-1 flex min-h-dvh px-6 pt-5 pb-7 lg:py-16 lg:px-8 lg:py-10 ">
             {children}
           </main>
         </div>

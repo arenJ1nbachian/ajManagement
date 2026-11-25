@@ -1,5 +1,6 @@
 "use client";
 
+import { AddPersonForm } from "@/components/AddPersonForm";
 import { AddPersonSheet } from "@/components/AddPersonSheet";
 import { useAuth } from "@/context/AuthContext";
 import { Check, CircleAlert, Plus, XIcon } from "lucide-react";
@@ -163,7 +164,7 @@ const Setup = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-7 flex-1 w-full max-w-155 mx-auto">
+      <div className="flex flex-col gap-7 lg:gap-6 flex-1 w-full max-w-155 lg:max-w-190 mx-auto">
         <header className="gap-3 flex flex-col">
           <p className="text-sm font-semibold text-muted-foreground">
             Step 3 of 3
@@ -198,6 +199,17 @@ const Setup = () => {
             {`${sentCount > 0 ? `${sentCount} ${sentCount === 1 ? "invite" : "invites"} sent.` : ""} ${failedCount} ${failedCount === 1 ? "invite" : "invites"} didn't go through. Fix or remove ${failedCount === 1 ? "it" : "them"}, then finish.`}
           </div>
         )}
+        <div className="hidden lg:block p-5 border border-dashed rounded-2xl border-border bg-card">
+          <AddPersonForm
+            roles={roles}
+            existingEmails={invitees.map((invitee) =>
+              invitee.email.toLowerCase().trim(),
+            )}
+            onAdd={(invitee: Invitee) => {
+              setInvitees((prev) => [...prev, invitee]);
+            }}
+          />
+        </div>
         {invitees.length > 0 ? (
           <ul className="bg-card border border-border rounded-2xl overflow-hidden">
             {invitees.map((invitee) => (
@@ -256,17 +268,17 @@ const Setup = () => {
         <button
           onClick={() => setIsSheetOpen(true)}
           type="button"
-          className="h-13 rounded-[14px] border border-dashed border-primary text-primary text-[15px] font-semibold flex items-center justify-center gap-1.5 hover:bg-accent cursor-pointer"
+          className="h-13 rounded-[14px] border border-dashed border-primary text-primary text-[15px] lg:hidden font-semibold flex items-center justify-center gap-1.5 hover:bg-accent cursor-pointer"
         >
           <Plus size={16} />
           {"Add a person"}
         </button>
-        <div className="mt-auto flex flex-col gap-1.5">
+        <div className="mt-auto lg:mt-0 flex flex-col lg:flex-row lg:justify-end gap-1.5 lg:gap-7 lg:items-center">
           {invitees.length > 0 && (
             <button
               disabled={isSending}
               onClick={handleSend}
-              className="w-full h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full lg:w-auto lg:px-5 h-[52px] rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-2 cursor-pointer enabled:hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSending
                 ? "Sending..."
@@ -281,7 +293,7 @@ const Setup = () => {
             <button
               disabled={isSaving || isSending}
               onClick={handleContinue}
-              className="h-11 text-[15px] font-semibold text-primary cursor-pointer disabled:opacity-50"
+              className="h-11 text-[15px] font-semibold text-primary lg:order-first cursor-pointer disabled:opacity-50"
             >
               {hasFailures || sentCount > 0
                 ? `Finish without ${unsent.length === 1 ? unsent[0].firstname : `${unsent.length} people`}`

@@ -44,7 +44,7 @@ export const AddPersonSheet = ({
   }, [onClose]);
 
   return (
-    <div className="inset-0 fixed z-50">
+    <div className="inset-0 fixed z-50 lg:hidden">
       <div className="inset-0 absolute bg-black/50" onClick={onClose}></div>
       <section
         className="absolute inset-x-0 bottom-0 rounded-t-3xl pt-2.5 pb-7 px-5 gap-4 flex flex-col bg-card max-h-[90dvh] overflow-y-auto"
