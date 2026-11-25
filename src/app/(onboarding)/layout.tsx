@@ -41,7 +41,7 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       {(isLoading || mustRedirect || !token) && <Loading />}
       {!isLoading && token && !mustRedirect && (
-        <div className="min-h-screen lg:flex">
+        <div className="min-h-dvh lg:flex">
           <aside className="w-80 shrink-0 hidden lg:flex flex-col bg-card border-r border-border p-8 pr-7 gap-10">
             <header className="flex items-center gap-3 text-lg font-bold">
               <Logo size={20} />
@@ -84,7 +84,7 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
               })}
             </ol>
           </aside>
-          <main className="flex-1 flex min-h-screen px-6 pt-5 pb-7 lg:py-16 lg:px-8">
+          <main className="flex-1 flex min-h-dvh px-6 pt-5 pb-7 lg:py-16 lg:px-8">
             {children}
           </main>
         </div>
