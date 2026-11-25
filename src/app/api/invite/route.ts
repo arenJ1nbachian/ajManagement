@@ -73,12 +73,6 @@ export const POST = async (request: NextRequest) => {
         { status: 400 },
       );
 
-    if (!password)
-      return NextResponse.json(
-        { message: "Password not provided" },
-        { status: 400 },
-      );
-
     const inviteToken = await prisma.inviteToken.findUnique({
       where: { token: inviteString },
     });
@@ -105,13 +99,25 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    // Hash the password
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    await prisma.user.update({
+    const user = await prisma.user.findUnique({
       where: { id: inviteToken.userId },
-      data: { passwordHash },
     });
+
+    if (!user?.passwordHash) {
+      if (!password)
+        return NextResponse.json(
+          { message: "Password not provided" },
+          { status: 400 },
+        );
+
+      // Hash the password
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      await prisma.user.update({
+        where: { id: inviteToken.userId },
+        data: { passwordHash },
+      });
+    }
 
     // Mark the status of a user belonging to the location in question as active
     await prisma.userLocation.updateMany({
