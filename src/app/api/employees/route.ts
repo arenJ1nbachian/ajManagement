@@ -102,6 +102,7 @@ export const POST = async (request: NextRequest) => {
         { status: 400 },
       );
 
+    let isNewUser = false;
     let invitedUser = await prisma.user.findUnique({ where: { email } });
 
     if (invitedUser) {
@@ -119,6 +120,7 @@ export const POST = async (request: NextRequest) => {
           { status: 409 },
         );
     } else {
+      isNewUser = true;
       invitedUser = await prisma.user.create({
         data: { firstname, lastname, email, phone },
       });
@@ -162,7 +164,7 @@ export const POST = async (request: NextRequest) => {
 
     const token = crypto.randomBytes(32).toString("hex");
 
-    await prisma.inviteToken.create({
+    const inviteToken = await prisma.inviteToken.create({
       data: {
         token,
         userId: invitedUser.id,
@@ -175,8 +177,8 @@ export const POST = async (request: NextRequest) => {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await resend.emails.send({
-      from: "noreply@ajmanagement.ca",
+    const { data, error } = await resend.emails.send({
+      from: "nope",
       to: email,
       subject: `${subject}`,
       html: `
@@ -243,6 +245,27 @@ export const POST = async (request: NextRequest) => {
 
 `,
     });
+
+    if (error) {
+      await prisma.inviteToken.delete({ where: { id: inviteToken.id } });
+      await prisma.userLocation.delete({
+        where: {
+          userId_locationId: { locationId: lid, userId: invitedUser.id },
+        },
+      });
+      await prisma.userPosition.deleteMany({
+        where: { userId: invitedUser.id, positionId: { in: positionIds } },
+      });
+      if (isNewUser)
+        await prisma.user.delete({ where: { id: invitedUser.id } });
+
+      return NextResponse.json(
+        {
+          message: "Couldn't send the invite email. Try again",
+        },
+        { status: 502 },
+      );
+    }
 
     return NextResponse.json({ message: "Employee created" }, { status: 201 });
   } catch (e) {
