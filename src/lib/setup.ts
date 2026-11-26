@@ -7,29 +7,27 @@ import { $Enums } from "@generated/prisma";
 const getSetupPath = (
   isSignedIn: boolean, // false before sign-in, while loading, or after logout
   locations: UserLocation[],
+  activeLocationId: string | null,
 ): string | null => {
   // Nobody signed in yet (or still loading), so no setup redirect
   if (!isSignedIn) return null;
 
-  // Step 1: the owner hasn't created a restaurant yet
+  // User is not part of a restaurant (Employee's and Managers will never face this condition because being signed in implies that they have a password and that in itself implies that they have joined a location)
   if (!locations.length) return "/setup";
 
-  // List of all owned locations the user belongs to
-  const owned = locations.filter((l) => l.role === $Enums.Role.owner);
+  // Find the current restaurant the user is part of
+  const currentRestaurant = locations.find(
+    (uL) => uL.location.id === activeLocationId,
+  );
 
-  // User owns no restaurants therefore setup has nothing to do with them
-  if (owned.length === 0) return null;
+  // No active restaurant yet, or the user isn't its owner
+  if (currentRestaurant?.role !== $Enums.Role.owner) return null;
 
-  // Check if at least one restaurant has positions setup.
-  const hasAnyPositions = owned.some((l) => {
-    return l.location._count.position > 0;
-  });
+  // Owner hasn't setup positions yet
+  if (currentRestaurant.location._count.position === 0) return "/setup/roles";
 
-  // Implies that an owner hasn't gotten past setting up a restaurant
-  if (!hasAnyPositions) return "/setup/roles";
-
-  // Setup done (step 3, inviting the team, is optional)
-  return null;
+  // Owner hasn't completed setup? Direct them to the invite page
+  return currentRestaurant.location.setupCompletedAt ? null : "/setup/invite";
 };
 
 export default getSetupPath;

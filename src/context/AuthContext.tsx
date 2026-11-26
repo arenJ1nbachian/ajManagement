@@ -15,6 +15,7 @@ type AuthContextType = {
   logout: () => void;
   addLocation: (location: Location) => void;
   addPositions: (locationId: string, count: number) => void;
+  completeSetup: (locationId: string, completedAt: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -60,7 +61,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (token: string, userId: string, locations: UserLocation[]) => {
     setToken(token);
     setUserId(userId);
-    setLocations(locations);
+    setLocations(
+      locations.map((uL) => ({
+        ...uL,
+        location: {
+          ...uL.location,
+          setupCompletedAt: uL.location.setupCompletedAt
+            ? new Date(uL.location.setupCompletedAt)
+            : null,
+        },
+      })),
+    );
   };
 
   const logout = () => {
@@ -74,7 +85,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLocations((prev) => [
       ...prev,
       {
-        location: { ...location, _count: { position: 0 } },
+        location: {
+          ...location,
+          _count: { position: 0 },
+          setupCompletedAt: location.setupCompletedAt
+            ? new Date(location.setupCompletedAt)
+            : null,
+        },
         status: $Enums.Status.active,
         role: $Enums.Role.owner,
       },
@@ -104,6 +121,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  const completeSetup = (locationId: string, completedAt: string) => {
+    setLocations((prev) =>
+      prev.map((uL) =>
+        uL.location.id === locationId
+          ? {
+              ...uL,
+              location: {
+                ...uL.location,
+                setupCompletedAt: new Date(completedAt),
+              },
+            }
+          : uL,
+      ),
+    );
+  };
+
   const role =
     locations.find((l) => {
       return l.location.id === activeLocationId;
@@ -123,6 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logout,
         addLocation,
         addPositions,
+        completeSetup,
       }}
     >
       {children}

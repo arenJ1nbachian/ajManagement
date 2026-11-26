@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string>(""); // Holds the error message if request's response returns an error
   const [rememberMe, setRememberMe] = useState<boolean>(false); // Hold the state of the remember me checkbox
   const { login, setActiveLocationId } = useAuth(); // Destructures login function from the externally created authContext
-  const router = useRouter(); // Router for page redirection
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const loginInProgress = useRef(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -48,8 +47,6 @@ export default function LoginPage() {
       if (locations.length > 0) {
         setActiveLocationId(data.locations[0].location.id);
       }
-
-      router.push("/dashboard"); // Redirect to dashboard page
     } catch (e) {
       setError("Something went wrong. Please try again.");
     } finally {

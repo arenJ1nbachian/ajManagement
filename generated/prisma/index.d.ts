@@ -39,6 +39,11 @@ export type RefreshToken = $Result.DefaultSelection<Prisma.$RefreshTokenPayload>
  */
 export type UserLocation = $Result.DefaultSelection<Prisma.$UserLocationPayload>
 /**
+ * Model UserPosition
+ * 
+ */
+export type UserPosition = $Result.DefaultSelection<Prisma.$UserPositionPayload>
+/**
  * Model ShiftAssignment
  * 
  */
@@ -328,6 +333,16 @@ export class PrismaClient<
     * ```
     */
   get userLocation(): Prisma.UserLocationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userPosition`: Exposes CRUD operations for the **UserPosition** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserPositions
+    * const userPositions = await prisma.userPosition.findMany()
+    * ```
+    */
+  get userPosition(): Prisma.UserPositionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.shiftAssignment`: Exposes CRUD operations for the **ShiftAssignment** model.
@@ -837,6 +852,7 @@ export namespace Prisma {
     InviteToken: 'InviteToken',
     RefreshToken: 'RefreshToken',
     UserLocation: 'UserLocation',
+    UserPosition: 'UserPosition',
     ShiftAssignment: 'ShiftAssignment',
     ShiftSwapRequest: 'ShiftSwapRequest',
     InventoryItem: 'InventoryItem',
@@ -859,7 +875,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "user" | "inviteToken" | "refreshToken" | "userLocation" | "shiftAssignment" | "shiftSwapRequest" | "inventoryItem" | "inventoryFlag" | "issueReport" | "ressource" | "position"
+      modelProps: "location" | "user" | "inviteToken" | "refreshToken" | "userLocation" | "userPosition" | "shiftAssignment" | "shiftSwapRequest" | "inventoryItem" | "inventoryFlag" | "issueReport" | "ressource" | "position"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1230,6 +1246,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserLocationCountArgs<ExtArgs>
             result: $Utils.Optional<UserLocationCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserPosition: {
+        payload: Prisma.$UserPositionPayload<ExtArgs>
+        fields: Prisma.UserPositionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserPositionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserPositionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          findFirst: {
+            args: Prisma.UserPositionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserPositionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          findMany: {
+            args: Prisma.UserPositionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>[]
+          }
+          create: {
+            args: Prisma.UserPositionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          createMany: {
+            args: Prisma.UserPositionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserPositionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>[]
+          }
+          delete: {
+            args: Prisma.UserPositionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          update: {
+            args: Prisma.UserPositionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserPositionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserPositionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserPositionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserPositionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPositionPayload>
+          }
+          aggregate: {
+            args: Prisma.UserPositionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserPosition>
+          }
+          groupBy: {
+            args: Prisma.UserPositionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserPositionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserPositionCountArgs<ExtArgs>
+            result: $Utils.Optional<UserPositionCountAggregateOutputType> | number
           }
         }
       }
@@ -1864,6 +1954,7 @@ export namespace Prisma {
     inviteToken?: InviteTokenOmit
     refreshToken?: RefreshTokenOmit
     userLocation?: UserLocationOmit
+    userPosition?: UserPositionOmit
     shiftAssignment?: ShiftAssignmentOmit
     shiftSwapRequest?: ShiftSwapRequestOmit
     inventoryItem?: InventoryItemOmit
@@ -2036,6 +2127,7 @@ export namespace Prisma {
     ressources: number
     refreshTokens: number
     inviteTokens: number
+    userPositions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2048,6 +2140,7 @@ export namespace Prisma {
     ressources?: boolean | UserCountOutputTypeCountRessourcesArgs
     refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
     inviteTokens?: boolean | UserCountOutputTypeCountInviteTokensArgs
+    userPositions?: boolean | UserCountOutputTypeCountUserPositionsArgs
   }
 
   // Custom InputTypes
@@ -2122,6 +2215,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountInviteTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InviteTokenWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUserPositionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPositionWhereInput
   }
 
 
@@ -2202,10 +2302,12 @@ export namespace Prisma {
 
   export type PositionCountOutputType = {
     shiftAssignments: number
+    userPositions: number
   }
 
   export type PositionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     shiftAssignments?: boolean | PositionCountOutputTypeCountShiftAssignmentsArgs
+    userPositions?: boolean | PositionCountOutputTypeCountUserPositionsArgs
   }
 
   // Custom InputTypes
@@ -2224,6 +2326,13 @@ export namespace Prisma {
    */
   export type PositionCountOutputTypeCountShiftAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ShiftAssignmentWhereInput
+  }
+
+  /**
+   * PositionCountOutputType without action
+   */
+  export type PositionCountOutputTypeCountUserPositionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPositionWhereInput
   }
 
 
@@ -2246,6 +2355,7 @@ export namespace Prisma {
     name: string | null
     address: string | null
     phone: string | null
+    setupCompletedAt: Date | null
   }
 
   export type LocationMaxAggregateOutputType = {
@@ -2253,6 +2363,7 @@ export namespace Prisma {
     name: string | null
     address: string | null
     phone: string | null
+    setupCompletedAt: Date | null
   }
 
   export type LocationCountAggregateOutputType = {
@@ -2260,6 +2371,7 @@ export namespace Prisma {
     name: number
     address: number
     phone: number
+    setupCompletedAt: number
     _all: number
   }
 
@@ -2269,6 +2381,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
   }
 
   export type LocationMaxAggregateInputType = {
@@ -2276,6 +2389,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
   }
 
   export type LocationCountAggregateInputType = {
@@ -2283,6 +2397,7 @@ export namespace Prisma {
     name?: true
     address?: true
     phone?: true
+    setupCompletedAt?: true
     _all?: true
   }
 
@@ -2363,6 +2478,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt: Date | null
     _count: LocationCountAggregateOutputType | null
     _min: LocationMinAggregateOutputType | null
     _max: LocationMaxAggregateOutputType | null
@@ -2387,6 +2503,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
     users?: boolean | Location$usersArgs<ExtArgs>
     inventoryItems?: boolean | Location$inventoryItemsArgs<ExtArgs>
     issueReports?: boolean | Location$issueReportsArgs<ExtArgs>
@@ -2401,6 +2518,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }, ExtArgs["result"]["location"]>
 
   export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2408,6 +2526,7 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }, ExtArgs["result"]["location"]>
 
   export type LocationSelectScalar = {
@@ -2415,9 +2534,10 @@ export namespace Prisma {
     name?: boolean
     address?: boolean
     phone?: boolean
+    setupCompletedAt?: boolean
   }
 
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone", ExtArgs["result"]["location"]>
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "phone" | "setupCompletedAt", ExtArgs["result"]["location"]>
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Location$usersArgs<ExtArgs>
     inventoryItems?: boolean | Location$inventoryItemsArgs<ExtArgs>
@@ -2445,6 +2565,7 @@ export namespace Prisma {
       name: string
       address: string
       phone: string
+      setupCompletedAt: Date | null
     }, ExtArgs["result"]["location"]>
     composites: {}
   }
@@ -2878,6 +2999,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Location", 'String'>
     readonly address: FieldRef<"Location", 'String'>
     readonly phone: FieldRef<"Location", 'String'>
+    readonly setupCompletedAt: FieldRef<"Location", 'DateTime'>
   }
     
 
@@ -3622,6 +3744,7 @@ export namespace Prisma {
     ressources?: boolean | User$ressourcesArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
     inviteTokens?: boolean | User$inviteTokensArgs<ExtArgs>
+    userPositions?: boolean | User$userPositionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3666,6 +3789,7 @@ export namespace Prisma {
     ressources?: boolean | User$ressourcesArgs<ExtArgs>
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
     inviteTokens?: boolean | User$inviteTokensArgs<ExtArgs>
+    userPositions?: boolean | User$userPositionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3683,6 +3807,7 @@ export namespace Prisma {
       ressources: Prisma.$RessourcePayload<ExtArgs>[]
       refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
       inviteTokens: Prisma.$InviteTokenPayload<ExtArgs>[]
+      userPositions: Prisma.$UserPositionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4095,6 +4220,7 @@ export namespace Prisma {
     ressources<T extends User$ressourcesArgs<ExtArgs> = {}>(args?: Subset<T, User$ressourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RessourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     inviteTokens<T extends User$inviteTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$inviteTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InviteTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userPositions<T extends User$userPositionsArgs<ExtArgs> = {}>(args?: Subset<T, User$userPositionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4737,6 +4863,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InviteTokenScalarFieldEnum | InviteTokenScalarFieldEnum[]
+  }
+
+  /**
+   * User.userPositions
+   */
+  export type User$userPositionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    where?: UserPositionWhereInput
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    cursor?: UserPositionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserPositionScalarFieldEnum | UserPositionScalarFieldEnum[]
   }
 
   /**
@@ -7986,6 +8136,1038 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserLocationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserPosition
+   */
+
+  export type AggregateUserPosition = {
+    _count: UserPositionCountAggregateOutputType | null
+    _min: UserPositionMinAggregateOutputType | null
+    _max: UserPositionMaxAggregateOutputType | null
+  }
+
+  export type UserPositionMinAggregateOutputType = {
+    userId: string | null
+    positionId: string | null
+  }
+
+  export type UserPositionMaxAggregateOutputType = {
+    userId: string | null
+    positionId: string | null
+  }
+
+  export type UserPositionCountAggregateOutputType = {
+    userId: number
+    positionId: number
+    _all: number
+  }
+
+
+  export type UserPositionMinAggregateInputType = {
+    userId?: true
+    positionId?: true
+  }
+
+  export type UserPositionMaxAggregateInputType = {
+    userId?: true
+    positionId?: true
+  }
+
+  export type UserPositionCountAggregateInputType = {
+    userId?: true
+    positionId?: true
+    _all?: true
+  }
+
+  export type UserPositionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPosition to aggregate.
+     */
+    where?: UserPositionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPositions to fetch.
+     */
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserPositionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPositions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPositions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserPositions
+    **/
+    _count?: true | UserPositionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserPositionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserPositionMaxAggregateInputType
+  }
+
+  export type GetUserPositionAggregateType<T extends UserPositionAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserPosition]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserPosition[P]>
+      : GetScalarType<T[P], AggregateUserPosition[P]>
+  }
+
+
+
+
+  export type UserPositionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserPositionWhereInput
+    orderBy?: UserPositionOrderByWithAggregationInput | UserPositionOrderByWithAggregationInput[]
+    by: UserPositionScalarFieldEnum[] | UserPositionScalarFieldEnum
+    having?: UserPositionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserPositionCountAggregateInputType | true
+    _min?: UserPositionMinAggregateInputType
+    _max?: UserPositionMaxAggregateInputType
+  }
+
+  export type UserPositionGroupByOutputType = {
+    userId: string
+    positionId: string
+    _count: UserPositionCountAggregateOutputType | null
+    _min: UserPositionMinAggregateOutputType | null
+    _max: UserPositionMaxAggregateOutputType | null
+  }
+
+  type GetUserPositionGroupByPayload<T extends UserPositionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserPositionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserPositionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserPositionGroupByOutputType[P]>
+            : GetScalarType<T[P], UserPositionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserPositionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    positionId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPosition"]>
+
+  export type UserPositionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    positionId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPosition"]>
+
+  export type UserPositionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    positionId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userPosition"]>
+
+  export type UserPositionSelectScalar = {
+    userId?: boolean
+    positionId?: boolean
+  }
+
+  export type UserPositionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "positionId", ExtArgs["result"]["userPosition"]>
+  export type UserPositionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }
+  export type UserPositionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }
+  export type UserPositionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    position?: boolean | PositionDefaultArgs<ExtArgs>
+  }
+
+  export type $UserPositionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserPosition"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      position: Prisma.$PositionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      userId: string
+      positionId: string
+    }, ExtArgs["result"]["userPosition"]>
+    composites: {}
+  }
+
+  type UserPositionGetPayload<S extends boolean | null | undefined | UserPositionDefaultArgs> = $Result.GetResult<Prisma.$UserPositionPayload, S>
+
+  type UserPositionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserPositionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserPositionCountAggregateInputType | true
+    }
+
+  export interface UserPositionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserPosition'], meta: { name: 'UserPosition' } }
+    /**
+     * Find zero or one UserPosition that matches the filter.
+     * @param {UserPositionFindUniqueArgs} args - Arguments to find a UserPosition
+     * @example
+     * // Get one UserPosition
+     * const userPosition = await prisma.userPosition.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserPositionFindUniqueArgs>(args: SelectSubset<T, UserPositionFindUniqueArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserPosition that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserPositionFindUniqueOrThrowArgs} args - Arguments to find a UserPosition
+     * @example
+     * // Get one UserPosition
+     * const userPosition = await prisma.userPosition.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserPositionFindUniqueOrThrowArgs>(args: SelectSubset<T, UserPositionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPosition that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionFindFirstArgs} args - Arguments to find a UserPosition
+     * @example
+     * // Get one UserPosition
+     * const userPosition = await prisma.userPosition.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserPositionFindFirstArgs>(args?: SelectSubset<T, UserPositionFindFirstArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserPosition that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionFindFirstOrThrowArgs} args - Arguments to find a UserPosition
+     * @example
+     * // Get one UserPosition
+     * const userPosition = await prisma.userPosition.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserPositionFindFirstOrThrowArgs>(args?: SelectSubset<T, UserPositionFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserPositions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserPositions
+     * const userPositions = await prisma.userPosition.findMany()
+     * 
+     * // Get first 10 UserPositions
+     * const userPositions = await prisma.userPosition.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const userPositionWithUserIdOnly = await prisma.userPosition.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends UserPositionFindManyArgs>(args?: SelectSubset<T, UserPositionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserPosition.
+     * @param {UserPositionCreateArgs} args - Arguments to create a UserPosition.
+     * @example
+     * // Create one UserPosition
+     * const UserPosition = await prisma.userPosition.create({
+     *   data: {
+     *     // ... data to create a UserPosition
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserPositionCreateArgs>(args: SelectSubset<T, UserPositionCreateArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserPositions.
+     * @param {UserPositionCreateManyArgs} args - Arguments to create many UserPositions.
+     * @example
+     * // Create many UserPositions
+     * const userPosition = await prisma.userPosition.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserPositionCreateManyArgs>(args?: SelectSubset<T, UserPositionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserPositions and returns the data saved in the database.
+     * @param {UserPositionCreateManyAndReturnArgs} args - Arguments to create many UserPositions.
+     * @example
+     * // Create many UserPositions
+     * const userPosition = await prisma.userPosition.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserPositions and only return the `userId`
+     * const userPositionWithUserIdOnly = await prisma.userPosition.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserPositionCreateManyAndReturnArgs>(args?: SelectSubset<T, UserPositionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserPosition.
+     * @param {UserPositionDeleteArgs} args - Arguments to delete one UserPosition.
+     * @example
+     * // Delete one UserPosition
+     * const UserPosition = await prisma.userPosition.delete({
+     *   where: {
+     *     // ... filter to delete one UserPosition
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserPositionDeleteArgs>(args: SelectSubset<T, UserPositionDeleteArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserPosition.
+     * @param {UserPositionUpdateArgs} args - Arguments to update one UserPosition.
+     * @example
+     * // Update one UserPosition
+     * const userPosition = await prisma.userPosition.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserPositionUpdateArgs>(args: SelectSubset<T, UserPositionUpdateArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserPositions.
+     * @param {UserPositionDeleteManyArgs} args - Arguments to filter UserPositions to delete.
+     * @example
+     * // Delete a few UserPositions
+     * const { count } = await prisma.userPosition.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserPositionDeleteManyArgs>(args?: SelectSubset<T, UserPositionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPositions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserPositions
+     * const userPosition = await prisma.userPosition.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserPositionUpdateManyArgs>(args: SelectSubset<T, UserPositionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserPositions and returns the data updated in the database.
+     * @param {UserPositionUpdateManyAndReturnArgs} args - Arguments to update many UserPositions.
+     * @example
+     * // Update many UserPositions
+     * const userPosition = await prisma.userPosition.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserPositions and only return the `userId`
+     * const userPositionWithUserIdOnly = await prisma.userPosition.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserPositionUpdateManyAndReturnArgs>(args: SelectSubset<T, UserPositionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserPosition.
+     * @param {UserPositionUpsertArgs} args - Arguments to update or create a UserPosition.
+     * @example
+     * // Update or create a UserPosition
+     * const userPosition = await prisma.userPosition.upsert({
+     *   create: {
+     *     // ... data to create a UserPosition
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserPosition we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserPositionUpsertArgs>(args: SelectSubset<T, UserPositionUpsertArgs<ExtArgs>>): Prisma__UserPositionClient<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserPositions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionCountArgs} args - Arguments to filter UserPositions to count.
+     * @example
+     * // Count the number of UserPositions
+     * const count = await prisma.userPosition.count({
+     *   where: {
+     *     // ... the filter for the UserPositions we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserPositionCountArgs>(
+      args?: Subset<T, UserPositionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserPositionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserPosition.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserPositionAggregateArgs>(args: Subset<T, UserPositionAggregateArgs>): Prisma.PrismaPromise<GetUserPositionAggregateType<T>>
+
+    /**
+     * Group by UserPosition.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserPositionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserPositionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserPositionGroupByArgs['orderBy'] }
+        : { orderBy?: UserPositionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserPositionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserPositionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserPosition model
+   */
+  readonly fields: UserPositionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserPosition.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserPositionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    position<T extends PositionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PositionDefaultArgs<ExtArgs>>): Prisma__PositionClient<$Result.GetResult<Prisma.$PositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserPosition model
+   */
+  interface UserPositionFieldRefs {
+    readonly userId: FieldRef<"UserPosition", 'String'>
+    readonly positionId: FieldRef<"UserPosition", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserPosition findUnique
+   */
+  export type UserPositionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPosition to fetch.
+     */
+    where: UserPositionWhereUniqueInput
+  }
+
+  /**
+   * UserPosition findUniqueOrThrow
+   */
+  export type UserPositionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPosition to fetch.
+     */
+    where: UserPositionWhereUniqueInput
+  }
+
+  /**
+   * UserPosition findFirst
+   */
+  export type UserPositionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPosition to fetch.
+     */
+    where?: UserPositionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPositions to fetch.
+     */
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPositions.
+     */
+    cursor?: UserPositionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPositions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPositions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPositions.
+     */
+    distinct?: UserPositionScalarFieldEnum | UserPositionScalarFieldEnum[]
+  }
+
+  /**
+   * UserPosition findFirstOrThrow
+   */
+  export type UserPositionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPosition to fetch.
+     */
+    where?: UserPositionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPositions to fetch.
+     */
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserPositions.
+     */
+    cursor?: UserPositionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPositions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPositions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPositions.
+     */
+    distinct?: UserPositionScalarFieldEnum | UserPositionScalarFieldEnum[]
+  }
+
+  /**
+   * UserPosition findMany
+   */
+  export type UserPositionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserPositions to fetch.
+     */
+    where?: UserPositionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserPositions to fetch.
+     */
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserPositions.
+     */
+    cursor?: UserPositionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserPositions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserPositions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserPositions.
+     */
+    distinct?: UserPositionScalarFieldEnum | UserPositionScalarFieldEnum[]
+  }
+
+  /**
+   * UserPosition create
+   */
+  export type UserPositionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserPosition.
+     */
+    data: XOR<UserPositionCreateInput, UserPositionUncheckedCreateInput>
+  }
+
+  /**
+   * UserPosition createMany
+   */
+  export type UserPositionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserPositions.
+     */
+    data: UserPositionCreateManyInput | UserPositionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserPosition createManyAndReturn
+   */
+  export type UserPositionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserPositions.
+     */
+    data: UserPositionCreateManyInput | UserPositionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPosition update
+   */
+  export type UserPositionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserPosition.
+     */
+    data: XOR<UserPositionUpdateInput, UserPositionUncheckedUpdateInput>
+    /**
+     * Choose, which UserPosition to update.
+     */
+    where: UserPositionWhereUniqueInput
+  }
+
+  /**
+   * UserPosition updateMany
+   */
+  export type UserPositionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserPositions.
+     */
+    data: XOR<UserPositionUpdateManyMutationInput, UserPositionUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPositions to update
+     */
+    where?: UserPositionWhereInput
+    /**
+     * Limit how many UserPositions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPosition updateManyAndReturn
+   */
+  export type UserPositionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * The data used to update UserPositions.
+     */
+    data: XOR<UserPositionUpdateManyMutationInput, UserPositionUncheckedUpdateManyInput>
+    /**
+     * Filter which UserPositions to update
+     */
+    where?: UserPositionWhereInput
+    /**
+     * Limit how many UserPositions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserPosition upsert
+   */
+  export type UserPositionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserPosition to update in case it exists.
+     */
+    where: UserPositionWhereUniqueInput
+    /**
+     * In case the UserPosition found by the `where` argument doesn't exist, create a new UserPosition with this data.
+     */
+    create: XOR<UserPositionCreateInput, UserPositionUncheckedCreateInput>
+    /**
+     * In case the UserPosition was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserPositionUpdateInput, UserPositionUncheckedUpdateInput>
+  }
+
+  /**
+   * UserPosition delete
+   */
+  export type UserPositionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    /**
+     * Filter which UserPosition to delete.
+     */
+    where: UserPositionWhereUniqueInput
+  }
+
+  /**
+   * UserPosition deleteMany
+   */
+  export type UserPositionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserPositions to delete
+     */
+    where?: UserPositionWhereInput
+    /**
+     * Limit how many UserPositions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserPosition without action
+   */
+  export type UserPositionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
   }
 
 
@@ -14850,6 +16032,7 @@ export namespace Prisma {
     color?: boolean
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
     shiftAssignments?: boolean | Position$shiftAssignmentsArgs<ExtArgs>
+    userPositions?: boolean | Position$userPositionsArgs<ExtArgs>
     _count?: boolean | PositionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["position"]>
 
@@ -14880,6 +16063,7 @@ export namespace Prisma {
   export type PositionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     atLocation?: boolean | LocationDefaultArgs<ExtArgs>
     shiftAssignments?: boolean | Position$shiftAssignmentsArgs<ExtArgs>
+    userPositions?: boolean | Position$userPositionsArgs<ExtArgs>
     _count?: boolean | PositionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PositionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14894,6 +16078,7 @@ export namespace Prisma {
     objects: {
       atLocation: Prisma.$LocationPayload<ExtArgs>
       shiftAssignments: Prisma.$ShiftAssignmentPayload<ExtArgs>[]
+      userPositions: Prisma.$UserPositionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15296,6 +16481,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     atLocation<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     shiftAssignments<T extends Position$shiftAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Position$shiftAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShiftAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userPositions<T extends Position$userPositionsArgs<ExtArgs> = {}>(args?: Subset<T, Position$userPositionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15754,6 +16940,30 @@ export namespace Prisma {
   }
 
   /**
+   * Position.userPositions
+   */
+  export type Position$userPositionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserPosition
+     */
+    select?: UserPositionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserPosition
+     */
+    omit?: UserPositionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserPositionInclude<ExtArgs> | null
+    where?: UserPositionWhereInput
+    orderBy?: UserPositionOrderByWithRelationInput | UserPositionOrderByWithRelationInput[]
+    cursor?: UserPositionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserPositionScalarFieldEnum | UserPositionScalarFieldEnum[]
+  }
+
+  /**
    * Position without action
    */
   export type PositionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15790,7 +17000,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     address: 'address',
-    phone: 'phone'
+    phone: 'phone',
+    setupCompletedAt: 'setupCompletedAt'
   };
 
   export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
@@ -15842,6 +17053,14 @@ export namespace Prisma {
   };
 
   export type UserLocationScalarFieldEnum = (typeof UserLocationScalarFieldEnum)[keyof typeof UserLocationScalarFieldEnum]
+
+
+  export const UserPositionScalarFieldEnum: {
+    userId: 'userId',
+    positionId: 'positionId'
+  };
+
+  export type UserPositionScalarFieldEnum = (typeof UserPositionScalarFieldEnum)[keyof typeof UserPositionScalarFieldEnum]
 
 
   export const ShiftAssignmentScalarFieldEnum: {
@@ -16118,6 +17337,7 @@ export namespace Prisma {
     name?: StringFilter<"Location"> | string
     address?: StringFilter<"Location"> | string
     phone?: StringFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableFilter<"Location"> | Date | string | null
     users?: UserLocationListRelationFilter
     inventoryItems?: InventoryItemListRelationFilter
     issueReports?: IssueReportListRelationFilter
@@ -16131,6 +17351,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrderInput | SortOrder
     users?: UserLocationOrderByRelationAggregateInput
     inventoryItems?: InventoryItemOrderByRelationAggregateInput
     issueReports?: IssueReportOrderByRelationAggregateInput
@@ -16147,6 +17368,7 @@ export namespace Prisma {
     name?: StringFilter<"Location"> | string
     address?: StringFilter<"Location"> | string
     phone?: StringFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableFilter<"Location"> | Date | string | null
     users?: UserLocationListRelationFilter
     inventoryItems?: InventoryItemListRelationFilter
     issueReports?: IssueReportListRelationFilter
@@ -16160,6 +17382,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrderInput | SortOrder
     _count?: LocationCountOrderByAggregateInput
     _max?: LocationMaxOrderByAggregateInput
     _min?: LocationMinOrderByAggregateInput
@@ -16173,6 +17396,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Location"> | string
     address?: StringWithAggregatesFilter<"Location"> | string
     phone?: StringWithAggregatesFilter<"Location"> | string
+    setupCompletedAt?: DateTimeNullableWithAggregatesFilter<"Location"> | Date | string | null
   }
 
   export type UserWhereInput = {
@@ -16195,6 +17419,7 @@ export namespace Prisma {
     ressources?: RessourceListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
     inviteTokens?: InviteTokenListRelationFilter
+    userPositions?: UserPositionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16214,6 +17439,7 @@ export namespace Prisma {
     ressources?: RessourceOrderByRelationAggregateInput
     refreshTokens?: RefreshTokenOrderByRelationAggregateInput
     inviteTokens?: InviteTokenOrderByRelationAggregateInput
+    userPositions?: UserPositionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16236,6 +17462,7 @@ export namespace Prisma {
     ressources?: RessourceListRelationFilter
     refreshTokens?: RefreshTokenListRelationFilter
     inviteTokens?: InviteTokenListRelationFilter
+    userPositions?: UserPositionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -16444,6 +17671,50 @@ export namespace Prisma {
     locationId?: StringWithAggregatesFilter<"UserLocation"> | string
     status?: EnumStatusWithAggregatesFilter<"UserLocation"> | $Enums.Status
     role?: EnumRoleWithAggregatesFilter<"UserLocation"> | $Enums.Role
+  }
+
+  export type UserPositionWhereInput = {
+    AND?: UserPositionWhereInput | UserPositionWhereInput[]
+    OR?: UserPositionWhereInput[]
+    NOT?: UserPositionWhereInput | UserPositionWhereInput[]
+    userId?: StringFilter<"UserPosition"> | string
+    positionId?: StringFilter<"UserPosition"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    position?: XOR<PositionScalarRelationFilter, PositionWhereInput>
+  }
+
+  export type UserPositionOrderByWithRelationInput = {
+    userId?: SortOrder
+    positionId?: SortOrder
+    user?: UserOrderByWithRelationInput
+    position?: PositionOrderByWithRelationInput
+  }
+
+  export type UserPositionWhereUniqueInput = Prisma.AtLeast<{
+    userId_positionId?: UserPositionUserIdPositionIdCompoundUniqueInput
+    AND?: UserPositionWhereInput | UserPositionWhereInput[]
+    OR?: UserPositionWhereInput[]
+    NOT?: UserPositionWhereInput | UserPositionWhereInput[]
+    userId?: StringFilter<"UserPosition"> | string
+    positionId?: StringFilter<"UserPosition"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    position?: XOR<PositionScalarRelationFilter, PositionWhereInput>
+  }, "userId_positionId">
+
+  export type UserPositionOrderByWithAggregationInput = {
+    userId?: SortOrder
+    positionId?: SortOrder
+    _count?: UserPositionCountOrderByAggregateInput
+    _max?: UserPositionMaxOrderByAggregateInput
+    _min?: UserPositionMinOrderByAggregateInput
+  }
+
+  export type UserPositionScalarWhereWithAggregatesInput = {
+    AND?: UserPositionScalarWhereWithAggregatesInput | UserPositionScalarWhereWithAggregatesInput[]
+    OR?: UserPositionScalarWhereWithAggregatesInput[]
+    NOT?: UserPositionScalarWhereWithAggregatesInput | UserPositionScalarWhereWithAggregatesInput[]
+    userId?: StringWithAggregatesFilter<"UserPosition"> | string
+    positionId?: StringWithAggregatesFilter<"UserPosition"> | string
   }
 
   export type ShiftAssignmentWhereInput = {
@@ -16873,6 +18144,7 @@ export namespace Prisma {
     color?: StringFilter<"Position"> | string
     atLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     shiftAssignments?: ShiftAssignmentListRelationFilter
+    userPositions?: UserPositionListRelationFilter
   }
 
   export type PositionOrderByWithRelationInput = {
@@ -16882,6 +18154,7 @@ export namespace Prisma {
     color?: SortOrder
     atLocation?: LocationOrderByWithRelationInput
     shiftAssignments?: ShiftAssignmentOrderByRelationAggregateInput
+    userPositions?: UserPositionOrderByRelationAggregateInput
   }
 
   export type PositionWhereUniqueInput = Prisma.AtLeast<{
@@ -16894,6 +18167,7 @@ export namespace Prisma {
     color?: StringFilter<"Position"> | string
     atLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     shiftAssignments?: ShiftAssignmentListRelationFilter
+    userPositions?: UserPositionListRelationFilter
   }, "id">
 
   export type PositionOrderByWithAggregationInput = {
@@ -16921,6 +18195,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -16934,6 +18209,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -16947,6 +18223,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -16960,6 +18237,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -16973,6 +18251,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
   }
 
   export type LocationUpdateManyMutationInput = {
@@ -16980,6 +18259,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LocationUncheckedUpdateManyInput = {
@@ -16987,6 +18267,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateInput = {
@@ -17006,6 +18287,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17025,6 +18307,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -17044,6 +18327,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17063,6 +18347,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -17270,6 +18555,40 @@ export namespace Prisma {
     locationId?: StringFieldUpdateOperationsInput | string
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  }
+
+  export type UserPositionCreateInput = {
+    user: UserCreateNestedOneWithoutUserPositionsInput
+    position: PositionCreateNestedOneWithoutUserPositionsInput
+  }
+
+  export type UserPositionUncheckedCreateInput = {
+    userId: string
+    positionId: string
+  }
+
+  export type UserPositionUpdateInput = {
+    user?: UserUpdateOneRequiredWithoutUserPositionsNestedInput
+    position?: PositionUpdateOneRequiredWithoutUserPositionsNestedInput
+  }
+
+  export type UserPositionUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    positionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserPositionCreateManyInput = {
+    userId: string
+    positionId: string
+  }
+
+  export type UserPositionUpdateManyMutationInput = {
+
+  }
+
+  export type UserPositionUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    positionId?: StringFieldUpdateOperationsInput | string
   }
 
   export type ShiftAssignmentCreateInput = {
@@ -17690,6 +19009,7 @@ export namespace Prisma {
     color?: string
     atLocation: LocationCreateNestedOneWithoutPositionInput
     shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutPositionInput
+    userPositions?: UserPositionCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUncheckedCreateInput = {
@@ -17698,6 +19018,7 @@ export namespace Prisma {
     locationId: string
     color?: string
     shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUpdateInput = {
@@ -17706,6 +19027,7 @@ export namespace Prisma {
     color?: StringFieldUpdateOperationsInput | string
     atLocation?: LocationUpdateOneRequiredWithoutPositionNestedInput
     shiftAssignments?: ShiftAssignmentUpdateManyWithoutPositionNestedInput
+    userPositions?: UserPositionUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateInput = {
@@ -17714,6 +19036,7 @@ export namespace Prisma {
     locationId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionCreateManyInput = {
@@ -17749,6 +19072,17 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type UserLocationListRelationFilter = {
@@ -17787,6 +19121,11 @@ export namespace Prisma {
     none?: InviteTokenWhereInput
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type UserLocationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -17816,6 +19155,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type LocationMaxOrderByAggregateInput = {
@@ -17823,6 +19163,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type LocationMinOrderByAggregateInput = {
@@ -17830,6 +19171,7 @@ export namespace Prisma {
     name?: SortOrder
     address?: SortOrder
     phone?: SortOrder
+    setupCompletedAt?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -17848,6 +19190,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -17900,9 +19256,10 @@ export namespace Prisma {
     none?: RefreshTokenWhereInput
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
+  export type UserPositionListRelationFilter = {
+    every?: UserPositionWhereInput
+    some?: UserPositionWhereInput
+    none?: UserPositionWhereInput
   }
 
   export type ShiftAssignmentOrderByRelationAggregateInput = {
@@ -17918,6 +19275,10 @@ export namespace Prisma {
   }
 
   export type RefreshTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserPositionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18128,6 +19489,26 @@ export namespace Prisma {
     isNot?: PositionWhereInput
   }
 
+  export type UserPositionUserIdPositionIdCompoundUniqueInput = {
+    userId: string
+    positionId: string
+  }
+
+  export type UserPositionCountOrderByAggregateInput = {
+    userId?: SortOrder
+    positionId?: SortOrder
+  }
+
+  export type UserPositionMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    positionId?: SortOrder
+  }
+
+  export type UserPositionMinOrderByAggregateInput = {
+    userId?: SortOrder
+    positionId?: SortOrder
+  }
+
   export type ShiftAssignmentCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -18326,17 +19707,6 @@ export namespace Prisma {
     _max?: NestedEnumFlagStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type EnumReportStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
@@ -18372,20 +19742,6 @@ export namespace Prisma {
     note?: SortOrder
     reportStatus?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -18552,6 +19908,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserLocationUpdateManyWithoutLocationNestedInput = {
@@ -18785,6 +20145,13 @@ export namespace Prisma {
     connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
   }
 
+  export type UserPositionCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput> | UserPositionCreateWithoutUserInput[] | UserPositionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutUserInput | UserPositionCreateOrConnectWithoutUserInput[]
+    createMany?: UserPositionCreateManyUserInputEnvelope
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+  }
+
   export type ShiftAssignmentUncheckedCreateNestedManyWithoutEmployeeInput = {
     create?: XOR<ShiftAssignmentCreateWithoutEmployeeInput, ShiftAssignmentUncheckedCreateWithoutEmployeeInput> | ShiftAssignmentCreateWithoutEmployeeInput[] | ShiftAssignmentUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: ShiftAssignmentCreateOrConnectWithoutEmployeeInput | ShiftAssignmentCreateOrConnectWithoutEmployeeInput[]
@@ -18846,6 +20213,13 @@ export namespace Prisma {
     connectOrCreate?: InviteTokenCreateOrConnectWithoutUserInput | InviteTokenCreateOrConnectWithoutUserInput[]
     createMany?: InviteTokenCreateManyUserInputEnvelope
     connect?: InviteTokenWhereUniqueInput | InviteTokenWhereUniqueInput[]
+  }
+
+  export type UserPositionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput> | UserPositionCreateWithoutUserInput[] | UserPositionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutUserInput | UserPositionCreateOrConnectWithoutUserInput[]
+    createMany?: UserPositionCreateManyUserInputEnvelope
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -18982,6 +20356,20 @@ export namespace Prisma {
     deleteMany?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
   }
 
+  export type UserPositionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput> | UserPositionCreateWithoutUserInput[] | UserPositionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutUserInput | UserPositionCreateOrConnectWithoutUserInput[]
+    upsert?: UserPositionUpsertWithWhereUniqueWithoutUserInput | UserPositionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPositionCreateManyUserInputEnvelope
+    set?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    disconnect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    delete?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    update?: UserPositionUpdateWithWhereUniqueWithoutUserInput | UserPositionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPositionUpdateManyWithWhereWithoutUserInput | UserPositionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+  }
+
   export type ShiftAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput = {
     create?: XOR<ShiftAssignmentCreateWithoutEmployeeInput, ShiftAssignmentUncheckedCreateWithoutEmployeeInput> | ShiftAssignmentCreateWithoutEmployeeInput[] | ShiftAssignmentUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: ShiftAssignmentCreateOrConnectWithoutEmployeeInput | ShiftAssignmentCreateOrConnectWithoutEmployeeInput[]
@@ -19108,6 +20496,20 @@ export namespace Prisma {
     deleteMany?: InviteTokenScalarWhereInput | InviteTokenScalarWhereInput[]
   }
 
+  export type UserPositionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput> | UserPositionCreateWithoutUserInput[] | UserPositionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutUserInput | UserPositionCreateOrConnectWithoutUserInput[]
+    upsert?: UserPositionUpsertWithWhereUniqueWithoutUserInput | UserPositionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserPositionCreateManyUserInputEnvelope
+    set?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    disconnect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    delete?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    update?: UserPositionUpdateWithWhereUniqueWithoutUserInput | UserPositionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserPositionUpdateManyWithWhereWithoutUserInput | UserPositionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutInviteTokensInput = {
     create?: XOR<UserCreateWithoutInviteTokensInput, UserUncheckedCreateWithoutInviteTokensInput>
     connectOrCreate?: UserCreateOrConnectWithoutInviteTokensInput
@@ -19188,6 +20590,34 @@ export namespace Prisma {
     upsert?: LocationUpsertWithoutUsersInput
     connect?: LocationWhereUniqueInput
     update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutUsersInput, LocationUpdateWithoutUsersInput>, LocationUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type UserCreateNestedOneWithoutUserPositionsInput = {
+    create?: XOR<UserCreateWithoutUserPositionsInput, UserUncheckedCreateWithoutUserPositionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserPositionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PositionCreateNestedOneWithoutUserPositionsInput = {
+    create?: XOR<PositionCreateWithoutUserPositionsInput, PositionUncheckedCreateWithoutUserPositionsInput>
+    connectOrCreate?: PositionCreateOrConnectWithoutUserPositionsInput
+    connect?: PositionWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUserPositionsNestedInput = {
+    create?: XOR<UserCreateWithoutUserPositionsInput, UserUncheckedCreateWithoutUserPositionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserPositionsInput
+    upsert?: UserUpsertWithoutUserPositionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserPositionsInput, UserUpdateWithoutUserPositionsInput>, UserUncheckedUpdateWithoutUserPositionsInput>
+  }
+
+  export type PositionUpdateOneRequiredWithoutUserPositionsNestedInput = {
+    create?: XOR<PositionCreateWithoutUserPositionsInput, PositionUncheckedCreateWithoutUserPositionsInput>
+    connectOrCreate?: PositionCreateOrConnectWithoutUserPositionsInput
+    upsert?: PositionUpsertWithoutUserPositionsInput
+    connect?: PositionWhereUniqueInput
+    update?: XOR<XOR<PositionUpdateToOneWithWhereWithoutUserPositionsInput, PositionUpdateWithoutUserPositionsInput>, PositionUncheckedUpdateWithoutUserPositionsInput>
   }
 
   export type UserCreateNestedOneWithoutShiftAssignmentsInput = {
@@ -19470,10 +20900,6 @@ export namespace Prisma {
     connect?: LocationWhereUniqueInput
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type EnumReportStatusFieldUpdateOperationsInput = {
     set?: $Enums.ReportStatus
   }
@@ -19539,11 +20965,25 @@ export namespace Prisma {
     connect?: ShiftAssignmentWhereUniqueInput | ShiftAssignmentWhereUniqueInput[]
   }
 
+  export type UserPositionCreateNestedManyWithoutPositionInput = {
+    create?: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput> | UserPositionCreateWithoutPositionInput[] | UserPositionUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutPositionInput | UserPositionCreateOrConnectWithoutPositionInput[]
+    createMany?: UserPositionCreateManyPositionInputEnvelope
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+  }
+
   export type ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput = {
     create?: XOR<ShiftAssignmentCreateWithoutPositionInput, ShiftAssignmentUncheckedCreateWithoutPositionInput> | ShiftAssignmentCreateWithoutPositionInput[] | ShiftAssignmentUncheckedCreateWithoutPositionInput[]
     connectOrCreate?: ShiftAssignmentCreateOrConnectWithoutPositionInput | ShiftAssignmentCreateOrConnectWithoutPositionInput[]
     createMany?: ShiftAssignmentCreateManyPositionInputEnvelope
     connect?: ShiftAssignmentWhereUniqueInput | ShiftAssignmentWhereUniqueInput[]
+  }
+
+  export type UserPositionUncheckedCreateNestedManyWithoutPositionInput = {
+    create?: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput> | UserPositionCreateWithoutPositionInput[] | UserPositionUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutPositionInput | UserPositionCreateOrConnectWithoutPositionInput[]
+    createMany?: UserPositionCreateManyPositionInputEnvelope
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
   }
 
   export type LocationUpdateOneRequiredWithoutPositionNestedInput = {
@@ -19568,6 +21008,20 @@ export namespace Prisma {
     deleteMany?: ShiftAssignmentScalarWhereInput | ShiftAssignmentScalarWhereInput[]
   }
 
+  export type UserPositionUpdateManyWithoutPositionNestedInput = {
+    create?: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput> | UserPositionCreateWithoutPositionInput[] | UserPositionUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutPositionInput | UserPositionCreateOrConnectWithoutPositionInput[]
+    upsert?: UserPositionUpsertWithWhereUniqueWithoutPositionInput | UserPositionUpsertWithWhereUniqueWithoutPositionInput[]
+    createMany?: UserPositionCreateManyPositionInputEnvelope
+    set?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    disconnect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    delete?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    update?: UserPositionUpdateWithWhereUniqueWithoutPositionInput | UserPositionUpdateWithWhereUniqueWithoutPositionInput[]
+    updateMany?: UserPositionUpdateManyWithWhereWithoutPositionInput | UserPositionUpdateManyWithWhereWithoutPositionInput[]
+    deleteMany?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+  }
+
   export type ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput = {
     create?: XOR<ShiftAssignmentCreateWithoutPositionInput, ShiftAssignmentUncheckedCreateWithoutPositionInput> | ShiftAssignmentCreateWithoutPositionInput[] | ShiftAssignmentUncheckedCreateWithoutPositionInput[]
     connectOrCreate?: ShiftAssignmentCreateOrConnectWithoutPositionInput | ShiftAssignmentCreateOrConnectWithoutPositionInput[]
@@ -19582,6 +21036,20 @@ export namespace Prisma {
     deleteMany?: ShiftAssignmentScalarWhereInput | ShiftAssignmentScalarWhereInput[]
   }
 
+  export type UserPositionUncheckedUpdateManyWithoutPositionNestedInput = {
+    create?: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput> | UserPositionCreateWithoutPositionInput[] | UserPositionUncheckedCreateWithoutPositionInput[]
+    connectOrCreate?: UserPositionCreateOrConnectWithoutPositionInput | UserPositionCreateOrConnectWithoutPositionInput[]
+    upsert?: UserPositionUpsertWithWhereUniqueWithoutPositionInput | UserPositionUpsertWithWhereUniqueWithoutPositionInput[]
+    createMany?: UserPositionCreateManyPositionInputEnvelope
+    set?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    disconnect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    delete?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    connect?: UserPositionWhereUniqueInput | UserPositionWhereUniqueInput[]
+    update?: UserPositionUpdateWithWhereUniqueWithoutPositionInput | UserPositionUpdateWithWhereUniqueWithoutPositionInput[]
+    updateMany?: UserPositionUpdateManyWithWhereWithoutPositionInput | UserPositionUpdateManyWithWhereWithoutPositionInput[]
+    deleteMany?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -19594,6 +21062,17 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -19622,6 +21101,31 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -19664,17 +21168,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -19799,36 +21292,11 @@ export namespace Prisma {
     _max?: NestedEnumFlagStatusFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumReportStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ReportStatus | EnumReportStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ReportStatus[] | ListEnumReportStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumReportStatusFilter<$PrismaModel> | $Enums.ReportStatus
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReportStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -19971,6 +21439,7 @@ export namespace Prisma {
     name: string
     color?: string
     shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutPositionInput
+    userPositions?: UserPositionCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUncheckedCreateWithoutAtLocationInput = {
@@ -19978,6 +21447,7 @@ export namespace Prisma {
     name: string
     color?: string
     shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutPositionInput
   }
 
   export type PositionCreateOrConnectWithoutAtLocationInput = {
@@ -20429,6 +21899,24 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserPositionCreateWithoutUserInput = {
+    position: PositionCreateNestedOneWithoutUserPositionsInput
+  }
+
+  export type UserPositionUncheckedCreateWithoutUserInput = {
+    positionId: string
+  }
+
+  export type UserPositionCreateOrConnectWithoutUserInput = {
+    where: UserPositionWhereUniqueInput
+    create: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPositionCreateManyUserInputEnvelope = {
+    data: UserPositionCreateManyUserInput | UserPositionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ShiftAssignmentUpsertWithWhereUniqueWithoutEmployeeInput = {
     where: ShiftAssignmentWhereUniqueInput
     update: XOR<ShiftAssignmentUpdateWithoutEmployeeInput, ShiftAssignmentUncheckedUpdateWithoutEmployeeInput>
@@ -20624,6 +22112,30 @@ export namespace Prisma {
     data: XOR<InviteTokenUpdateManyMutationInput, InviteTokenUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type UserPositionUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserPositionWhereUniqueInput
+    update: XOR<UserPositionUpdateWithoutUserInput, UserPositionUncheckedUpdateWithoutUserInput>
+    create: XOR<UserPositionCreateWithoutUserInput, UserPositionUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserPositionUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserPositionWhereUniqueInput
+    data: XOR<UserPositionUpdateWithoutUserInput, UserPositionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserPositionUpdateManyWithWhereWithoutUserInput = {
+    where: UserPositionScalarWhereInput
+    data: XOR<UserPositionUpdateManyMutationInput, UserPositionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserPositionScalarWhereInput = {
+    AND?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+    OR?: UserPositionScalarWhereInput[]
+    NOT?: UserPositionScalarWhereInput | UserPositionScalarWhereInput[]
+    userId?: StringFilter<"UserPosition"> | string
+    positionId?: StringFilter<"UserPosition"> | string
+  }
+
   export type UserCreateWithoutInviteTokensInput = {
     id?: string
     firstname: string
@@ -20640,6 +22152,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutReportByInput
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInviteTokensInput = {
@@ -20658,6 +22171,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutReportByInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInviteTokensInput = {
@@ -20670,6 +22184,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -20682,6 +22197,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -20721,6 +22237,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutReportByNestedInput
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInviteTokensInput = {
@@ -20739,6 +22256,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutReportByNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LocationUpsertWithoutInviteTokensInput = {
@@ -20757,6 +22275,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -20769,6 +22288,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -20792,6 +22312,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutReportByInput
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -20810,6 +22331,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutReportByInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -20844,6 +22366,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutReportByNestedInput
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -20862,6 +22385,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutReportByNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLocationsInput = {
@@ -20880,6 +22404,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLocationsInput = {
@@ -20898,6 +22423,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLocationsInput = {
@@ -20910,6 +22436,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -20922,6 +22449,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -20961,6 +22489,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLocationsInput = {
@@ -20979,6 +22508,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LocationUpsertWithoutUsersInput = {
@@ -20997,6 +22527,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21009,11 +22540,152 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
     position?: PositionUncheckedUpdateManyWithoutAtLocationNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutLocationNestedInput
+  }
+
+  export type UserCreateWithoutUserPositionsInput = {
+    id?: string
+    firstname: string
+    lastname: string
+    email: string
+    passwordHash?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutEmployeeInput
+    locations?: UserLocationCreateNestedManyWithoutUserInput
+    swapRequestsSent?: ShiftSwapRequestCreateNestedManyWithoutRequesterUserInput
+    swapRequestsReceived?: ShiftSwapRequestCreateNestedManyWithoutTargetUserInput
+    inventoryFlags?: InventoryFlagCreateNestedManyWithoutFlaggedByInput
+    issueReports?: IssueReportCreateNestedManyWithoutReportByInput
+    ressources?: RessourceCreateNestedManyWithoutCreatedByInput
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUserPositionsInput = {
+    id?: string
+    firstname: string
+    lastname: string
+    email: string
+    passwordHash?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutEmployeeInput
+    locations?: UserLocationUncheckedCreateNestedManyWithoutUserInput
+    swapRequestsSent?: ShiftSwapRequestUncheckedCreateNestedManyWithoutRequesterUserInput
+    swapRequestsReceived?: ShiftSwapRequestUncheckedCreateNestedManyWithoutTargetUserInput
+    inventoryFlags?: InventoryFlagUncheckedCreateNestedManyWithoutFlaggedByInput
+    issueReports?: IssueReportUncheckedCreateNestedManyWithoutReportByInput
+    ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUserPositionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserPositionsInput, UserUncheckedCreateWithoutUserPositionsInput>
+  }
+
+  export type PositionCreateWithoutUserPositionsInput = {
+    id?: string
+    name: string
+    color?: string
+    atLocation: LocationCreateNestedOneWithoutPositionInput
+    shiftAssignments?: ShiftAssignmentCreateNestedManyWithoutPositionInput
+  }
+
+  export type PositionUncheckedCreateWithoutUserPositionsInput = {
+    id?: string
+    name: string
+    locationId: string
+    color?: string
+    shiftAssignments?: ShiftAssignmentUncheckedCreateNestedManyWithoutPositionInput
+  }
+
+  export type PositionCreateOrConnectWithoutUserPositionsInput = {
+    where: PositionWhereUniqueInput
+    create: XOR<PositionCreateWithoutUserPositionsInput, PositionUncheckedCreateWithoutUserPositionsInput>
+  }
+
+  export type UserUpsertWithoutUserPositionsInput = {
+    update: XOR<UserUpdateWithoutUserPositionsInput, UserUncheckedUpdateWithoutUserPositionsInput>
+    create: XOR<UserCreateWithoutUserPositionsInput, UserUncheckedCreateWithoutUserPositionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserPositionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserPositionsInput, UserUncheckedUpdateWithoutUserPositionsInput>
+  }
+
+  export type UserUpdateWithoutUserPositionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftAssignments?: ShiftAssignmentUpdateManyWithoutEmployeeNestedInput
+    locations?: UserLocationUpdateManyWithoutUserNestedInput
+    swapRequestsSent?: ShiftSwapRequestUpdateManyWithoutRequesterUserNestedInput
+    swapRequestsReceived?: ShiftSwapRequestUpdateManyWithoutTargetUserNestedInput
+    inventoryFlags?: InventoryFlagUpdateManyWithoutFlaggedByNestedInput
+    issueReports?: IssueReportUpdateManyWithoutReportByNestedInput
+    ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUserPositionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutEmployeeNestedInput
+    locations?: UserLocationUncheckedUpdateManyWithoutUserNestedInput
+    swapRequestsSent?: ShiftSwapRequestUncheckedUpdateManyWithoutRequesterUserNestedInput
+    swapRequestsReceived?: ShiftSwapRequestUncheckedUpdateManyWithoutTargetUserNestedInput
+    inventoryFlags?: InventoryFlagUncheckedUpdateManyWithoutFlaggedByNestedInput
+    issueReports?: IssueReportUncheckedUpdateManyWithoutReportByNestedInput
+    ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PositionUpsertWithoutUserPositionsInput = {
+    update: XOR<PositionUpdateWithoutUserPositionsInput, PositionUncheckedUpdateWithoutUserPositionsInput>
+    create: XOR<PositionCreateWithoutUserPositionsInput, PositionUncheckedCreateWithoutUserPositionsInput>
+    where?: PositionWhereInput
+  }
+
+  export type PositionUpdateToOneWithWhereWithoutUserPositionsInput = {
+    where?: PositionWhereInput
+    data: XOR<PositionUpdateWithoutUserPositionsInput, PositionUncheckedUpdateWithoutUserPositionsInput>
+  }
+
+  export type PositionUpdateWithoutUserPositionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    atLocation?: LocationUpdateOneRequiredWithoutPositionNestedInput
+    shiftAssignments?: ShiftAssignmentUpdateManyWithoutPositionNestedInput
+  }
+
+  export type PositionUncheckedUpdateWithoutUserPositionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput
   }
 
   export type UserCreateWithoutShiftAssignmentsInput = {
@@ -21032,6 +22704,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutShiftAssignmentsInput = {
@@ -21050,6 +22723,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutShiftAssignmentsInput = {
@@ -21062,6 +22736,7 @@ export namespace Prisma {
     name: string
     color?: string
     atLocation: LocationCreateNestedOneWithoutPositionInput
+    userPositions?: UserPositionCreateNestedManyWithoutPositionInput
   }
 
   export type PositionUncheckedCreateWithoutShiftAssignmentsInput = {
@@ -21069,6 +22744,7 @@ export namespace Prisma {
     name: string
     locationId: string
     color?: string
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutPositionInput
   }
 
   export type PositionCreateOrConnectWithoutShiftAssignmentsInput = {
@@ -21159,6 +22835,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutShiftAssignmentsInput = {
@@ -21177,6 +22854,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PositionUpsertWithoutShiftAssignmentsInput = {
@@ -21195,6 +22873,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     atLocation?: LocationUpdateOneRequiredWithoutPositionNestedInput
+    userPositions?: UserPositionUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateWithoutShiftAssignmentsInput = {
@@ -21202,6 +22881,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
+    userPositions?: UserPositionUncheckedUpdateManyWithoutPositionNestedInput
   }
 
   export type ShiftSwapRequestUpsertWithWhereUniqueWithoutRequesterShiftInput = {
@@ -21252,6 +22932,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSwapRequestsSentInput = {
@@ -21270,6 +22951,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSwapRequestsSentInput = {
@@ -21293,6 +22975,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSwapRequestsReceivedInput = {
@@ -21311,6 +22994,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSwapRequestsReceivedInput = {
@@ -21399,6 +23083,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSwapRequestsSentInput = {
@@ -21417,6 +23102,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSwapRequestsReceivedInput = {
@@ -21446,6 +23132,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSwapRequestsReceivedInput = {
@@ -21464,6 +23151,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ShiftAssignmentUpsertWithoutRequesterShiftInput = {
@@ -21537,6 +23225,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -21549,6 +23238,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -21603,6 +23293,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21615,6 +23306,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
@@ -21679,6 +23371,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInventoryFlagsInput = {
@@ -21697,6 +23390,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInventoryFlagsInput = {
@@ -21762,6 +23456,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryFlagsInput = {
@@ -21780,6 +23475,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutIssueReportsInput = {
@@ -21798,6 +23494,7 @@ export namespace Prisma {
     ressources?: RessourceCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutIssueReportsInput = {
@@ -21816,6 +23513,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedCreateNestedManyWithoutCreatedByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutIssueReportsInput = {
@@ -21828,6 +23526,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     ressources?: RessourceCreateNestedManyWithoutLocationInput
@@ -21840,6 +23539,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     ressources?: RessourceUncheckedCreateNestedManyWithoutLocationInput
@@ -21879,6 +23579,7 @@ export namespace Prisma {
     ressources?: RessourceUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIssueReportsInput = {
@@ -21897,6 +23598,7 @@ export namespace Prisma {
     ressources?: RessourceUncheckedUpdateManyWithoutCreatedByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LocationUpsertWithoutIssueReportsInput = {
@@ -21915,6 +23617,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUpdateManyWithoutLocationNestedInput
@@ -21927,6 +23630,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     ressources?: RessourceUncheckedUpdateManyWithoutLocationNestedInput
@@ -21950,6 +23654,7 @@ export namespace Prisma {
     issueReports?: IssueReportCreateNestedManyWithoutReportByInput
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRessourcesInput = {
@@ -21968,6 +23673,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutReportByInput
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     inviteTokens?: InviteTokenUncheckedCreateNestedManyWithoutUserInput
+    userPositions?: UserPositionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRessourcesInput = {
@@ -21980,6 +23686,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -21992,6 +23699,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -22031,6 +23739,7 @@ export namespace Prisma {
     issueReports?: IssueReportUpdateManyWithoutReportByNestedInput
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRessourcesInput = {
@@ -22049,6 +23758,7 @@ export namespace Prisma {
     issueReports?: IssueReportUncheckedUpdateManyWithoutReportByNestedInput
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     inviteTokens?: InviteTokenUncheckedUpdateManyWithoutUserNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LocationUpsertWithoutRessourcesInput = {
@@ -22067,6 +23777,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -22079,6 +23790,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -22091,6 +23803,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportCreateNestedManyWithoutAtLocationInput
@@ -22103,6 +23816,7 @@ export namespace Prisma {
     name: string
     address: string
     phone: string
+    setupCompletedAt?: Date | string | null
     users?: UserLocationUncheckedCreateNestedManyWithoutLocationInput
     inventoryItems?: InventoryItemUncheckedCreateNestedManyWithoutLocationInput
     issueReports?: IssueReportUncheckedCreateNestedManyWithoutAtLocationInput
@@ -22147,6 +23861,24 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserPositionCreateWithoutPositionInput = {
+    user: UserCreateNestedOneWithoutUserPositionsInput
+  }
+
+  export type UserPositionUncheckedCreateWithoutPositionInput = {
+    userId: string
+  }
+
+  export type UserPositionCreateOrConnectWithoutPositionInput = {
+    where: UserPositionWhereUniqueInput
+    create: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput>
+  }
+
+  export type UserPositionCreateManyPositionInputEnvelope = {
+    data: UserPositionCreateManyPositionInput | UserPositionCreateManyPositionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LocationUpsertWithoutPositionInput = {
     update: XOR<LocationUpdateWithoutPositionInput, LocationUncheckedUpdateWithoutPositionInput>
     create: XOR<LocationCreateWithoutPositionInput, LocationUncheckedCreateWithoutPositionInput>
@@ -22163,6 +23895,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUpdateManyWithoutAtLocationNestedInput
@@ -22175,6 +23908,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     address?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
+    setupCompletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: UserLocationUncheckedUpdateManyWithoutLocationNestedInput
     inventoryItems?: InventoryItemUncheckedUpdateManyWithoutLocationNestedInput
     issueReports?: IssueReportUncheckedUpdateManyWithoutAtLocationNestedInput
@@ -22196,6 +23930,22 @@ export namespace Prisma {
   export type ShiftAssignmentUpdateManyWithWhereWithoutPositionInput = {
     where: ShiftAssignmentScalarWhereInput
     data: XOR<ShiftAssignmentUpdateManyMutationInput, ShiftAssignmentUncheckedUpdateManyWithoutPositionInput>
+  }
+
+  export type UserPositionUpsertWithWhereUniqueWithoutPositionInput = {
+    where: UserPositionWhereUniqueInput
+    update: XOR<UserPositionUpdateWithoutPositionInput, UserPositionUncheckedUpdateWithoutPositionInput>
+    create: XOR<UserPositionCreateWithoutPositionInput, UserPositionUncheckedCreateWithoutPositionInput>
+  }
+
+  export type UserPositionUpdateWithWhereUniqueWithoutPositionInput = {
+    where: UserPositionWhereUniqueInput
+    data: XOR<UserPositionUpdateWithoutPositionInput, UserPositionUncheckedUpdateWithoutPositionInput>
+  }
+
+  export type UserPositionUpdateManyWithWhereWithoutPositionInput = {
+    where: UserPositionScalarWhereInput
+    data: XOR<UserPositionUpdateManyMutationInput, UserPositionUncheckedUpdateManyWithoutPositionInput>
   }
 
   export type UserLocationCreateManyLocationInput = {
@@ -22351,6 +24101,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUpdateManyWithoutPositionNestedInput
+    userPositions?: UserPositionUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateWithoutAtLocationInput = {
@@ -22358,6 +24109,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     color?: StringFieldUpdateOperationsInput | string
     shiftAssignments?: ShiftAssignmentUncheckedUpdateManyWithoutPositionNestedInput
+    userPositions?: UserPositionUncheckedUpdateManyWithoutPositionNestedInput
   }
 
   export type PositionUncheckedUpdateManyWithoutAtLocationInput = {
@@ -22464,6 +24216,10 @@ export namespace Prisma {
     expiresAt: Date | string
     used?: boolean
     lid: string
+  }
+
+  export type UserPositionCreateManyUserInput = {
+    positionId: string
   }
 
   export type ShiftAssignmentUpdateWithoutEmployeeInput = {
@@ -22698,6 +24454,18 @@ export namespace Prisma {
     lid?: StringFieldUpdateOperationsInput | string
   }
 
+  export type UserPositionUpdateWithoutUserInput = {
+    position?: PositionUpdateOneRequiredWithoutUserPositionsNestedInput
+  }
+
+  export type UserPositionUncheckedUpdateWithoutUserInput = {
+    positionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserPositionUncheckedUpdateManyWithoutUserInput = {
+    positionId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ShiftSwapRequestCreateManyRequesterShiftInput = {
     id?: string
     requesterId: string
@@ -22811,6 +24579,10 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type UserPositionCreateManyPositionInput = {
+    userId: string
+  }
+
   export type ShiftAssignmentUpdateWithoutPositionInput = {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22840,6 +24612,18 @@ export namespace Prisma {
     start?: StringFieldUpdateOperationsInput | string
     end?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserPositionUpdateWithoutPositionInput = {
+    user?: UserUpdateOneRequiredWithoutUserPositionsNestedInput
+  }
+
+  export type UserPositionUncheckedUpdateWithoutPositionInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserPositionUncheckedUpdateManyWithoutPositionInput = {
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
 

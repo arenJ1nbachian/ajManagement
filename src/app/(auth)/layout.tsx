@@ -4,15 +4,14 @@ import { Loading } from "@/components/loading";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
 import getSetupPath from "@/lib/setup";
-import { $Enums } from "@generated/prisma";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const AuthRootLayout = ({ children }: { children: React.ReactNode }) => {
-  const { token, isLoading, locations } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
+  const { token, isLoading, locations, activeLocationId } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
   const router = useRouter();
-  const setupPath = getSetupPath(!!token, locations);
+  const setupPath = getSetupPath(!!token, locations, activeLocationId);
 
   /* Effect that runs on initial page load or when isLoading or token or setupPath changes value.
      Since refreshing the page results in losing our access token, React needs more context 

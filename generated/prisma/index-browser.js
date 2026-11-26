@@ -124,7 +124,8 @@ exports.Prisma.LocationScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
-  phone: 'phone'
+  phone: 'phone',
+  setupCompletedAt: 'setupCompletedAt'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -161,6 +162,11 @@ exports.Prisma.UserLocationScalarFieldEnum = {
   locationId: 'locationId',
   status: 'status',
   role: 'role'
+};
+
+exports.Prisma.UserPositionScalarFieldEnum = {
+  userId: 'userId',
+  positionId: 'positionId'
 };
 
 exports.Prisma.ShiftAssignmentScalarFieldEnum = {
@@ -286,6 +292,7 @@ exports.Prisma.ModelName = {
   InviteToken: 'InviteToken',
   RefreshToken: 'RefreshToken',
   UserLocation: 'UserLocation',
+  UserPosition: 'UserPosition',
   ShiftAssignment: 'ShiftAssignment',
   ShiftSwapRequest: 'ShiftSwapRequest',
   InventoryItem: 'InventoryItem',

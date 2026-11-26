@@ -14,16 +14,17 @@ datasource db {
 
 // Location is a model where owners represent their business and add ressources, employees and other relevant needs
 model Location {
-  id             String          @id @default(cuid())
-  name           String
-  address        String
-  phone          String
-  users          UserLocation[]
-  inventoryItems InventoryItem[]
-  issueReports   IssueReport[]
-  ressources     Ressource[]
-  position       Position[]
-  inviteTokens   InviteToken[]
+  id               String          @id @default(cuid())
+  name             String
+  address          String
+  phone            String
+  setupCompletedAt DateTime?
+  users            UserLocation[]
+  inventoryItems   InventoryItem[]
+  issueReports     IssueReport[]
+  ressources       Ressource[]
+  position         Position[]
+  inviteTokens     InviteToken[]
 }
 
 // User is a model that represents an individual working in a company.
@@ -44,6 +45,7 @@ model User {
   ressources           Ressource[]
   refreshTokens        RefreshToken[]
   inviteTokens         InviteToken[]
+  userPositions        UserPosition[]
 }
 
 // A model used for storing a newly created users invite token where it will be used for account setup.
@@ -80,6 +82,16 @@ model UserLocation {
   role       Role
 
   @@id([userId, locationId])
+}
+
+// A model used for assigning a user to a specific position
+model UserPosition {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, positionId])
 }
 
 // A model used for assigning a shift to a user with their position for that shift. Since a user can occupy many positions on different shifts, position
@@ -172,6 +184,7 @@ model Position {
   atLocation       Location          @relation(fields: [locationId], references: [id])
   shiftAssignments ShiftAssignment[]
   color            String            @default("gray")
+  userPositions    UserPosition[]
 }
 
 enum Status {
