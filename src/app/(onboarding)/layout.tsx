@@ -18,7 +18,8 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const { token, isLoading, locations, activeLocationId } = useAuth(); // Access token and isLoading flag to determine if renewal of refreshToken api is ongoing
   const setupPath = getSetupPath(!!token, locations, activeLocationId);
-  const mustRedirect = setupPath !== pathname && setupPath !== null;
+  const redirection = setupPath ?? "/dashboard";
+  const mustRedirect = redirection !== pathname;
   const currentIndex = steps.findIndex((s) => s.href === pathname);
 
   const router = useRouter();
@@ -34,12 +35,14 @@ const OnboardingRootLayout = ({ children }: { children: React.ReactNode }) => {
     // Indicates that generating a new access token failed
     if (!isLoading && !token) {
       router.push("/login"); // User is brought to the login page
-    } else if (!isLoading && mustRedirect) router.push(setupPath);
+    } else if (!isLoading && mustRedirect) {
+      router.push(redirection);
+    }
   }, [isLoading, token, setupPath, pathname]);
 
   return (
     <>
-      {(isLoading || mustRedirect || !token) && <Loading />}
+      {(isLoading || !token || mustRedirect) && <Loading />}
       {!isLoading && token && !mustRedirect && (
         <div className="min-h-dvh lg:flex">
           <aside className="w-80 shrink-0 hidden lg:flex flex-col bg-card border-r border-border p-8 pr-7 gap-10">

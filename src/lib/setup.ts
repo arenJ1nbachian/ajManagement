@@ -12,7 +12,7 @@ const getSetupPath = (
   // Nobody signed in yet (or still loading), so no setup redirect
   if (!isSignedIn) return null;
 
-  // User is not part of a restaurant
+  // User is not part of a restaurant (Employee's and Managers will never face this condition because being signed in implies that they have a password and that in itself implies that they have joined a location)
   if (!locations.length) return "/setup";
 
   // Find the current restaurant the user is part of

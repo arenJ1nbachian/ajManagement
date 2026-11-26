@@ -4,7 +4,6 @@ import { Loading } from "@/components/loading";
 import Logo from "@/components/Logo";
 import { useAuth } from "@/context/AuthContext";
 import getSetupPath from "@/lib/setup";
-import { $Enums } from "@generated/prisma";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
